@@ -7,11 +7,12 @@ public:
   View();
   void update();
   void init();
+  void setContext(sf::RenderWindow* window);
   void handleEvents();
   bool isOpen();
 private: //methods
 private: //vars and objs
-  sf::RenderWindow window;
+  sf::RenderWindow* targetWindow;
 };
 
 #endif

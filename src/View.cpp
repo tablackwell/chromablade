@@ -1,26 +1,28 @@
 #include <View.hpp>
 
-View::View(): window(sf::VideoMode(800,600,32), "ChromaBlade - Alpha build",sf::Style::Titlebar | sf::Style::Close){}
-
+View::View(){}
 
 void View::init(){
 }
 
+void View::setContext(sf::RenderWindow* window){
+  targetWindow = window;
+}
+
 void View::update(){
-  window.clear(sf::Color::Black);
-  window.display();
+  targetWindow->clear(sf::Color::Black);
+  targetWindow->display();
 }
 
 bool View::isOpen(){
-  return window.isOpen();
+  return targetWindow->isOpen();
 }
 
-void View::handleEvents(){ //temporarily here for debug purposes
+void View::handleEvents(){
   sf::Event Event;
-  while(window.pollEvent(Event))
-  {
-    // Exit
-    if(Event.type == sf::Event::Closed)
-      window.close();
+  while(targetWindow->pollEvent(Event)){
+  // Exit
+  if(Event.type == sf::Event::Closed)
+    targetWindow->close();
   }
 }
