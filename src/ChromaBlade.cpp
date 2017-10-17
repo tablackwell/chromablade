@@ -7,13 +7,12 @@ ChromaBlade::ChromaBlade()
 /* Main game loop */
 void ChromaBlade::run(){
 
-  while(playerView.isOpen()){
+  while(view.isOpen()){
 
     float deltaTime = fpsTimer.restart().asSeconds();
-    playerView.update();
-    playerView.handleEvents();
+    view.update();
+    view.handleEvents();
     gameLogic.update(deltaTime);
-
   }
 }
 

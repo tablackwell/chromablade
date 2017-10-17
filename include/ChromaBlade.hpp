@@ -1,7 +1,7 @@
 #ifndef CHROMABLADE
 #define CHROMABLADE
 
-#include <PlayerView.hpp>
+#include <View.hpp>
 #include <GameLogic.hpp>
 #include <SFML/System/Clock.hpp>
 
@@ -15,7 +15,7 @@ public:
 private: // functions
 private: //vars and objs
   GameLogic gameLogic;
-  PlayerView playerView;
+  View view;
   sf::RenderWindow window;
   sf::Clock fpsTimer;
 };

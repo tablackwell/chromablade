@@ -1,10 +1,10 @@
-#ifndef PLAYERVIEW
-#define PLAYERVIEW
+#ifndef VIEW
+#define VIEW
 #include <SFML/Graphics.hpp>
 
-class PlayerView{
+class View{
 public:
-  PlayerView();
+  View();
   void update();
   void init();
   void handleEvents();
