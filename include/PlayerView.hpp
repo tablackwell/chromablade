@@ -7,6 +7,7 @@ public:
   PlayerView();
   void update();
   void init();
+  void handleEvents();
   bool isOpen();
 private: //methods
 private: //vars and objs
