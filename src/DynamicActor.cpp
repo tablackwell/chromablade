@@ -4,8 +4,11 @@
 
 #include "DynamicActor.hpp"
 
+
 DynamicActor::DynamicActor() {
+
 }
+
 
 DynamicActor::DynamicActor(AvailableColors color, float health, float damage, std::tuple<int, int> startPos, sf::Texture sprite, int speed) {
     this -> activeColor = color;

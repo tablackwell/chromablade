@@ -6,9 +6,9 @@
 #define EVENT_INTERFACE
 
 class EventInterface {
-public:
-    virtual const EventType& getEventType(void) const =0;
-    virtual float getTimeStamp(void) const = 0;
+	public:
+		virtual const EventType& getEventType(void) const =0;
+		virtual float getTimeStamp(void) const = 0;
 }
 
 #endif

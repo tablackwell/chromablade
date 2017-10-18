@@ -1,7 +1,3 @@
-/*
- * Dynamic actor class. All dynamic actors inherit from the dynamic actor class.
- */
-
 #ifndef DYNAMIC_ACTOR
 #define DYNAMIC_ACTOR
 
@@ -13,6 +9,10 @@ enum class AvailableColors {
     RED, BLUE, YELLOW, GREEN, ORANGE, PURPLE
 };
 
+
+/*
+ * Dynamic actor class. All dynamic actors inherit from the dynamic actor class.
+ */
 class DynamicActor {
 public:
     DynamicActor();
