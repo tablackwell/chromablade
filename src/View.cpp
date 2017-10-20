@@ -1,35 +1,27 @@
-#include <PlayerView.hpp>
+#include <View.hpp>
 
-PlayerView::PlayerView(){
-
-}
-
-void PlayerView::init(){
+View::View(){
 
 }
 
-void PlayerView::setContext(sf::RenderWindow* window){
+void View::init(){
+
+}
+
+void View::setContext(sf::RenderWindow* window){
 	targetWindow = window;
 }
 
-void PlayerView::update(){
+void View::update(){
 	targetWindow->clear(sf::Color::Black);
-	sf::Texture texture;
-	if (!texture.loadFromFile("../resources/Char.png"))
-	{
-	    // error...
-	}
-	sf::Sprite character;
-	character.setTexture(texture);
-	targetWindow->draw(character);
 	targetWindow->display();
 }
 
-bool PlayerView::isOpen(){
+bool View::isOpen(){
 	return targetWindow->isOpen();
 }
 
-void PlayerView::handleEvents(){
+void View::handleEvents(){
 	sf::Event Event;
 	while(targetWindow->pollEvent(Event)){
 		// Exit

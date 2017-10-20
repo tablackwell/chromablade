@@ -1,19 +1,25 @@
-#ifndef VIEW
-#define VIEW
-#include <SFML/Graphics.hpp>
+/*
+ * Player View inherits from the View class. It is used to implement all of player's character
+ * functionality.
+ */
 
-class PlayerView{
+#ifndef PlayerView_hpp
+#define PlayerView_hpp
+
+#include <stdio.h>
+#include <map>
+
+#include "DynamicActor.hpp"
+
+class PlayerView: public DynamicActor{
 	public:
-		PlayerView();
-		void init();
-		void update();
-		void setContext(sf::RenderWindow* window);
-		void handleEvents();
-		bool isOpen();
-	private: //methods
-
-	private: //vars and objs
-		sf::RenderWindow* targetWindow;
+    	PlayerView();
+    	void changeSwordColor(AvailableColors color);
+    	void unlockColor(AvailableColors color);
+	private:
+    
+	private:
+    	std::map<AvailableColors, bool> colorsAvail; // Hashmap of available colors.
+    	//int colorTimer;
 };
-
 #endif
