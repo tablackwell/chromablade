@@ -10,3 +10,7 @@ CTestTestfile.cmake
 Debug/
 Release/
 Profile/
+.DS_Store
+.cproject
+.project
+.settings/language.settings.xml

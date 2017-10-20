@@ -3,22 +3,23 @@
  * character.
  */
 
-#include "PlayerView.hpp"
+#include "Player.hpp"
 #include "DynamicActor.hpp"
 
 #include <iostream>
 
-PlayerView::PlayerView() {
+Player::Player() {
     // Initialize hashmap. Start with red by default.
     colorsAvail[AvailableColors::RED] = true;
+    activeColor = AvailableColors::RED;
 }
 
 /* Change active color of player's sword to given color. */
-void PlayerView::changeSwordColor(AvailableColors color) {
+void Player::changeSwordColor(AvailableColors color) {
     DynamicActor::changeColor(color);
 }
 
 /* Unlock color. */
-void PlayerView::unlockColor(AvailableColors color) {
+void Player::unlockColor(AvailableColors color) {
     
 }
