@@ -2,7 +2,8 @@
 
 ChromaBlade::ChromaBlade() : window(sf::VideoMode(800,600,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
 {
-
+	// initialize view
+	// initialize game logic
 }
 
 
@@ -20,5 +21,3 @@ void ChromaBlade::run(){
 		gameLogic.update(deltaTime);
 	}
 }
-
-
