@@ -5,10 +5,13 @@
 #ifndef EVENT_INTERFACE
 #define EVENT_INTERFACE
 
+#include "EventType.hpp"
+
 class EventInterface {
 	public:
-		virtual const EventType& getEventType(void) const =0;
-		virtual float getTimeStamp(void) const = 0;
-}
+	    virtual const GameEventsType &getEventType(void);
+	private:
+	private:
+};
 
 #endif
