@@ -39,7 +39,7 @@ void ChromaBlade::run(){
 		m_view.handleEvents();
 		m_gameLogic.update(deltaTime);
 		m_window.clear();
-		m_window.draw(m_map);
+//      m_window.draw(m_map);
         m_title.draw(m_window);
 		m_window.display();
 //		view.update();

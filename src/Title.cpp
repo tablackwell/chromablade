@@ -13,7 +13,8 @@ void Title::init() {
         return;
     }
     m_background.setTexture(&m_texture);
-    m_background.setSize(sf::Vector2f(WIDTH, HEIGHT));
+    m_background.setSize(sf::Vector2f(WIDTH / 2, HEIGHT / 2));
+    m_background.setPosition(sf::Vector2f(200, 40));
 
     // create font
     if (!m_font.loadFromFile("../res/PressStart2P.ttf")) {
