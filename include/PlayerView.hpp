@@ -1,5 +1,5 @@
-#ifndef PLAYERVIEW
-#define PLAYERVIEW
+#ifndef PLAYERVIEW_HPP
+#define PLAYERVIEW_HPP
 
 #include <SFML/Graphics.hpp>
 

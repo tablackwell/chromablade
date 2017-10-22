@@ -1,5 +1,5 @@
-#ifndef GAMELOGIC
-#define GAMELOGIC
+#ifndef GAMELOGIC_HPP
+#define GAMELOGIC_HPP
 
 enum Level { red, blue, yellow, green, orange, purple };
 

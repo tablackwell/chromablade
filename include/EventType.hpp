@@ -2,8 +2,8 @@
  * Event types.
  */
 
-#ifndef EVENT_TYPE
-#define EVENT_TYPE
+#ifndef EVENTTYPE_HPP
+#define EVENTTYPE_HPP
 
 enum GameEventsType {
    CollisionEvent,

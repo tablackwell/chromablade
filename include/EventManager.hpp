@@ -2,8 +2,8 @@
  * Event manager used for processing events.
  */
 
-#ifndef EVENT_MANAGER
-#define EVENT_MANAGER
+#ifndef EVENTMANAGER_HPP
+#define EVENTMANAGER_HPP
 
 #include <SFML/Graphics.hpp>
 #include <map>

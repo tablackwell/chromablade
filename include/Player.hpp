@@ -3,8 +3,8 @@
  * functionality.
  */
 
-#ifndef PlayerView_hpp
-#define PlayerView_hpp
+#ifndef PLAYERVIEW_HPP
+#define PLAYERVIEW_HPP
 
 #include <stdio.h>
 #include <map>

@@ -2,8 +2,8 @@
  * Event manager used for processing events.
  */
 
-#ifndef EVENT_LISTENER
-#define EVENT_LISTENER
+#ifndef EVENTLISTENER_HPP
+#define EVENTLISTENER_HPP
 
 #include <functional>
 #include "EventInterface.hpp"

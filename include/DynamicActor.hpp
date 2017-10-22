@@ -1,5 +1,5 @@
-#ifndef DYNAMIC_ACTOR
-#define DYNAMIC_ACTOR
+#ifndef DYNAMICACTOR_HPP
+#define DYNAMICACTOR_HPP
 
 #include <stdio.h>
 #include <SFML/Graphics.hpp>

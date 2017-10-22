@@ -1,5 +1,5 @@
-#ifndef CHROMABLADE
-#define CHROMABLADE
+#ifndef CHROMABLADE_HPP
+#define CHROMABLADE_HPP
 
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window.hpp>

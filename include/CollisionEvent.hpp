@@ -2,8 +2,8 @@
  * CollisionEvent implements EventInterface.
  */
 
-#ifndef COLLISION_EVENT
-#define COLLISION_EVENT
+#ifndef COLLISIONEVENT_HPP
+#define COLLISIONEVENT_HPP
 
 #include "EventInterface.hpp"
 #include "EventType.hpp"
