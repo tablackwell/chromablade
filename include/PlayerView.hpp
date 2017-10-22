@@ -1,6 +1,8 @@
-#ifndef VIEW
-#define VIEW
+#ifndef PLAYERVIEW
+#define PLAYERVIEW
+
 #include <SFML/Graphics.hpp>
+
 
 class PlayerView{
 	public:
@@ -14,6 +16,8 @@ class PlayerView{
 
 	private: //vars and objs
 		sf::RenderWindow* targetWindow;
+		sf::Sprite character;
+		sf::Texture charTexture;
 };
 
 #endif

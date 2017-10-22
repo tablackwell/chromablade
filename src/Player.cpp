@@ -1,5 +1,5 @@
 /*
- * Implementation of PlayerView class, instance of DynamicActor class used for player's
+ * Implementation of Player class, instance of DynamicActor class used for player's
  * character.
  */
 
@@ -9,17 +9,17 @@
 #include <iostream>
 
 Player::Player() {
-    // Initialize hashmap. Start with red by default.
-    //colorsAvail[AvailableColors::RED] = true;
-    //activeColor = AvailableColors::RED;
+    // Initialize hash map. Start with red by default.
+    colorsAvail[Color::RED] = true;
+    changeColor(Color::RED);
 }
 
 /* Change active color of player's sword to given color. */
-void Player::changeSwordColor(AvailableColors color) {
-    DynamicActor::changeColor(color);
+void Player::changeSwordColor(Color color) {
+    changeColor(color);
 }
 
 /* Unlock color. */
-void Player::unlockColor(AvailableColors color) {
-
+void Player::unlockColor(Color color) {
+	// colorsAvail[color] = true;
 }

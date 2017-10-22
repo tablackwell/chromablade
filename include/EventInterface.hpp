@@ -9,7 +9,7 @@
 
 class EventInterface {
 	public:
-	    virtual const GameEventsType &getEventType(void);
+	    virtual const GameEventsType& getEventType(void);
 	private:
 	private:
 };
