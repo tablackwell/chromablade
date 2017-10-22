@@ -11,21 +11,21 @@
 #define HEIGHT 600
 
 class ChromaBlade{
-    public:
-		ChromaBlade();
-		void init();
-		void run();
-		void pause();
-		void shutdown();
+public:
+    ChromaBlade();
+    void init();
+    void run();
+    void pause();
+    void shutdown();
 
-    private: // functions
+private: // functions
 
-    private: // vars and objs
-    		GameLogic gameLogic;
-    		PlayerView view;
-		sf::RenderWindow window;
-        sf::Clock fpsTimer;
-        TileMap map;
+private: // vars and objs
+    GameLogic m_gameLogic;
+    PlayerView m_view;
+    sf::RenderWindow m_window;
+    sf::Clock m_fpsTimer;
+    TileMap m_map;
 };
 
 #endif

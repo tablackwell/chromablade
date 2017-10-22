@@ -1,6 +1,6 @@
 #include <ChromaBlade.hpp>
 
-ChromaBlade::ChromaBlade() : window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
+ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
 {
 	// initialize view
 	// initialize game logic
@@ -8,15 +8,9 @@ ChromaBlade::ChromaBlade() : window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade
 
 
 void ChromaBlade::init(){
-	view.setContext(&window);
-}
+	m_view.setContext(&m_window);
 
-
-void ChromaBlade::run(){
-	/* Main game loop */
-
-	//
-	TileMap map;
+	m_map;
 	const int level[] =
     {
         0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -29,17 +23,21 @@ void ChromaBlade::run(){
         0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
     };
 
-		map.load("../res/tileset.png", sf::Vector2u(32, 32), level, 16, 8);
+	m_map.load("../res/tileset.png", sf::Vector2u(32, 32), level, 16, 8);
+}
 
 
-	while(view.isOpen()){
-		float deltaTime = fpsTimer.restart().asSeconds();
+void ChromaBlade::run(){
+	/* Main game loop */
+
+	while(m_view.isOpen()){
+		float deltaTime = m_fpsTimer.restart().asSeconds();
 		//view.update();
 
-		window.clear();
-		window.draw(map);
-		window.display();
-		gameLogic.update(deltaTime);
-		view.handleEvents();
+		m_window.clear();
+		m_window.draw(m_map);
+		m_window.display();
+		m_gameLogic.update(deltaTime);
+		m_view.handleEvents();
 	}
 }
