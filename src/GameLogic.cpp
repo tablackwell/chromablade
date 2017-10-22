@@ -1,4 +1,4 @@
-#include <GameLogic.hpp>
+#include "GameLogic.hpp"
 
 GameLogic::GameLogic(){
 	level = red;

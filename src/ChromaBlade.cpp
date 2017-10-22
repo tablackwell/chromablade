@@ -1,7 +1,7 @@
-#include <ChromaBlade.hpp>
-#include <PlayerView.hpp>
-#include <GameLogic.hpp>
-#include <TileMap.hpp>
+#include "ChromaBlade.hpp"
+#include "PlayerView.hpp"
+#include "GameLogic.hpp"
+#include "TileMap.hpp"
 
 
 ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
@@ -39,7 +39,6 @@ void ChromaBlade::run(){
 		m_view.handleEvents();
 		m_gameLogic.update(deltaTime);
 		m_window.clear();
-		m_window.draw(m_map);
         m_title.draw(m_window);
 		m_window.display();
 //		view.update();
