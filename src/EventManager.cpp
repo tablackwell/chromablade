@@ -14,13 +14,13 @@ void EventManager::init() {
 
 /* Set reference to window. */
 void EventManager::setWindow(sf::RenderWindow *mainWindow) {
-    this -> window_ = mainWindow;
+    this->m_window = mainWindow;
 }
 
 
 /* Queue event. */
 void EventManager::QueueEvent(EventInterface *event) {
-    m_registerQueue -> m_eventList.push_back(event);
+    m_registerQueue->m_eventList.push_back(event);
 }
 
 
@@ -46,9 +46,9 @@ void EventManager::triggerEvent(EventInterface& event) {
     }
     // Trigger all events in listener list
     else {
-        auto m_list = m_itr -> second;
+        auto m_list = m_itr->second;
         for (auto m_funcItr = m_list.begin(); m_funcItr != m_list.end(); m_funcItr++){
-            m_funcItr -> callFunction(event);
+            m_funcItr->callFunction(event);
         }
     }
 }
@@ -58,12 +58,12 @@ void EventManager::triggerEvent(EventInterface& event) {
 void EventManager::handleEvents() {
     // Swap queues and clear old queue
     std::swap(m_processQueue, m_registerQueue);
-    m_registerQueue -> m_eventList.clear();
+    m_registerQueue->m_eventList.clear();
 
     // Process all events in queue
-    while (!(m_processQueue -> m_eventList.empty())) {
-        EventInterface *event = m_processQueue -> m_eventList.front();
-        m_processQueue -> m_eventList.pop_front(); // No return value
+    while (!(m_processQueue->m_eventList.empty())) {
+        EventInterface *event = m_processQueue->m_eventList.front();
+        m_processQueue->m_eventList.pop_front(); // No return value
         triggerEvent(*event);
     }
 }

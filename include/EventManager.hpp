@@ -33,7 +33,7 @@ class EventManager {
 
     private:
     private:
-        sf::RenderWindow *window_; // Reference to RenderWindow
+        sf::RenderWindow *m_window; // Reference to RenderWindow
         EventQueue m_queues[2]; // List of queues
         EventQueue *m_processQueue = &m_queues[0]; // Queue for processing events
         EventQueue *m_registerQueue = &m_queues[1]; // Queue for registering events
