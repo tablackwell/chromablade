@@ -4,7 +4,7 @@
 #include <TileMap.hpp>
 
 
-ChromaBlade::ChromaBlade() : window(sf::VideoMode(800,600,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
+ChromaBlade::ChromaBlade() : window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
 {
 }
 

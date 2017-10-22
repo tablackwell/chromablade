@@ -8,6 +8,9 @@
 #include <GameLogic.hpp>
 #include <TileMap.hpp>
 
+#define WIDTH 800
+#define HEIGHT 600
+
 class ChromaBlade{
     public:
 		ChromaBlade();
