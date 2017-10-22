@@ -25,6 +25,7 @@ void Title::init() {
     // menu text
     m_play.setString("Play");
     m_play.setFont(m_font);
+    m_play.setStyle(sf::Text::Style::Italic);
     m_play.setCharacterSize(24);
     m_play.setFillColor(sf::Color::White);
     m_play.setOutlineColor(sf::Color::Black);
@@ -33,6 +34,7 @@ void Title::init() {
 
     m_exit.setString("Exit");
     m_exit.setFont(m_font);
+    m_exit.setStyle(sf::Text::Style::Italic);
     m_exit.setCharacterSize(24);
     m_exit.setFillColor(sf::Color::White);
     m_exit.setOutlineColor(sf::Color::Black);
@@ -42,6 +44,7 @@ void Title::init() {
     // create menu cursor
     m_cursor.setString(">");
     m_cursor.setFont(m_font);
+    m_cursor.setStyle(sf::Text::Style::Italic);
     m_cursor.setCharacterSize(24);
     m_cursor.setFillColor(sf::Color::White);
     m_cursor.setOutlineColor(sf::Color::Black);
