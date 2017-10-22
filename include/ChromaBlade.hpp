@@ -4,9 +4,10 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window.hpp>
 
-#include <PlayerView.hpp>
-#include <GameLogic.hpp>
-#include <TileMap.hpp>
+#include "PlayerView.hpp"
+#include "GameLogic.hpp"
+#include "TileMap.hpp"
+#include "Title.hpp"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -27,6 +28,7 @@ private: // vars and objs
     sf::RenderWindow m_window;
     sf::Clock m_fpsTimer;
     TileMap m_map;
+    Title m_title;
 };
 
 #endif

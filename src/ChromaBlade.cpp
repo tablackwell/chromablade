@@ -13,6 +13,7 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 void ChromaBlade::init(){
 	m_view.init();
 	m_gameLogic.init();
+
 	m_view.setContext(&m_window);
 
 	const int level[] =
@@ -39,6 +40,7 @@ void ChromaBlade::run(){
 		m_gameLogic.update(deltaTime);
 		m_window.clear();
 		m_window.draw(m_map);
+        m_title.draw(m_window);
 		m_window.display();
 //		view.update();
 	}
