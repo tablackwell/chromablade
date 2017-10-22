@@ -9,10 +9,24 @@
 #include "TileMap.hpp"
 #include <iostream>
 #include <string>
+#include <fstream>
 
-bool TileMap::loadFromFile(std::string fileName){
+bool TileMap::loadFromText(const std::string& tileset, std::string fileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
+  std::ifstream inputFile;
+  inputFile.open(fileName, std::ifstream::in);
+  std::vector<int>numbers;
+  int number;
+  while(inputFile >> number){
+    numbers.push_back(number);
+  }
 
+  const int *newArray = &numbers[0];
+  inputFile.close();
+
+  load(tileset,tileSize,newArray,width,height);
+  return true;
 }
+
 
 bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height)
     {
