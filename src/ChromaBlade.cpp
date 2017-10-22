@@ -15,8 +15,10 @@ void ChromaBlade::init(){
 	m_gameLogic.init();
 
 	m_view.setContext(&m_window);
+  m_map.loadFromText("../res/tileset.png", "../res/level/testlevel.txt", sf::Vector2u(32, 32), 16, 8);
 
-	const int level[] =
+  //	m_map.load("../res/tileset.png", sf::Vector2u(32, 32), level, 16, 8);
+  /*const int level[] =
     {
         0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
         0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 2, 0, 0, 0, 0,
@@ -27,8 +29,7 @@ void ChromaBlade::init(){
         2, 0, 1, 0, 3, 0, 2, 2, 2, 0, 1, 1, 1, 1, 1, 1,
         0, 0, 1, 0, 3, 2, 2, 2, 0, 0, 0, 0, 1, 1, 1, 1,
     };
-
-	m_map.load("../res/tileset.png", sf::Vector2u(32, 32), level, 16, 8);
+    */
 }
 
 void ChromaBlade::run(){
@@ -63,6 +64,5 @@ void ChromaBlade::render() {
 
     /* Draw things */
     m_title.draw(m_window);
-
     m_window.display();
 }
