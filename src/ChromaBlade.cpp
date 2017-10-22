@@ -1,16 +1,20 @@
 #include <ChromaBlade.hpp>
+#include <PlayerView.hpp>
+#include <GameLogic.hpp>
+#include <TileMap.hpp>
+
 
 ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
 {
-	// initialize view
-	// initialize game logic
+    init();
 }
 
 
 void ChromaBlade::init(){
+	m_view.init();
+	m_gameLogic.init();
 	m_view.setContext(&m_window);
 
-	m_map;
 	const int level[] =
     {
         0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -26,18 +30,16 @@ void ChromaBlade::init(){
 	m_map.load("../res/tileset.png", sf::Vector2u(32, 32), level, 16, 8);
 }
 
-
 void ChromaBlade::run(){
 	/* Main game loop */
 
 	while(m_view.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
-		//view.update();
-
+		m_view.handleEvents();
+		m_gameLogic.update(deltaTime);
 		m_window.clear();
 		m_window.draw(m_map);
 		m_window.display();
-		m_gameLogic.update(deltaTime);
-		m_view.handleEvents();
+//		view.update();
 	}
 }

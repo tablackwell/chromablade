@@ -1,5 +1,5 @@
 /*
- * Collision event inherits from EventInterface.
+ * CollisionEvent implements EventInterface.
  */
 
 #ifndef COLLISION_EVENT
@@ -11,9 +11,9 @@
 class CollisionEvent : public EventInterface {
 	public:
 	private:
-	    virtual const GameEventsType &getEventType(void) const { return eventType;};
+	    const GameEventsType& getEventType(void) const { return eventType;};
 	private:
-	    static const GameEventsType collision;
+	    static const GameEventsType eventType;
 };
 
 #endif

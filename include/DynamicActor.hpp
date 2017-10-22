@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 
 /* List of all possible colors */
-enum AvailableColors{
+enum Color{
     RED, BLUE, YELLOW, GREEN, ORANGE, PURPLE
 };
 
@@ -16,19 +16,20 @@ enum AvailableColors{
 class DynamicActor {
 	public:
 		DynamicActor();
-		DynamicActor(AvailableColors activeColor, float health, float damage, std::tuple<int, int> startPos, sf::Texture sprite, int speed);
-		float checkHealth();
+		DynamicActor(Color activeColor, float health, float damage, std::tuple<int, int> startPos, sf::Texture texture, int speed);
+		float getHealth();
 		virtual void attack();
-		void changeColor(AvailableColors color);
+		void changeColor(Color color);
+		void setHealth(float health);
 
 	private:
 
 	private:
-		AvailableColors activeColor;
+		Color activeColor;
 		float health;
 		float damage; // Attack damage
 		std::tuple<int, int> position;
-		sf::Texture sprite;
+		sf::Texture texture;
 		int speed;
 };
 
