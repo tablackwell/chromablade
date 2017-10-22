@@ -21,6 +21,9 @@ public:
     void shutdown();
 
 private: // functions
+    void handleEvents();
+    void update(float &deltaTime);
+    void render();
 
 private: // vars and objs
     GameLogic m_gameLogic;
