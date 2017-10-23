@@ -1,8 +1,16 @@
 
 /*
- At the moment this is not my original code! This is adapted from:
+ At the moment this is not entirely my original code! This is adapted from:
  https://www.sfml-dev.org/tutorials/2.4/graphics-vertex-array.php
  - Thomas
+
+Example Usage:
+TileMap m_map
+m_map.loadFromText("../res/tileset.png", "../res/level/testlevel.txt", sf::Vector2u(32, 32), 16, 8);
+m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/testbaselayer.txt",sf::Vector2u(16,16),50,38);
+m_map.loadFromText("../res/tilesets/dungeon.png","../res/level/sampledungeon.txt",sf::Vector2u(16,16),50,38);
+m_map.load("../res/tileset.png", sf::Vector2u(32, 32), level, 16, 8);
+
 */
 
 
