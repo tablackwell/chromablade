@@ -26,7 +26,7 @@ void PlayerView::setContext(sf::RenderWindow* window){
 
 /* Redraw the window */
 void PlayerView::update(){
-	targetWindow->clear(sf::Color::Black);
+//	targetWindow->clear(sf::Color::Black);
 	targetWindow->draw(character);
 	targetWindow->display();
 }
@@ -38,7 +38,7 @@ bool PlayerView::isOpen(){
 }
 
 
-void PlayerView::handleEvents(){
+void PlayerView::handleEvents(float deltaTime){
 	sf::Event event;
 	while(targetWindow->pollEvent(event)){
 		// Close window
@@ -47,15 +47,15 @@ void PlayerView::handleEvents(){
 		}
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-
+	    character.move(-200.f * deltaTime, 0.f);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-
+	    character.move(200.f * deltaTime, 0.f);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-	// letter ‘A’...
+	    character.move(0.f, -200.f * deltaTime);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-
+	    character.move(0.f, 200.f * deltaTime);
 	}
 }

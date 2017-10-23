@@ -16,17 +16,17 @@ void ChromaBlade::init(){
 
 	m_view.setContext(&m_window);
 
-  m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
-  m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
+	m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
+	m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
+	m_window.setVerticalSyncEnabled(true);
 }
 
 void ChromaBlade::run(){
 	/* Main game loop */
-
 	while(m_view.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
-        handleEvents();
-        update(deltaTime);
+        handleEvents(deltaTime);
+//        update(deltaTime);
         render();
         /*
 		m_view.handleEvents();
@@ -35,12 +35,12 @@ void ChromaBlade::run(){
         m_title.draw(m_window);
 		m_window.display();
         */
-//		view.update();
+		m_view.update();
 	}
 }
 
-void ChromaBlade::handleEvents() {
-    m_view.handleEvents();
+void ChromaBlade::handleEvents(float deltaTime) {
+    m_view.handleEvents(deltaTime);
 }
 
 void ChromaBlade::update(float &deltaTime) {
@@ -51,10 +51,10 @@ void ChromaBlade::render() {
     m_window.clear();
 
     /* Draw things */
-    m_title.draw(m_window);
+//    m_title.draw(m_window);
 
     /* Demo Level Code*/
-    //m_window.draw(m_map);
-    //m_window.draw(m_overlay);
-    m_window.display();
+    m_window.draw(m_map);
+    m_window.draw(m_overlay);
+//    m_window.display();
 }

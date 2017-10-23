@@ -10,7 +10,7 @@ PlayerView();
 	void init();
 	void update();
 	void setContext(sf::RenderWindow* window);
-	void handleEvents();
+	void handleEvents(float);
 	bool isOpen();
 private: //methods
 
