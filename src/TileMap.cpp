@@ -11,6 +11,11 @@ m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/testbaselayer.
 m_map.loadFromText("../res/tilesets/dungeon.png","../res/level/sampledungeon.txt",sf::Vector2u(16,16),50,38);
 m_map.load("../res/tileset.png", sf::Vector2u(32, 32), level, 16, 8);
 
+Overlay Example:
+m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/base.txt", sf::Vector2u(16, 16), 50, 38);
+m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/overlay.txt", sf::Vector2u(16, 16), 50, 38);
+render them in their respective order
+
 */
 
 
