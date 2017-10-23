@@ -2,7 +2,7 @@
 #define PLAYERVIEW_HPP
 
 #include <SFML/Graphics.hpp>
-
+#include "EventInterface.hpp"
 
 class PlayerView{
 public:
@@ -18,6 +18,7 @@ private: //vars and objs
     sf::RenderWindow* targetWindow;
 	sf::Sprite character;
 	sf::Texture charTexture;
+	void moveEventListener(const EventInterface& moveEvent);
 };
 
 #endif

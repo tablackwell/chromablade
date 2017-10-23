@@ -53,7 +53,7 @@ void PlayerView::handleEvents(){
 
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-	// letter ‘A’...
+
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
 
