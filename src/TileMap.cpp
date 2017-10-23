@@ -26,7 +26,12 @@ render them in their respective order
 
 bool TileMap::loadFromText(const std::string& tileset, std::string fileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
   std::ifstream inputFile;
+  // load the tileset texture
+  if (!m_tileset.loadFromFile(tileset)){
+    return false;
+  }
   inputFile.open(fileName, std::ifstream::in);
+
   std::vector<int>numbers;
   int number;
   while(inputFile >> number){
@@ -35,19 +40,10 @@ bool TileMap::loadFromText(const std::string& tileset, std::string fileName, sf:
      }
      numbers.push_back(number);
   }
-  const int *newArray = &numbers[0];
+
+  // Convert int array to vector
+  const int *tileArray = &numbers[0];
   inputFile.close();
-
-  load(tileset,tileSize,newArray,width,height);
-  return true;
-}
-
-
-bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, const int* tiles, unsigned int width, unsigned int height)
-    {
-        // load the tileset texture
-        if (!m_tileset.loadFromFile(tileset))
-            return false;
 
         // resize the vertex array to fit the level size
         m_vertices.setPrimitiveType(sf::Quads);
@@ -58,7 +54,7 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, const int*
             for (unsigned int j = 0; j < height; ++j)
             {
                 // get the current tile number
-                int tileNumber = tiles[i + j * width];
+                int tileNumber = tileArray[i + j * width];
 
                 // find its position in the tileset texture
                 int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
@@ -81,7 +77,8 @@ bool TileMap::load(const std::string& tileset, sf::Vector2u tileSize, const int*
             }
 
         return true;
-    }
+}
+
 
 void TileMap::init(){
   sf::VertexArray m_vertices;
@@ -92,10 +89,8 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         // apply the transform
         states.transform *= getTransform();
-
         // apply the tileset texture
         states.texture = &m_tileset;
-
         // draw the vertex array
         target.draw(m_vertices, states);
     }
