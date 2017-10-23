@@ -5,7 +5,7 @@ class Process {
 public:
     enum States { UNINITIALIZED, RUNNING, PAUSED, SUCCESS, FAILED, ABORTED };
 
-    Process() : m_state(UNINITIALIZED), m_child(NULL) {}
+    Process() : m_state(UNINITIALIZED), m_child(0) {}
     ~Process() {}
 
     virtual void init() { m_state = RUNNING; }
