@@ -31,6 +31,7 @@ private: // vars and objs
     sf::RenderWindow m_window;
     sf::Clock m_fpsTimer;
     TileMap m_map;
+    TileMap m_overlay;
     Title m_title;
 };
 
