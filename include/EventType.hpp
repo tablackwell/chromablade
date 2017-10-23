@@ -8,6 +8,7 @@
 enum EventType {
    CollisionEvent,
    AttackEvent,
+   MoveEvent
 };
 
 #endif
