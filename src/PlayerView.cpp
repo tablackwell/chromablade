@@ -2,9 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <cstdio>
 
-PlayerView::PlayerView(){
-
+PlayerView::PlayerView() : Process() {
 }
 
 /* Initialize player view by loading files and setting initial positions */
@@ -15,6 +15,8 @@ void PlayerView::init(){
 	}
 	character.setTexture(charTexture);
 	character.setPosition(sf::Vector2f(400, 300));
+
+    setState(RUNNING);
 }
 
 
@@ -24,13 +26,14 @@ void PlayerView::setContext(sf::RenderWindow* window){
 }
 
 
-/* Redraw the window */
-void PlayerView::update(){
-	targetWindow->clear(sf::Color::Black);
-	targetWindow->draw(character);
-	targetWindow->display();
+/* Update view. */
+void PlayerView::update(float &deltaTime){
 }
 
+/* Draw view. */
+void PlayerView::draw() {
+    targetWindow->draw(character);
+}
 
 /* Check if the window is open */
 bool PlayerView::isOpen(){

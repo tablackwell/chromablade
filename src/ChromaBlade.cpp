@@ -2,22 +2,22 @@
 #include "PlayerView.hpp"
 #include "GameLogic.hpp"
 #include "TileMap.hpp"
+#include <cstdio>
 
 
 ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
 {
-    init();
 }
 
 
 void ChromaBlade::init(){
-	m_view.init();
-	m_gameLogic.init();
-
 	m_view.setContext(&m_window);
 
-  m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
-  m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
+    m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
+    m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
+
+    m_processManager.attachProcess(&m_view);
+    m_processManager.attachProcess(&m_gameLogic);
 }
 
 void ChromaBlade::run(){
@@ -28,14 +28,6 @@ void ChromaBlade::run(){
         handleEvents();
         update(deltaTime);
         render();
-        /*
-		m_view.handleEvents();
-		m_gameLogic.update(deltaTime);
-		m_window.clear();
-        m_title.draw(m_window);
-		m_window.display();
-        */
-//		view.update();
 	}
 }
 
@@ -44,7 +36,8 @@ void ChromaBlade::handleEvents() {
 }
 
 void ChromaBlade::update(float &deltaTime) {
-    m_gameLogic.update(deltaTime);
+    m_processManager.update(deltaTime);
+    //m_gameLogic.update(deltaTime);
 }
 
 void ChromaBlade::render() {
@@ -52,6 +45,7 @@ void ChromaBlade::render() {
 
     /* Draw things */
     m_title.draw(m_window);
+    //m_view.draw();
 
     /* Demo Level Code*/
     //m_window.draw(m_map);

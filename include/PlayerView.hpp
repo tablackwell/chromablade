@@ -2,13 +2,15 @@
 #define PLAYERVIEW_HPP
 
 #include <SFML/Graphics.hpp>
+#include "Process.hpp"
 
 
-class PlayerView{
+class PlayerView : public Process {
 public:
 PlayerView();
 	void init();
-	void update();
+	void update(float &deltaTime);
+    void draw();
 	void setContext(sf::RenderWindow* window);
 	void handleEvents();
 	bool isOpen();

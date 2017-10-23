@@ -8,6 +8,7 @@
 #include "GameLogic.hpp"
 #include "TileMap.hpp"
 #include "Title.hpp"
+#include "ProcessManager.hpp"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -33,6 +34,7 @@ private: // vars and objs
     TileMap m_map;
     TileMap m_overlay;
     Title m_title;
+    ProcessManager m_processManager;
 };
 
 #endif
