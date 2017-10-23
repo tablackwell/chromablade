@@ -8,6 +8,7 @@
 enum GameEventsType {
    CollisionEvent,
    AttackEvent,
+   MoveEvent
 };
 
 #endif

@@ -1,18 +1,19 @@
 #include "GameLogic.hpp"
+#include "EventManager.hpp"
 
 GameLogic::GameLogic(){
-	level = red;
+
 }
 
 void GameLogic::init(){
-
+	m_level = red;
 }
 
 void GameLogic::update(float deltaTime){
-
+	m_eventManager.handleEvents();
 }
 
 Level GameLogic::getLevel(){
-	return level;
+	return m_level;
 }
 

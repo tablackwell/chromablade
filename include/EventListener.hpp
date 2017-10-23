@@ -1,5 +1,5 @@
 /*
- * Event manager used for processing events.
+ * Event listener.
  */
 
 #ifndef EVENTLISTENER_HPP
