@@ -25,12 +25,12 @@ void EventManager::queueEvent(EventInterface *event) {
 
 void EventManager::queueEvent(sf::Event event) {
     EventInterface *newEvent = convertSfEvent(event);
+    m_registerQueue->m_eventList.push_back(newEvent);
 }
 
 
 /* Convert sfKeyEvents to EventInterface for event handling. */
 EventInterface* EventManager::convertSfEvent(sf::Event event) {
-    std::cout<<"InsideSFConverter"<<std::endl;
     EventInterface *newEvent;
     switch (event.type) {
         case sf::Event::KeyPressed: {
