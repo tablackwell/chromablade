@@ -19,8 +19,12 @@ void EventManager::setWindow(sf::RenderWindow *mainWindow) {
 
 
 /* Queue event. */
-void EventManager::QueueEvent(EventInterface *event) {
+void EventManager::queueEvent(EventInterface *event) {
     m_registerQueue->m_eventList.push_back(event);
+}
+
+void EventManager::queueEvent(sf::Event event) {
+    std::cout<<event.type;
 }
 
 

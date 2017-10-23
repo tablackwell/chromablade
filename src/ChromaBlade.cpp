@@ -52,6 +52,9 @@ void ChromaBlade::run(){
 }
 
 void ChromaBlade::handleEvents() {
+    sf::Event event;
+    m_eventManager.queueEvent(event);
+    
     m_eventManager.handleEvents();
     m_view.handleEvents();
 }

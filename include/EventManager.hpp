@@ -6,6 +6,7 @@
 #define EVENTMANAGER_HPP
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 #include <map>
 #include <list>
 #include <algorithm>
@@ -27,7 +28,8 @@ class EventManager {
 	    void setWindow(sf::RenderWindow *mainWindow);
 		void addListener(EventListener &listener, EventType &type);
 		void removeListener(EventListener &listener, EventType &type);
-        virtual void QueueEvent(EventInterface *event);
+        virtual void queueEvent(EventInterface *event);
+        virtual void queueEvent(sf::Event event);
         virtual void triggerEvent(EventInterface &event);
         virtual void handleEvents(void);
 
