@@ -25,7 +25,7 @@ void EventManager::QueueEvent(EventInterface *event) {
 
 
 /* Add listener. */
-void EventManager::addListener(EventListener &listener, GameEventsType &type) {
+void EventManager::addListener(EventListener &listener, EventType &type) {
 
     m_listeners = m_eventMap[type];
 

@@ -25,8 +25,8 @@ class EventManager {
 	    EventManager();
         void init();
 	    void setWindow(sf::RenderWindow *mainWindow);
-		void addListener(EventListener &listener, GameEventsType &type);
-		void removeListener(EventListener &listener, GameEventsType &type);
+		void addListener(EventListener &listener, EventType &type);
+		void removeListener(EventListener &listener, EventType &type);
         virtual void QueueEvent(EventInterface *event);
         virtual void triggerEvent(EventInterface &event);
         virtual void handleEvents(void);
@@ -38,7 +38,7 @@ class EventManager {
         EventQueue *m_processQueue = &m_queues[0]; // Queue for processing events
         EventQueue *m_registerQueue = &m_queues[1]; // Queue for registering events
         std::list<EventListener> m_listeners; // List of listeners
-        std::map<GameEventsType, std::list<EventListener>> m_eventMap; // Maps event to listeners
+        std::map<EventType, std::list<EventListener>> m_eventMap; // Maps event to listeners
 };
 
 #endif

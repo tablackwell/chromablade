@@ -5,7 +5,7 @@
 #ifndef EVENTTYPE_HPP
 #define EVENTTYPE_HPP
 
-enum GameEventsType {
+enum EventType {
    CollisionEvent,
    AttackEvent,
 };
