@@ -19,6 +19,7 @@ void ChromaBlade::init(){
 
     m_processManager.attachProcess(&m_view);
     m_processManager.attachProcess(&m_gameLogic);
+    m_processManager.attachProcess(&m_audio);
 }
 
 void ChromaBlade::run(){
