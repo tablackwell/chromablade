@@ -6,7 +6,7 @@
 
 class PlayerView{
 public:
-PlayerView();
+    PlayerView();
 	void init();
 	void update();
 	void setContext(sf::RenderWindow* window);

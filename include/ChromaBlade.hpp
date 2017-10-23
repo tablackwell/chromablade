@@ -5,6 +5,7 @@
 #include <SFML/Window.hpp>
 
 #include "PlayerView.hpp"
+#include "EventManager.hpp"
 #include "GameLogic.hpp"
 #include "TileMap.hpp"
 #include "Title.hpp"
@@ -28,6 +29,7 @@ private: // functions
 private: // vars and objs
     GameLogic m_gameLogic;
     PlayerView m_view;
+    EventManager m_eventManager;
     sf::RenderWindow m_window;
     sf::Clock m_fpsTimer;
     TileMap m_map;
