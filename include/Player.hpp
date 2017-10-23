@@ -3,8 +3,8 @@
  * functionality.
  */
 
-#ifndef PLAYERVIEW_HPP
-#define PLAYERVIEW_HPP
+#ifndef PLAYER_HPP
+#define PLAYER_HPP
 
 #include <stdio.h>
 #include <map>
@@ -12,15 +12,15 @@
 #include "DynamicActor.hpp"
 
 class Player: public DynamicActor{
-	public:
-		Player();
-    		void changeSwordColor(Color color);
-    		void unlockColor(Color color);
-	private:
+public:
+	Player();
+   	void changeSwordColor(Color color);
+   	void unlockColor(Color color);
+private:
     
-	private:
-    		std::map<Color, bool> colorsAvail; // Hash map of available colors.
-    		//int colorTimer;
+private:
+   	std::map<Color, bool> colorsAvail; // Hash map of available colors.
+   	//int colorTimer;
 };
 
 #endif

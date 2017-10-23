@@ -13,7 +13,7 @@ class GameLogic{
 		Level getLevel();
 	private:
 		Level m_level;
-		Player m_player;
+		//Player m_player;
 		EventManager m_eventManager;
 	private:
 };
