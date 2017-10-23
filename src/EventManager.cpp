@@ -24,20 +24,21 @@ void EventManager::queueEvent(EventInterface *event) {
 }
 
 void EventManager::queueEvent(sf::Event event) {
-    std::cout<<"Queuing"<<event.type;
     EventInterface *newEvent = convertSfEvent(event);
+    std::cout<<"Testing"<<std::endl;
 }
 
 
 /* Convert sfKeyEvents to EventInterface for event handling. */
 EventInterface* EventManager::convertSfEvent(sf::Event event) {
+    std::cout<<"InsideSFConverter"<<std::endl;
     EventInterface *newEvent;
     switch (event.type) {
+        std::cout<<"InsideSwitch"<<std::endl;
         case sf::Event::KeyPressed: {
+            std::cout<<"NEWLINE"<<event.key.code;
             if (event.key.code == sf::Keyboard::Up) {
                 EventInterface *newEvent = new MoveEvent(Direction::Up);
-                std::cout<<"NEWLINE"<<newEvent->getEventType();
-                return newEvent;
             }
         }
         default : break;

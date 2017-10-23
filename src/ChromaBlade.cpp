@@ -55,10 +55,7 @@ void ChromaBlade::run(){
 
 void ChromaBlade::handleEvents() {
     sf::Event event;
-    if (event.type == sf::Event::KeyPressed) {
-        std::cout<<"Key Pressed";
-        m_eventManager.queueEvent(event);
-    }
+    m_eventManager.queueEvent(event);
     
     m_eventManager.handleEvents();
     m_view.handleEvents();
