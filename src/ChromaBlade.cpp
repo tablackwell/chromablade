@@ -15,6 +15,7 @@ void ChromaBlade::init(){
 
     m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
+	m_window.setVerticalSyncEnabled(true);
 
     m_processManager.attachProcess(&m_view);
     m_processManager.attachProcess(&m_gameLogic);
@@ -22,23 +23,22 @@ void ChromaBlade::init(){
 
 void ChromaBlade::run(){
 	/* Main game loop */
-
 	while(m_view.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
-        handleEvents();
+        handleEvents(deltaTime);
         update(deltaTime);
         render();
 	}
 }
 
-void ChromaBlade::handleEvents() {
-    m_view.handleEvents();
+void ChromaBlade::handleEvents(float deltaTime) {
+    m_view.handleEvents(deltaTime);
 }
 
 void ChromaBlade::update(float &deltaTime) {
     m_processManager.update(deltaTime);
-    //m_gameLogic.update(deltaTime);
 }
+
 
 void ChromaBlade::render() {
     m_window.clear();

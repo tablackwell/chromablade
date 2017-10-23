@@ -22,7 +22,7 @@ public:
     void shutdown();
 
 private: // functions
-    void handleEvents();
+    void handleEvents(float);
     void update(float &deltaTime);
     void render();
 

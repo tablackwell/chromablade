@@ -12,7 +12,7 @@ PlayerView();
 	void update(float &deltaTime);
     void draw();
 	void setContext(sf::RenderWindow* window);
-	void handleEvents();
+	void handleEvents(float);
 	bool isOpen();
 private: //methods
 
