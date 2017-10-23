@@ -54,7 +54,7 @@ void ChromaBlade::render() {
     m_title.draw(m_window);
 
     /* Demo Level Code*/
-    //m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
-    //m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
+    //m_window.draw(m_map);
+    //m_window.draw(m_overlay);
     m_window.display();
 }
