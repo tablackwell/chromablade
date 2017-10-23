@@ -12,8 +12,8 @@ m_map.loadFromText("../res/tilesets/dungeon.png","../res/level/sampledungeon.txt
 m_map.load("../res/tileset.png", sf::Vector2u(32, 32), level, 16, 8);
 
 Overlay Example:
-m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/base.txt", sf::Vector2u(16, 16), 50, 38);
-m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/overlay.txt", sf::Vector2u(16, 16), 50, 38);
+m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
+m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
 render them in their respective order
 
 */
@@ -30,9 +30,11 @@ bool TileMap::loadFromText(const std::string& tileset, std::string fileName, sf:
   std::vector<int>numbers;
   int number;
   while(inputFile >> number){
-    numbers.push_back(number);
+     if(inputFile.peek() == ','){
+       inputFile.ignore();
+     }
+     numbers.push_back(number);
   }
-
   const int *newArray = &numbers[0];
   inputFile.close();
 
