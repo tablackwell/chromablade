@@ -3,6 +3,8 @@
 #include "GameLogic.hpp"
 #include "TileMap.hpp"
 
+#include <iostream>
+
 
 ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
 {
@@ -53,7 +55,10 @@ void ChromaBlade::run(){
 
 void ChromaBlade::handleEvents() {
     sf::Event event;
-    m_eventManager.queueEvent(event);
+    if (event.type == sf::Event::KeyPressed) {
+        std::cout<<"Key Pressed";
+        m_eventManager.queueEvent(event);
+    }
     
     m_eventManager.handleEvents();
     m_view.handleEvents();

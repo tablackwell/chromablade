@@ -13,6 +13,7 @@
 
 #include "EventInterface.hpp"
 #include "EventListener.hpp"
+#include "MoveEvent.hpp"
 #include "EventType.hpp"
 
 // Queues used to store events.
@@ -34,6 +35,8 @@ class EventManager {
         virtual void handleEvents(void);
 
     private:
+        EventInterface* convertSfEvent(sf::Event event);
+    
     private:
         sf::RenderWindow *m_window; // Reference to RenderWindow
         EventQueue m_queues[2]; // List of queues

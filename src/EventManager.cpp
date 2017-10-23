@@ -24,9 +24,26 @@ void EventManager::queueEvent(EventInterface *event) {
 }
 
 void EventManager::queueEvent(sf::Event event) {
-    std::cout<<event.type;
+    std::cout<<"Queuing"<<event.type;
+    EventInterface *newEvent = convertSfEvent(event);
 }
 
+
+/* Convert sfKeyEvents to EventInterface for event handling. */
+EventInterface* EventManager::convertSfEvent(sf::Event event) {
+    EventInterface *newEvent;
+    switch (event.type) {
+        case sf::Event::KeyPressed: {
+            if (event.key.code == sf::Keyboard::Up) {
+                EventInterface *newEvent = new MoveEvent(Direction::Up);
+                std::cout<<"NEWLINE"<<newEvent->getEventType();
+                return newEvent;
+            }
+        }
+        default : break;
+    }
+    return newEvent;
+}
 
 /* Add listener. */
 void EventManager::addListener(EventListener &listener, EventType &type) {
