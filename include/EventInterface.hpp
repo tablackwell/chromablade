@@ -6,6 +6,7 @@
 #define EVENTINTERFACE_HPP
 
 #include "EventType.hpp"
+#include <SFML/Window.hpp>
 
 class EventInterface {
 	public:

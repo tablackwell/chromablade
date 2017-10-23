@@ -25,7 +25,6 @@ void EventManager::queueEvent(EventInterface *event) {
 
 void EventManager::queueEvent(sf::Event event) {
     EventInterface *newEvent = convertSfEvent(event);
-    std::cout<<"Testing"<<std::endl;
 }
 
 
@@ -34,14 +33,14 @@ EventInterface* EventManager::convertSfEvent(sf::Event event) {
     std::cout<<"InsideSFConverter"<<std::endl;
     EventInterface *newEvent;
     switch (event.type) {
-        std::cout<<"InsideSwitch"<<std::endl;
         case sf::Event::KeyPressed: {
-            std::cout<<"NEWLINE"<<event.key.code;
             if (event.key.code == sf::Keyboard::Up) {
+                std::cout<<event.key.code;
                 EventInterface *newEvent = new MoveEvent(Direction::Up);
             }
         }
-        default : break;
+        default :
+            std::cout<<"DefaultSwitch"<<std::endl;
     }
     return newEvent;
 }

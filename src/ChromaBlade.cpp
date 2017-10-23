@@ -16,8 +16,9 @@ void ChromaBlade::init(){
 	m_view.init();
 	m_gameLogic.init();
 
+    m_eventManager.setWindow(&m_window);
 	m_view.setContext(&m_window);
-  m_map.loadFromText("../res/tileset.png", "../res/level/testlevel.txt", sf::Vector2u(32, 32), 16, 8);
+    m_map.loadFromText("../res/tileset.png", "../res/level/testlevel.txt", sf::Vector2u(32, 32), 16, 8);
 
   //	m_map.load("../res/tileset.png", sf::Vector2u(32, 32), level, 16, 8);
   /*const int level[] =
@@ -55,7 +56,9 @@ void ChromaBlade::run(){
 
 void ChromaBlade::handleEvents() {
     sf::Event event;
-    m_eventManager.queueEvent(event);
+    if (m_window.waitEvent(event)) {
+        m_eventManager.queueEvent(event);
+    }
     
     m_eventManager.handleEvents();
     m_view.handleEvents();
