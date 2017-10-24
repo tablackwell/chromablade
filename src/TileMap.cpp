@@ -1,6 +1,7 @@
 
 /*
- At the moment this is not entirely my original code! This is adapted from:
+ Please note: this code is adapted from the SFMl tutorial. It is modified, but
+ is mostly just the tutorial so don't treat this as 100% my own code.
  https://www.sfml-dev.org/tutorials/2.4/graphics-vertex-array.php
  - Thomas
 
@@ -24,21 +25,31 @@ render them in their respective order
 #include <string>
 #include <fstream>
 
-bool TileMap::loadFromText(const std::string& tileset, std::string fileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
+/*
+Creates a TileMap object from a .csv file.
+Arguments: tileset = tileset texture file (a png)
+           textFileName = the .csv file to read from
+           tileSize = Vector2u containing dimension of image tiles (ex: 16x16)
+           width and height = how many tiles to actually place
+*/
+bool TileMap::loadFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
+
   std::ifstream inputFile;
   // load the tileset texture
   if (!m_tileset.loadFromFile(tileset)){
     return false;
   }
-  inputFile.open(fileName, std::ifstream::in);
+
+  // load the csv file
+  inputFile.open(textFileName, std::ifstream::in);
 
   std::vector<int>numbers;
   int number;
-  while(inputFile >> number){
-     if(inputFile.peek() == ','){
+  while(inputFile >> number){ //until document ends
+     if(inputFile.peek() == ','){ // skip commas
        inputFile.ignore();
      }
-     numbers.push_back(number);
+     numbers.push_back(number); //add the number
   }
 
   // Convert int array to vector
@@ -49,14 +60,14 @@ bool TileMap::loadFromText(const std::string& tileset, std::string fileName, sf:
         m_vertices.setPrimitiveType(sf::Quads);
         m_vertices.resize(width * height * 4);
 
-        // populate the vertex array, with one quad per tile
+        // file vertex array with quads for each tile
         for (unsigned int i = 0; i < width; ++i)
             for (unsigned int j = 0; j < height; ++j)
             {
                 // get the current tile number
                 int tileNumber = tileArray[i + j * width];
 
-                // find its position in the tileset texture
+                // choose the particular tile from the tileset
                 int tu = tileNumber % (m_tileset.getSize().x / tileSize.x);
                 int tv = tileNumber / (m_tileset.getSize().x / tileSize.x);
 
@@ -75,14 +86,7 @@ bool TileMap::loadFromText(const std::string& tileset, std::string fileName, sf:
                 quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
                 quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
             }
-
         return true;
-}
-
-
-void TileMap::init(){
-  sf::VertexArray m_vertices;
-  sf::Texture m_tileset;
 }
 
 void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
