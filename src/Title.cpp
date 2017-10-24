@@ -85,16 +85,20 @@ int Title::checkCursor(const sf::Text &text) {
 int Title::update(sf::RenderWindow &window) {
     sf::Event event;
     while(window.pollEvent(event)) {
-    if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Down) {
-            if (checkCursor(m_play)) moveCursor(m_exit);
-        } else if (event.key.code == sf::Keyboard::Up) {
-            if (checkCursor(m_exit)) moveCursor(m_play);
-        } else if (event.key.code == sf::Keyboard::Return) {
-            if (checkCursor(m_play)) return 1;
-            else if (checkCursor(m_exit)) return 2;
-        }
-        break;
+    switch (event.type) {
+        case sf::Event::KeyPressed:
+            if (event.key.code == sf::Keyboard::Down) {
+                if (checkCursor(m_play)) moveCursor(m_exit);
+            } else if (event.key.code == sf::Keyboard::Up) {
+                if (checkCursor(m_exit)) moveCursor(m_play);
+            } else if (event.key.code == sf::Keyboard::Return) {
+                if (checkCursor(m_play)) return 1;
+                else if (checkCursor(m_exit)) return 2;
+            }
+            break;
+        case sf::Event::Closed:
+            return 2;
+            break;
     }
     }
     return 0;
