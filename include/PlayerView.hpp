@@ -20,6 +20,8 @@ private: //vars and objs
     sf::RenderWindow* targetWindow;
 	sf::Sprite character;
 	sf::Texture charTexture;
+	float speed;
+	bool notReleased;
 };
 
 #endif

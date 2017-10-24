@@ -26,14 +26,14 @@ void ChromaBlade::run(){
 	/* Main game loop */
 	while(m_view.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
-        handleEvents(deltaTime);
+        //handleEvents(deltaTime);
         update(deltaTime);
         render();
 	}
 }
 
 void ChromaBlade::handleEvents(float deltaTime) {
-    m_view.handleEvents(deltaTime);
+    //m_view.handleEvents(deltaTime);
 }
 
 void ChromaBlade::update(float &deltaTime) {
@@ -45,11 +45,11 @@ void ChromaBlade::render() {
     m_window.clear();
 
     /* Draw things */
-    m_title.draw(m_window);
-    //m_view.draw();
+    //m_title.draw(m_window);
 
     /* Demo Level Code*/
-    //m_window.draw(m_map);
-    //m_window.draw(m_overlay);
+    m_window.draw(m_map);
+    m_window.draw(m_overlay);
+    m_view.draw();
     m_window.display();
 }

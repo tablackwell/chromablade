@@ -4,7 +4,12 @@
 #include <SFML/Window.hpp>
 #include <cstdio>
 
+#define MAX_SPEED 200.f
+#define INIT_SPEED 50.f
+#define ACCELERATION 100.f
+
 PlayerView::PlayerView() : Process() {
+    init();
 }
 
 /* Initialize player view by loading files and setting initial positions */
@@ -15,8 +20,9 @@ void PlayerView::init(){
 	}
 	character.setTexture(charTexture);
 	character.setPosition(sf::Vector2f(400, 300));
-
+	character.setScale(2.f,2.f);
     setState(RUNNING);
+    speed = INIT_SPEED;
 }
 
 
@@ -28,6 +34,39 @@ void PlayerView::setContext(sf::RenderWindow* window){
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
+	sf::Event event;
+	while(targetWindow->pollEvent(event)){
+		// Close window
+		if(event.type == sf::Event::Closed){
+			targetWindow->close();
+		}
+		else if(event.type == sf::Event::KeyReleased){
+		    notReleased = false;
+		}
+		else if(event.type == sf::Event::KeyPressed){
+            notReleased = true;
+        }
+	}
+	if (notReleased){
+	    if (speed <= MAX_SPEED){
+	        speed += deltaTime * ACCELERATION;
+	    }
+	}
+	else{
+	    speed = INIT_SPEED;
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+	    character.move(-speed * deltaTime, 0.f);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+	    character.move(speed * deltaTime, 0.f);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+	    character.move(0.f, -speed * deltaTime);
+	}
+	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+	    character.move(0.f, speed * deltaTime);
+	}
 }
 
 /* Draw view. */
@@ -42,23 +81,4 @@ bool PlayerView::isOpen(){
 
 
 void PlayerView::handleEvents(float deltaTime){
-	sf::Event event;
-	while(targetWindow->pollEvent(event)){
-		// Close window
-		if(event.type == sf::Event::Closed){
-			targetWindow->close();
-		}
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-	    character.move(-200.f * deltaTime, 0.f);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-	    character.move(200.f * deltaTime, 0.f);
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-	    character.move(0.f, -200.f * deltaTime);
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-	    character.move(0.f, 200.f * deltaTime);
-	}
 }
