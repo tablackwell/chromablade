@@ -13,6 +13,8 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 void ChromaBlade::init(){
 	m_view.setContext(&m_window);
 
+    m_audio.init();
+
     m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
 	m_window.setVerticalSyncEnabled(true);
