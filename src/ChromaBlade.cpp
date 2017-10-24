@@ -13,16 +13,7 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 
 
 void ChromaBlade::init(){
-<<<<<<< HEAD
-	m_view.init();
-	m_gameLogic.init();
-
     m_eventManager.setWindow(&m_window);
-	m_view.setContext(&m_window);
-    m_map.loadFromText("../res/tileset.png", "../res/level/testlevel.txt", sf::Vector2u(32, 32), 16, 8);
-=======
-	m_view.setContext(&m_window);
->>>>>>> origin/master
 
     /* Play music on start. */
     m_audio.init();
@@ -54,7 +45,6 @@ void ChromaBlade::run(){
 }
 
 void ChromaBlade::handleEvents() {
-<<<<<<< HEAD
     sf::Event event;
     if (m_window.waitEvent(event)) {
         m_eventManager.queueEvent(event);
@@ -62,8 +52,6 @@ void ChromaBlade::handleEvents() {
     
     m_eventManager.handleEvents();
     m_view.handleEvents();
-=======
->>>>>>> origin/master
 }
 
 void ChromaBlade::update(float &deltaTime) {
