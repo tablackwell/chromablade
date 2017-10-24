@@ -17,9 +17,9 @@ void ChromaBlade::init(){
     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
 	m_window.setVerticalSyncEnabled(true);
 
-    m_processManager.attachProcess(&m_view);
-    m_processManager.attachProcess(&m_gameLogic);
-    m_processManager.attachProcess(&m_audio);
+//    m_processManager.attachProcess(&m_view);
+//    m_processManager.attachProcess(&m_gameLogic);
+//    m_processManager.attachProcess(&m_audio);
 }
 
 void ChromaBlade::run(){
@@ -27,8 +27,11 @@ void ChromaBlade::run(){
 	while(m_view.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
         handleEvents(deltaTime);
-        update(deltaTime);
+//        update(deltaTime);
         render();
+//        m_window.clear();
+//        m_view.draw();
+//        m_window.display();
 	}
 }
 
@@ -45,11 +48,12 @@ void ChromaBlade::render() {
     m_window.clear();
 
     /* Draw things */
-    m_title.draw(m_window);
-    //m_view.draw();
+//    m_title.draw(m_window);
+
 
     /* Demo Level Code*/
-    //m_window.draw(m_map);
-    //m_window.draw(m_overlay);
+    m_window.draw(m_map);
+    m_window.draw(m_overlay);
+    m_view.draw();
     m_window.display();
 }
