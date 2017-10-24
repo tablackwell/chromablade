@@ -5,7 +5,7 @@
 #include <cstdio>
 
 #define MAX_SPEED 200.f
-#define INIT_SPEED 50.f
+#define INIT_SPEED 110.f
 #define ACCELERATION 100.f
 
 PlayerView::PlayerView() : Process() {
@@ -47,6 +47,7 @@ void PlayerView::update(float &deltaTime){
             notReleased = true;
         }
 	}
+    /*
 	if (notReleased){
 	    if (speed <= MAX_SPEED){
 	        speed += deltaTime * ACCELERATION;
@@ -55,6 +56,7 @@ void PlayerView::update(float &deltaTime){
 	else{
 	    speed = INIT_SPEED;
 	}
+    */
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
 	    character.move(-speed * deltaTime, 0.f);
 	}
