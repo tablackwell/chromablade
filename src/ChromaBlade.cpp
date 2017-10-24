@@ -20,36 +20,52 @@ void ChromaBlade::init(){
     m_processManager.attachProcess(&m_view);
     m_processManager.attachProcess(&m_gameLogic);
     m_processManager.attachProcess(&m_audio);
+
+    m_state = GameState::Title;
 }
 
 void ChromaBlade::run(){
 	/* Main game loop */
 	while(m_view.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
-        //handleEvents(deltaTime);
+        //handleEvents();
         update(deltaTime);
         render();
 	}
 }
 
-void ChromaBlade::handleEvents(float deltaTime) {
-    //m_view.handleEvents(deltaTime);
+void ChromaBlade::handleEvents() {
 }
 
 void ChromaBlade::update(float &deltaTime) {
-    m_processManager.update(deltaTime);
+    int rc;
+    switch (m_state) {
+        case GameState::Title:
+            rc = m_title.update(m_window);
+            if (rc == 0) {}
+            else if (rc == 1) m_state = GameState::Game;
+            else m_window.close();
+            break;
+        case GameState::Game:
+            m_processManager.update(deltaTime);
+            break;
+    }
 }
-
 
 void ChromaBlade::render() {
     m_window.clear();
 
     /* Draw things */
-    //m_title.draw(m_window);
+    switch(m_state) {
+        case GameState::Title:
+            m_title.draw(m_window);
+            break;
+        case GameState::Game:
+            m_window.draw(m_map);
+            m_window.draw(m_overlay);
+            m_view.draw();
+            break;
+    }
 
-    /* Demo Level Code*/
-    m_window.draw(m_map);
-    m_window.draw(m_overlay);
-    m_view.draw();
     m_window.display();
 }

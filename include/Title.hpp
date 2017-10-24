@@ -8,6 +8,7 @@ public:
     ~Title();
 
     void draw(sf::RenderWindow &window);
+    int update(sf::RenderWindow &window);
 private:
     void init();
     void centerText(sf::Text &text);

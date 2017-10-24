@@ -10,6 +10,7 @@
 #include "Title.hpp"
 #include "ProcessManager.hpp"
 #include "Audio.hpp"
+#include "GameState.hpp"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -23,7 +24,7 @@ public:
     void shutdown();
 
 private: // functions
-    void handleEvents(float);
+    void handleEvents();
     void update(float &deltaTime);
     void render();
 
@@ -37,6 +38,7 @@ private: // vars and objs
     Title m_title;
     ProcessManager m_processManager;
     Audio m_audio;
+    GameState m_state;
 };
 
 #endif
