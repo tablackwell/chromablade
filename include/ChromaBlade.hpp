@@ -4,11 +4,14 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window.hpp>
 
+#include "ProcessManager.hpp"
 #include "PlayerView.hpp"
 #include "EventManager.hpp"
 #include "GameLogic.hpp"
+#include "GameState.hpp"
 #include "TileMap.hpp"
 #include "Title.hpp"
+#include "Audio.hpp"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -33,7 +36,11 @@ private: // vars and objs
     sf::RenderWindow m_window;
     sf::Clock m_fpsTimer;
     TileMap m_map;
+    TileMap m_overlay;
     Title m_title;
+    ProcessManager m_processManager;
+    Audio m_audio;
+    GameState m_state;
 };
 
 #endif

@@ -82,3 +82,20 @@ int Title::checkCursor(const sf::Text &text) {
     return m_cursor.getPosition().y == text.getPosition().y;
 }
 
+int Title::update(sf::RenderWindow &window) {
+    sf::Event event;
+    while(window.pollEvent(event)) {
+    if (event.type == sf::Event::KeyPressed) {
+        if (event.key.code == sf::Keyboard::Down) {
+            if (checkCursor(m_play)) moveCursor(m_exit);
+        } else if (event.key.code == sf::Keyboard::Up) {
+            if (checkCursor(m_exit)) moveCursor(m_play);
+        } else if (event.key.code == sf::Keyboard::Return) {
+            if (checkCursor(m_play)) return 1;
+            else if (checkCursor(m_exit)) return 2;
+        }
+        break;
+    }
+    }
+    return 0;
+}
