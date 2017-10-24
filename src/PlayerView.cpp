@@ -20,7 +20,7 @@ void PlayerView::init(){
 	}
 	character.setTexture(charTexture);
 	character.setPosition(sf::Vector2f(180, 210));
-	character.setScale(2.f,2.f);
+	character.setScale(1.f,1.f);
     setState(Process::RUNNING);
     speed = INIT_SPEED;
 }
