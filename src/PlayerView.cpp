@@ -80,5 +80,5 @@ bool PlayerView::isOpen(){
 }
 
 
-void PlayerView::handleEvents(float deltaTime){
+void PlayerView::handleEvents(){
 }

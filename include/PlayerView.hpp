@@ -12,7 +12,7 @@ public:
 	void update(float &deltaTime);
     void draw();
 	void setContext(sf::RenderWindow* window);
-	void handleEvents(float);
+	void handleEvents();
 	bool isOpen();
 private: //methods
 

@@ -13,6 +13,7 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 
 
 void ChromaBlade::init(){
+    m_view.setContext(&m_window);
     m_eventManager.setWindow(&m_window);
 
     /* Play music on start. */
@@ -36,10 +37,10 @@ void ChromaBlade::run(){
 	/* Main game loop */
 	while(m_view.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
-        sf::Event event;
-        if (m_window.waitEvent(event)) {
-            m_eventManager.queueEvent(event);
-        }
+        //sf::Event event;
+        //if (m_window.pollEvent(event)) {
+            //m_eventManager.queueEvent(event);
+        //}
         handleEvents();
         update(deltaTime);
         render();
@@ -48,7 +49,6 @@ void ChromaBlade::run(){
 
 void ChromaBlade::handleEvents() {
     m_eventManager.handleEvents();
-    m_view.handleEvents();
 }
 
 void ChromaBlade::update(float &deltaTime) {
