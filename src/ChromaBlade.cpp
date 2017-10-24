@@ -40,6 +40,10 @@ void ChromaBlade::run(){
 
 	while(m_view.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
+        sf::Event event;
+        if (m_window.waitEvent(event)) {
+            m_eventManager.queueEvent(event);
+        }
         handleEvents();
         update(deltaTime);
         render();
@@ -55,11 +59,6 @@ void ChromaBlade::run(){
 }
 
 void ChromaBlade::handleEvents() {
-    sf::Event event;
-    if (m_window.waitEvent(event)) {
-        m_eventManager.queueEvent(event);
-    }
-    
     m_eventManager.handleEvents();
     m_view.handleEvents();
 }

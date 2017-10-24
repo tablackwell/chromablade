@@ -10,6 +10,7 @@ EventManager::EventManager() {
 
 
 void EventManager::init() {
+
 }
 
 /* Set reference to window. */
@@ -39,8 +40,7 @@ EventInterface* EventManager::convertSfEvent(sf::Event event) {
                 EventInterface *newEvent = new MoveEvent(Direction::Up);
             }
         }
-        default :
-            std::cout<<"DefaultSwitch"<<std::endl;
+        default : break;
     }
     return newEvent;
 }
@@ -77,12 +77,14 @@ void EventManager::triggerEvent(EventInterface& event) {
 
 /* Process all events in event queue. */
 void EventManager::handleEvents() {
-    // Swap queues and clear old queue
-    std::swap(m_processQueue, m_registerQueue);
-    m_registerQueue->m_eventList.clear();
-
+    if (m_processQueue->m_eventList.size() > 0) {
+        // Swap queues and clear old queue
+        std::swap(m_processQueue, m_registerQueue);
+        m_registerQueue->m_eventList.clear();
+    }
+    
     // Process all events in queue
-    while (!(m_processQueue->m_eventList.empty())) {
+    while (m_processQueue->m_eventList.size() > 0) {
         EventInterface *event = m_processQueue->m_eventList.front();
         m_processQueue->m_eventList.pop_front(); // No return value
         triggerEvent(*event);
