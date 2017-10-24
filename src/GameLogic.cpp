@@ -7,7 +7,7 @@ GameLogic::GameLogic() : Process() {
 
 void GameLogic::init(){
 	m_level = red;
-    setState(RUNNING);
+    setState(Process::RUNNING);
 }
 
 void GameLogic::update(float &deltaTime){

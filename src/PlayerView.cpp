@@ -19,9 +19,9 @@ void PlayerView::init(){
 		// ERROR
 	}
 	character.setTexture(charTexture);
-	character.setPosition(sf::Vector2f(400, 300));
+	character.setPosition(sf::Vector2f(180, 210));
 	character.setScale(2.f,2.f);
-    setState(RUNNING);
+    setState(Process::RUNNING);
     speed = INIT_SPEED;
 }
 

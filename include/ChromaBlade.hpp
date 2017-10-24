@@ -4,13 +4,13 @@
 #include <SFML/System/Clock.hpp>
 #include <SFML/Window.hpp>
 
+#include "ProcessManager.hpp"
 #include "PlayerView.hpp"
 #include "GameLogic.hpp"
+#include "GameState.hpp"
 #include "TileMap.hpp"
 #include "Title.hpp"
-#include "ProcessManager.hpp"
 #include "Audio.hpp"
-#include "GameState.hpp"
 
 #define WIDTH 800
 #define HEIGHT 600
