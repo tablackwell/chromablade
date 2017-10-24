@@ -36,20 +36,17 @@ void ChromaBlade::run(){
 	/* Main game loop */
 	while(m_view.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
-        // TODO: integrate EventManager
-        //handleEvents();
-
+        sf::Event event;
+        if (m_window.waitEvent(event)) {
+            m_eventManager.queueEvent(event);
+        }
+        handleEvents();
         update(deltaTime);
         render();
 	}
 }
 
 void ChromaBlade::handleEvents() {
-    sf::Event event;
-    if (m_window.waitEvent(event)) {
-        m_eventManager.queueEvent(event);
-    }
-    
     m_eventManager.handleEvents();
     m_view.handleEvents();
 }
