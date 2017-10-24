@@ -34,20 +34,6 @@ void PlayerView::setContext(sf::RenderWindow* window){
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
-}
-
-/* Draw view. */
-void PlayerView::draw() {
-    targetWindow->draw(character);
-}
-
-/* Check if the window is open */
-bool PlayerView::isOpen(){
-	return targetWindow->isOpen();
-}
-
-
-void PlayerView::handleEvents(float deltaTime){
 	sf::Event event;
 	while(targetWindow->pollEvent(event)){
 		// Close window
@@ -81,4 +67,18 @@ void PlayerView::handleEvents(float deltaTime){
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
 	    character.move(0.f, speed * deltaTime);
 	}
+}
+
+/* Draw view. */
+void PlayerView::draw() {
+    targetWindow->draw(character);
+}
+
+/* Check if the window is open */
+bool PlayerView::isOpen(){
+	return targetWindow->isOpen();
+}
+
+
+void PlayerView::handleEvents(float deltaTime){
 }
