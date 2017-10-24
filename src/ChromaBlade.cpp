@@ -13,6 +13,9 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 void ChromaBlade::init(){
 	m_view.setContext(&m_window);
 
+    /* Load title screen. */
+    m_title.init();
+
     /* Play music on start. */
     m_audio.init();
 

@@ -1,7 +1,7 @@
 #include "ChromaBlade.hpp"
 #include "Title.hpp"
 
-Title::Title() { init(); };
+Title::Title() { };
 Title::~Title() { };
 
 void Title::init() {

@@ -7,10 +7,10 @@ public:
     Title();
     ~Title();
 
+    void init();
     void draw(sf::RenderWindow &window);
     int update(sf::RenderWindow &window);
 private:
-    void init();
     void centerText(sf::Text &text);
     void moveCursor(const sf::Text &text);
     int checkCursor(const sf::Text &text);
