@@ -8,7 +8,8 @@
 enum EventType {
    collisionEvent,
    attackEvent,
-   moveEvent
+   moveEvent,
+   sfmlEvent
 };
 
 #endif

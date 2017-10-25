@@ -12,6 +12,7 @@
 #include <algorithm>
 
 #include "EventInterface.hpp"
+#include "SFMLEvent.hpp"
 #include "EventListener.hpp"
 #include "MoveEvent.hpp"
 #include "EventType.hpp"
@@ -23,20 +24,18 @@ typedef struct {
 
 
 class EventManager {
-	public:
+public:
 	    EventManager();
-        void init();
+      void init();
 	    void setWindow(sf::RenderWindow *mainWindow);
-		void addListener(EventListener &listener, EventType &type);
-		void removeListener(EventListener &listener, EventType &type);
-        virtual void queueEvent(EventInterface *event);
-        virtual void queueEvent(sf::Event event);
-        virtual void triggerEvent(EventInterface &event);
-        virtual void handleEvents(void);
+		  void addListener(EventListener &listener, EventType &type);
+      void removeListener(EventListener &listener, EventType &type);
+      virtual void queueEvent(EventInterface *event);
+      virtual void queueEvent(sf::Event event);
+      virtual void triggerEvent(EventInterface &event);
+      virtual void handleEvents(void);
 
     private:
-        EventInterface* convertSfEvent(sf::Event event);
-    
     private:
         sf::RenderWindow *m_window; // Reference to RenderWindow
         EventQueue m_queues[2]; // List of queues

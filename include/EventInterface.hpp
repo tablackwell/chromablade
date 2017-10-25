@@ -13,6 +13,7 @@ class EventInterface {
 	    virtual const EventType& getEventType(void) const = 0;
 	private:
 	private:
+			EventType type;
 };
 
 #endif

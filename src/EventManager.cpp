@@ -10,7 +10,6 @@ EventManager::EventManager() {
 
 
 void EventManager::init() {
-
 }
 
 /* Set reference to window. */
@@ -25,25 +24,10 @@ void EventManager::queueEvent(EventInterface *event) {
 }
 
 void EventManager::queueEvent(sf::Event event) {
-    EventInterface *newEvent = convertSfEvent(event);
-    m_registerQueue->m_eventList.push_back(newEvent);
+    SFMLEvent *newEvent = new SFMLEvent(event);
+    m_registerQueue->m_eventList.push_back((EventInterface*)newEvent);
 }
 
-
-/* Convert sfKeyEvents to EventInterface for event handling. */
-EventInterface* EventManager::convertSfEvent(sf::Event event) {
-    EventInterface *newEvent;
-    switch (event.type) {
-        case sf::Event::KeyPressed: {
-            if (event.key.code == sf::Keyboard::Up) {
-                std::cout<<event.key.code;
-                EventInterface *newEvent = new MoveEvent(Direction::Up);
-            }
-        }
-        default : break;
-    }
-    return newEvent;
-}
 
 /* Add listener. */
 void EventManager::addListener(EventListener &listener, EventType &type) {
@@ -82,7 +66,7 @@ void EventManager::handleEvents() {
         std::swap(m_processQueue, m_registerQueue);
         m_registerQueue->m_eventList.clear();
     }
-    
+
     // Process all events in queue
     while (m_processQueue->m_eventList.size() > 0) {
         EventInterface *event = m_processQueue->m_eventList.front();
