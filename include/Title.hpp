@@ -9,6 +9,7 @@ public:
 
     void draw(sf::RenderWindow &window);
     int update(sf::RenderWindow &window);
+	void update2(const EventInterface& event);
 private:
     void init();
     void centerText(sf::Text &text);

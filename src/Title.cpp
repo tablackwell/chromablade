@@ -1,5 +1,6 @@
 #include "ChromaBlade.hpp"
 #include "Title.hpp"
+#include <iostream>
 
 Title::Title() { init(); };
 Title::~Title() { };
@@ -83,19 +84,37 @@ int Title::checkCursor(const sf::Text &text) {
 }
 
 int Title::update(sf::RenderWindow &window) {
-    sf::Event event;
-    while(window.pollEvent(event)) {
-    if (event.type == sf::Event::KeyPressed) {
-        if (event.key.code == sf::Keyboard::Down) {
-            if (checkCursor(m_play)) moveCursor(m_exit);
-        } else if (event.key.code == sf::Keyboard::Up) {
-            if (checkCursor(m_exit)) moveCursor(m_play);
-        } else if (event.key.code == sf::Keyboard::Return) {
-            if (checkCursor(m_play)) return 1;
-            else if (checkCursor(m_exit)) return 2;
-        }
-        break;
-    }
-    }
+//    sf::Event event;
+//    while(window.pollEvent(event)) {
+//    if (event.type == sf::Event::KeyPressed) {
+//        if (event.key.code == sf::Keyboard::Down) {
+//            if (checkCursor(m_play)) moveCursor(m_exit);
+//        } else if (event.key.code == sf::Keyboard::Up) {
+//            if (checkCursor(m_exit)) moveCursor(m_play);
+//        } else if (event.key.code == sf::Keyboard::Return) {
+//            if (checkCursor(m_play)) return 1;
+//            else if (checkCursor(m_exit)) return 2;
+//        }
+//        break;
+//    }
+//    }
     return 0;
+}
+
+void Title::update2(const EventInterface &event) {
+    const EventInterface *ptr = &event;
+    
+    // Convert to SFML inherited class.
+    if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)){
+        
+        sf::Event sfmlEvent = sfEvent->getSFMLEvent();
+        if (sfmlEvent.type == sf::Event::KeyPressed) {
+            std::cout<<"UPDATING";
+            if (sfmlEvent.key.code == sf::Keyboard::Down) {
+                if (checkCursor(m_play)) moveCursor(m_exit);
+            } else if (sfmlEvent.key.code == sf::Keyboard::Up) {
+                if (checkCursor(m_exit)) moveCursor(m_play);
+            }
+        }
+    }
 }

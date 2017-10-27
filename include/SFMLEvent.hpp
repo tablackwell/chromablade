@@ -11,11 +11,12 @@
 
 class SFMLEvent : public EventInterface{
 public:
-  SFMLEvent(sf::Event event);
-  virtual const EventType& getEventType(void) const;
+    SFMLEvent(sf::Event event);
+	virtual const EventType& getEventType(void) const;
+	const sf::Event getSFMLEvent() const;
 private:
-  sf::Event event;
-  EventType type;
+	sf::Event event;
+    EventType type;
 private:
 };
 

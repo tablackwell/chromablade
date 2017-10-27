@@ -5,7 +5,7 @@ MoveEvent::MoveEvent(Direction direction) {
 }
 
 const EventType& MoveEvent::getEventType() const{
-    return EventType::moveEvent;
+    return eventType;
 }
 
 /* Set the movement direction */

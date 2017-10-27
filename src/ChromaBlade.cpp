@@ -15,6 +15,7 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 void ChromaBlade::init(){
     m_view.setContext(&m_window);
     m_eventManager.setWindow(&m_window);
+	m_eventManager.init();
 
     /* Play music on start. */
     m_audio.init();
@@ -35,14 +36,17 @@ void ChromaBlade::init(){
 
 void ChromaBlade::run(){
 	/* Main game loop */
-	while(m_view.isOpen()){
+	while(m_window.isOpen()){
 		float deltaTime = m_fpsTimer.restart().asSeconds();
-        //sf::Event event;
-        //if (m_window.pollEvent(event)) {
-            //m_eventManager.queueEvent(event);
-        //}
-        handleEvents();
-        update(deltaTime);
+        sf::Event event;
+        while (m_window.pollEvent(event)) {
+			// Only queue input events to avoid overloading event manager.
+			if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed) {
+				m_eventManager.queueEvent(event);
+			}
+        }
+		handleEvents();
+        //update(deltaTime);
         render();
 	}
 }
@@ -54,19 +58,19 @@ void ChromaBlade::handleEvents() {
 void ChromaBlade::update(float &deltaTime) {
     /* Naive switch to handle game state transitions. */
     int rc;
-    switch (m_state) {
-        case GameState::Title:
-            rc = m_title.update(m_window);
-            if (rc == 0) {}
-            // Selected Play
-            else if (rc == 1) m_state = GameState::Game;
-            // Selected Exit
-            else m_window.close();
-            break;
-        case GameState::Game:
-            m_processManager.update(deltaTime);
-            break;
-    }
+//    switch (m_state) {
+//        case GameState::Title:
+//            rc = m_title.update(m_window);
+//            if (rc == 0) {}
+//            // Selected Play
+//            else if (rc == 1) m_state = GameState::Game;
+//            // Selected Exit
+//            else m_window.close();
+//            break;
+//        case GameState::Game:
+//            m_processManager.update(deltaTime);
+//            break;
+//    }
 }
 
 void ChromaBlade::render() {
