@@ -14,8 +14,8 @@ public:
     void setListener(EventManager *eventManager);
 
     void draw(sf::RenderWindow &window);
-    int update(sf::RenderWindow &window);
-	void update2(const EventInterface& event);
+	void update(const EventInterface& event);
+    
 private:
     void init();
     void centerText(sf::Text &text);

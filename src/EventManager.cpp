@@ -37,11 +37,10 @@ void EventManager::queueEvent(sf::Event event) {
 void EventManager::addListener(const EventListener &listener, const EventType &type) {
 
 	m_listeners = m_eventMap[type];
-	const static auto addToEnd = std::move(listener);
 	
 	// Listener not in list m_listeners. Add to list.
 	if (std::find(m_listeners.begin(), m_listeners.end(), listener) == m_listeners.end()) {
-		m_listeners.push_back(addToEnd);
+		m_listeners.push_back(listener);
         
 //        std::cout<<"Event type "<<type<< " Listener added: "<<listener.getId()<<" "<<m_listeners.back().getId()<<"\n";
 		
@@ -55,7 +54,6 @@ void EventManager::triggerEvent(EventInterface& event) {
 	// Event not found.
 	if (m_eventMap.find(event.getEventType()) == m_eventMap.end()) {
 		std::cout<<"Event not found \n";
-		return;
 	}
 	
 	// Trigger all events in listener list.
@@ -69,11 +67,11 @@ void EventManager::triggerEvent(EventInterface& event) {
 
 /* Process all events in event queue. */
 void EventManager::handleEvents() {
-    // Swap queues and clear old queue
+    // Swap queues and clear old queue.
     std::swap(m_processQueue, m_registerQueue);
     m_registerQueue->m_eventList.clear();
 
-    // Process all events in queue
+    // Process all events in queue.
     while (m_processQueue->m_eventList.size() > 0) {
         EventInterface *event = m_processQueue->m_eventList.front();
 		m_processQueue->m_eventList.pop_front(); // No return value

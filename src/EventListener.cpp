@@ -35,6 +35,5 @@ float EventListener::getId() const {
 /* Call function. */
 void EventListener::callFunction(const EventInterface &event) {
     this->m_function(event);
-	std::cout<<"Listener calling function \n";
 }
 

@@ -60,10 +60,10 @@ void Title::init() {
 }
 
 void Title::setListener(EventManager *eventManager) {
-    std::function<void(const EventInterface &event)> titleScreen = std::bind(&Title::update2, this, std::placeholders::_1);
+    // Create function for listener. Add to event manager.
+    std::function<void(const EventInterface &event)> titleScreen = std::bind(&Title::update, this, std::placeholders::_1);
     const EventListener m_listener = EventListener(titleScreen, 1);
     eventManager->addListener(m_listener, EventType::sfmlEvent);
-    std::cout<<"Added listener id: "<<m_listener.getId()<<" to "<<EventType::sfmlEvent;
 }
 
 void Title::draw(sf::RenderWindow &window) {
@@ -91,33 +91,17 @@ int Title::checkCursor(const sf::Text &text) {
     return m_cursor.getPosition().y == text.getPosition().y;
 }
 
-int Title::update(sf::RenderWindow &window) {
-//    sf::Event event;
-//    while(window.pollEvent(event)) {
-//    if (event.type == sf::Event::KeyPressed) {
-//        if (event.key.code == sf::Keyboard::Down) {
-//            if (checkCursor(m_play)) moveCursor(m_exit);
-//        } else if (event.key.code == sf::Keyboard::Up) {
-//            if (checkCursor(m_exit)) moveCursor(m_play);
-//        } else if (event.key.code == sf::Keyboard::Return) {
-//            if (checkCursor(m_play)) return 1;
-//            else if (checkCursor(m_exit)) return 2;
-//        }
-//        break;
-//    }
-//    }
-    return 0;
-}
 
-void Title::update2(const EventInterface &event) {
+/* Update title screen based on keyPressed event. */
+void Title::update(const EventInterface &event) {
     const EventInterface *ptr = &event;
     
     // Convert to SFML inherited class.
     if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)){
         
         sf::Event sfmlEvent = sfEvent->getSFMLEvent();
+        
         if (sfmlEvent.type == sf::Event::KeyPressed) {
-            std::cout<<"UPDATING";
             if (sfmlEvent.key.code == sf::Keyboard::Down) {
                 if (checkCursor(m_play)) moveCursor(m_exit);
             } else if (sfmlEvent.key.code == sf::Keyboard::Up) {
