@@ -2,10 +2,16 @@
 #define TITLE_HPP
 #include <SFML/Graphics.hpp>
 
+#include "EventListener.hpp"
+#include "EventManager.hpp"
+#include "EventInterface.hpp"
+
 class Title {
 public:
     Title();
     ~Title();
+    
+    void setListener(EventManager *eventManager);
 
     void draw(sf::RenderWindow &window);
     int update(sf::RenderWindow &window);

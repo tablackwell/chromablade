@@ -1,9 +1,6 @@
 #include "ChromaBlade.hpp"
-#include "PlayerView.hpp"
-#include "GameLogic.hpp"
-#include "TileMap.hpp"
-#include <cstdio>
 
+#include <cstdio>
 #include <iostream>
 
 
@@ -15,7 +12,9 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 void ChromaBlade::init(){
     m_view.setContext(&m_window);
     m_eventManager.setWindow(&m_window);
-	m_eventManager.init();
+    m_title.setListener(&m_eventManager);
+    
+    std::cout<<"INIT"<<m_eventManager.m_listeners.size();
 
     /* Play music on start. */
     m_audio.init();

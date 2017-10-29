@@ -18,6 +18,7 @@ public:
     bool operator==(const EventListener &otherListener) {
         return m_id == otherListener.getId();
     }
+    EventListener();
 	EventListener(std::function<void(const EventInterface&)> function);
 	EventListener(std::function<void(const EventInterface&)> function, float id);
 	void callFunction(const EventInterface&);

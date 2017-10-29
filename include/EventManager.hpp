@@ -13,7 +13,6 @@
 
 #include "EventInterface.hpp"
 #include "EventListener.hpp"
-#include "Title.hpp"
 #include "SFMLEvent.hpp"
 #include "MoveEvent.hpp"
 #include "EventType.hpp"
@@ -35,6 +34,8 @@ public:
 	virtual void queueEvent(sf::Event event);
 	virtual void triggerEvent(EventInterface &event);
 	virtual void handleEvents(void);
+    std::list<EventListener> m_listeners; // List of listeners
+
 
 private:
 private:
@@ -42,7 +43,6 @@ private:
 	EventQueue m_queues[2]; // List of queues
 	EventQueue *m_processQueue = &m_queues[0]; // Queue for processing events
 	EventQueue *m_registerQueue = &m_queues[1]; // Queue for registering events
-	std::list<EventListener> m_listeners; // List of listeners
 	std::map<EventType, std::list<EventListener>> m_eventMap; // Maps event to listeners
 };
 

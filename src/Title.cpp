@@ -1,5 +1,6 @@
 #include "ChromaBlade.hpp"
 #include "Title.hpp"
+
 #include <iostream>
 
 Title::Title() { init(); };
@@ -56,6 +57,13 @@ void Title::init() {
     centerText(m_play);
     centerText(m_exit);
     moveCursor(m_play);
+}
+
+void Title::setListener(EventManager *eventManager) {
+    std::function<void(const EventInterface &event)> titleScreen = std::bind(&Title::update2, this, std::placeholders::_1);
+    const EventListener m_listener = EventListener(titleScreen, 1);
+    eventManager->addListener(m_listener, EventType::sfmlEvent);
+    std::cout<<"Added listener id: "<<m_listener.getId()<<" to "<<EventType::sfmlEvent;
 }
 
 void Title::draw(sf::RenderWindow &window) {
