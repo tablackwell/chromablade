@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include "Process.hpp"
+#include "GameLogic.hpp"
 
 
 class PlayerView : public Process {
@@ -14,6 +15,7 @@ PlayerView();
 	void setContext(sf::RenderWindow* window);
 	void handleEvents(float);
 	bool isOpen();
+	void setGameLogic(GameLogic gameLogic);
 private: //methods
 
 private: //vars and objs
@@ -22,6 +24,7 @@ private: //vars and objs
 	sf::Texture charTexture;
 	float speed;
 	bool notReleased;
+	GameLogic gameLogic;
 };
 
 #endif

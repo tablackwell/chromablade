@@ -12,6 +12,7 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 
 void ChromaBlade::init(){
 	m_view.setContext(&m_window);
+	m_view.setGameLogic(m_gameLogic);
 
     /* Load title screen. */
     m_title.init();

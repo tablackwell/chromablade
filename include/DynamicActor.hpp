@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <SFML/Graphics.hpp>
+#include<tuple>
 
 /* List of all possible colors */
 enum Color{
@@ -16,11 +17,12 @@ enum Color{
 class DynamicActor {
 	public:
 		DynamicActor();
-		DynamicActor(Color activeColor, float health, float damage, std::tuple<int, int> startPos, sf::Texture texture, int speed);
+		DynamicActor(Color activeColor, float health, float damage, std::tuple<float, float> startPos, sf::Texture texture, int speed);
 		float getHealth();
 		virtual void attack();
 		void changeColor(Color color);
 		void setHealth(float health);
+		void setPosition(std::tuple<float, float>);
 
 	private:
 
@@ -28,7 +30,7 @@ class DynamicActor {
 		Color activeColor;
 		float health;
 		float damage; // Attack damage
-		std::tuple<int, int> position;
+		std::tuple<float, float> position;
 		sf::Texture texture;
 		int speed;
 };

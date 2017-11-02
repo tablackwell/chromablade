@@ -3,10 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <cstdio>
+#include <tuple>
 
 #define MAX_SPEED 200.f
 #define INIT_SPEED 110.f
-#define ACCELERATION 100.f
+//#define ACCELERATION 100.f
 
 PlayerView::PlayerView() : Process() {
     init();
@@ -29,6 +30,10 @@ void PlayerView::init(){
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
 	targetWindow = window;
+}
+
+void PlayerView::setGameLogic(GameLogic gameLogic) {
+    this->gameLogic = gameLogic;
 }
 
 
@@ -59,15 +64,19 @@ void PlayerView::update(float &deltaTime){
     */
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
 	    character.move(-speed * deltaTime, 0.f);
+	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
 	    character.move(speed * deltaTime, 0.f);
+	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 	    character.move(0.f, -speed * deltaTime);
+	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
 	    character.move(0.f, speed * deltaTime);
+	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
 	}
 }
 
