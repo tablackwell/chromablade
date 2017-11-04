@@ -14,6 +14,10 @@ void ChromaBlade::init(){
     m_eventManager.setWindow(&m_window);
     
     /* Subscribe to events. */
+    std::function<void(const EventInterface &event)> closeScreen = std::bind(&ChromaBlade::shutdown, this, std::placeholders::_1);
+    const EventListener m_listener = EventListener(closeScreen, 0);
+    m_eventManager.addListener(m_listener, EventType::sfmlEvent);
+    
     m_title.setListener(&m_eventManager);
     
     /* Play music on start. */
@@ -89,4 +93,16 @@ void ChromaBlade::render() {
     }
 
     m_window.display();
+}
+
+void ChromaBlade::shutdown(const EventInterface &event) {
+    std::cout<<"Shutdown";
+    const EventInterface *ptr = &event;
+
+    // Convert to SFML inherited class.
+    if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)){
+        if (sfEvent->getSFMLEvent().type == sf::Event::Closed) {
+            m_window.close();
+        }
+    }
 }

@@ -22,7 +22,7 @@ public:
     void init();
     void run();
     void pause();
-    void shutdown();
+    void shutdown(const EventInterface &event);
 
 private: // functions
     void handleEvents();

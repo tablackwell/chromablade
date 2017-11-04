@@ -64,6 +64,7 @@ void Title::setListener(EventManager *eventManager) {
     std::function<void(const EventInterface &event)> titleScreen = std::bind(&Title::update, this, std::placeholders::_1);
     const EventListener m_listener = EventListener(titleScreen, 1);
     eventManager->addListener(m_listener, EventType::sfmlEvent);
+    std::cout<<"Title listener";
 }
 
 void Title::draw(sf::RenderWindow &window) {

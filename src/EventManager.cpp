@@ -29,28 +29,35 @@ void EventManager::queueEvent(sf::Event event) {
     SFMLEvent *newEvent = new SFMLEvent(event);
     m_registerQueue->m_eventList.push_back((EventInterface*)newEvent);
 	
-//    std::cout<<"Queue size: "<<m_registerQueue->m_eventList.size()<<" "<<m_registerQueue->m_eventList.back()<<"\n";
+    std::cout<<"Queue size: "<<m_registerQueue->m_eventList.size()<<" "<<m_registerQueue->m_eventList.back()<<"\n";
 }
 
 
 /* Add listener. */
 void EventManager::addListener(const EventListener &listener, const EventType &type) {
 
-	m_listeners = m_eventMap[type];
-	
-	// Listener not in list m_listeners. Add to list.
-	if (std::find(m_listeners.begin(), m_listeners.end(), listener) == m_listeners.end()) {
-		m_listeners.push_back(listener);
+    // Event type already in map.
+    if (m_eventMap.find(type) != m_eventMap.end()) {
+        m_listeners = m_eventMap.find(type)->second;
+        std::cout<<"Listener size"<<m_listeners.size();
         
-//        std::cout<<"Event type "<<type<< " Listener added: "<<listener.getId()<<" "<<m_listeners.back().getId()<<"\n";
-		
-	}
+        // Listener not in list m_listeners. Add to list.
+        if (std::find(m_listeners.begin(), m_listeners.end(), listener) == m_listeners.end()) {
+            auto newListener = std::move(listener);
+            m_listeners.push_back(newListener);
+            
+//            std::cout<<"Event type "<<type<< " Listener added: "<<listener.getId()<<" "<<m_listeners.back().getId()<<" " <<m_listeners.size()<<"\n";
+        }
+   // Event type not already in map.
+    } else {
+        m_listeners.push_back(listener);
+        m_eventMap.emplace(type, m_listeners);
+    }
 }
 
 
 /* Trigger event. */
 void EventManager::triggerEvent(EventInterface& event) {
-    
 	// Event not found.
 	if (m_eventMap.find(event.getEventType()) == m_eventMap.end()) {
 		std::cout<<"Event not found \n";
@@ -59,7 +66,8 @@ void EventManager::triggerEvent(EventInterface& event) {
 	// Trigger all events in listener list.
 	else {
 		for (auto m_funcItr = m_listeners.begin(); m_funcItr != m_listeners.end(); m_funcItr++){
-			m_funcItr->callFunction(event);
+            std::cout<<"Calling listener";
+            m_funcItr->callFunction(event);
 		}
 	}
 }
