@@ -22,14 +22,17 @@ void PlayerView::init(){
 	character.setTexture(charTexture);
 	character.setPosition(sf::Vector2f(180, 210));
 	character.setScale(1.f,1.f);
-    setState(Process::RUNNING);
-    speed = INIT_SPEED;
+  setState(Process::RUNNING);
+  speed = INIT_SPEED;
+  camera.setSize(800,600);
 }
 
 
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
 	targetWindow = window;
+  sf::View camera = window->getDefaultView();
+  window->setView(camera);
 }
 
 void PlayerView::setGameLogic(GameLogic gameLogic) {
@@ -83,6 +86,11 @@ void PlayerView::update(float &deltaTime){
 /* Draw view. */
 void PlayerView::draw() {
     targetWindow->draw(character);
+}
+
+void PlayerView::updateCamera(){
+  camera.setCenter(character.getPosition().x, character.getPosition().y);
+  targetWindow->setView(camera);
 }
 
 /* Check if the window is open */
