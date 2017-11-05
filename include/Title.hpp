@@ -11,6 +11,7 @@ public:
     Title();
     ~Title();
     
+    void setWindow(sf::RenderWindow *window);
     void setListener(EventManager *eventManager);
 
     void draw(sf::RenderWindow &window);
@@ -22,6 +23,7 @@ private:
     void moveCursor(const sf::Text &text);
     int checkCursor(const sf::Text &text);
 
+    sf::RenderWindow *m_window;
     sf::Texture m_texture;
     sf::RectangleShape m_background;
     sf::Font m_font;
