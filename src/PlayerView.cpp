@@ -35,6 +35,10 @@ void PlayerView::setContext(sf::RenderWindow* window){
   window->setView(camera);
 }
 
+void PlayerView::setCollisionMap(TileMap* collisionMap){
+  m_collisionMap = collisionMap;
+}
+
 void PlayerView::setGameLogic(GameLogic gameLogic) {
     this->gameLogic = gameLogic;
 }
@@ -68,23 +72,24 @@ void PlayerView::update(float &deltaTime){
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
 	    character.move(-speed * deltaTime, 0.f);
 	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
+      m_collisionMap->checkCollision(character.getPosition().x, character.getPosition().y);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
 	    character.move(speed * deltaTime, 0.f);
 	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
+      m_collisionMap->checkCollision(character.getPosition().x, character.getPosition().y);
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 	    character.move(0.f, -speed * deltaTime);
 	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
+      m_collisionMap->checkCollision(character.getPosition().x, character.getPosition().y);
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
 	    character.move(0.f, speed * deltaTime);
 	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
+      m_collisionMap->checkCollision(character.getPosition().x, character.getPosition().y);
 	}
   updateCamera();
-}
-
-void PlayerView::checkTileCollisions(){
 }
 
 /* Draw view. */

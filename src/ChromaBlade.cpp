@@ -25,6 +25,7 @@ void ChromaBlade::init(){
     m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_base.csv", sf::Vector2u(16, 16), 100, 38);
     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_overlay.csv", sf::Vector2u(16, 16),100, 38);
 		m_collisionMap.loadCollisionsFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_collisions.csv", sf::Vector2u(16, 16), 100, 38);
+		m_view.setCollisionMap(&m_collisionMap);
 	  m_window.setVerticalSyncEnabled(true);
 
     /* Attach PlayerView, GameLogic, and Audio to ProcessManager. */

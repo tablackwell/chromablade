@@ -33,7 +33,8 @@ Arguments: tileset = tileset texture file (a png)
            width and height = how many tiles to actually place
 */
 bool TileMap::loadFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
-
+  m_height = height;
+  m_width = width;
   std::ifstream inputFile;
   // load the tileset texture
   if (!m_tileset.loadFromFile(tileset)){
@@ -99,6 +100,17 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
         target.draw(m_vertices, states);
 }
 
+int TileMap::checkCollision(int actorX, int actorY){
+  int tileX = actorX / 16;
+  int tileY = actorY / 16;
+  std::cout << "Coords:" << "\n";
+  std::cout << tileX << "\n";
+  std::cout << tileY << "\n";
+  std::cout << "Tile Value:" << "\n";
+  int tileVal = tileNumbers.at(tileX + tileY * m_width);
+  std::cout << tileVal << "\n";
+}
+
 /*
 Debug method for indicating where collisions should be
 */
@@ -110,6 +122,8 @@ void TileMap::drawBoxes(sf::RenderWindow* target){
 
 bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
   std::ifstream inputFile;
+  m_height = height;
+  m_width = width;
   // load the tileset texture
   if (!m_tileset.loadFromFile(tileset)){
     return false;
@@ -118,19 +132,18 @@ bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string tex
   // load the csv file
   inputFile.open(textFileName, std::ifstream::in);
 
-  std::vector<int>numbers;
   int number;
   while(inputFile >> number){ //until document ends
      if(inputFile.peek() == ','){ // skip commas
        inputFile.ignore();
      }
-     numbers.push_back(number); //add the number
-     std::cout << number;
+     tileNumbers.push_back(number); //add the number
   }
 
   inputFile.close();
 
-  const int *tileArray = &numbers[0];
+  // This is hacky and I probably dont need to do it
+  const int *tileArray = &tileNumbers[0];
   inputFile.close();
 
         // resize the vertex array to fit the level size
