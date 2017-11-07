@@ -36,7 +36,7 @@ private: // vars and objs
     sf::Clock m_fpsTimer;
     TileMap m_map;
     TileMap m_overlay;
-    CollisionMap m_collisionMap;
+    TileMap m_collisionMap;
     Title m_title;
     ProcessManager m_processManager;
     Audio m_audio;

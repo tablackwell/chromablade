@@ -13,11 +13,12 @@
 #include <SFML/Graphics.hpp>
 class CollisionMap{
 public:
-    CollisionMap(){}
     bool loadFromText(std::string fileName, sf::Vector2u tileSize, unsigned int width, unsigned int height);
     bool checkCollision(int actorX, int actorY);
 private:
-    std::vector<std::vector<int>> collisionMap;
+    std::vector<std::vector<int>>collisionMap;
+    int width;
+    int height;
 };
 
 #endif
