@@ -2,6 +2,7 @@
 #include "PlayerView.hpp"
 #include "GameLogic.hpp"
 #include "TileMap.hpp"
+#include "CollisionMap.hpp"
 #include <cstdio>
 
 
@@ -21,9 +22,10 @@ void ChromaBlade::init(){
     m_audio.init();
 
     /* Load sample game room. */
-    m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
-    m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
-	m_window.setVerticalSyncEnabled(true);
+    m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_base.csv", sf::Vector2u(16, 16), 100, 38);
+    m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_overlay.csv", sf::Vector2u(16, 16),100, 38);
+		m_collisionMap.loadFromText("../res/level/TestLevel/test_collisions.csv", sf::Vector2u(16, 16), 100, 38);
+	  m_window.setVerticalSyncEnabled(true);
 
     /* Attach PlayerView, GameLogic, and Audio to ProcessManager. */
     m_processManager.attachProcess(&m_view);

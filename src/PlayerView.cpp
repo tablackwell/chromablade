@@ -81,6 +81,7 @@ void PlayerView::update(float &deltaTime){
 	    character.move(0.f, speed * deltaTime);
 	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
 	}
+  updateCamera();
 }
 
 /* Draw view. */
