@@ -98,3 +98,58 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
         // draw the vertex array
         target.draw(m_vertices, states);
 }
+
+/*
+Debug method for indicating where collisions should be
+*/
+void TileMap::drawBoxes(sf::RenderWindow* target){
+  for(int i = 0; i < collisionRects.size(); i++){
+    target->draw(collisionRects.at(i));
+  }
+}
+
+bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
+  std::ifstream inputFile;
+  // load the tileset texture
+  if (!m_tileset.loadFromFile(tileset)){
+    return false;
+  }
+
+  // load the csv file
+  inputFile.open(textFileName, std::ifstream::in);
+
+  std::vector<int>numbers;
+  int number;
+  while(inputFile >> number){ //until document ends
+     if(inputFile.peek() == ','){ // skip commas
+       inputFile.ignore();
+     }
+     numbers.push_back(number); //add the number
+     std::cout << number;
+  }
+
+  inputFile.close();
+
+  const int *tileArray = &numbers[0];
+  inputFile.close();
+
+        // resize the vertex array to fit the level size
+        m_vertices.setPrimitiveType(sf::Quads);
+        m_vertices.resize(width * height * 4);
+
+        // file vertex array with quads for each tile
+        for (unsigned int i = 0; i < width; ++i)
+            for (unsigned int j = 0; j < height; ++j)
+            {
+                // get the current tile number
+                int tileNumber = tileArray[i + j * width];
+
+                if(tileNumber == 1){
+                  sf::RectangleShape rect(sf::Vector2f(16,16));
+                  rect.setFillColor(sf::Color(150, 50, 250, 125));
+                  rect.setPosition(sf::Vector2f(i * tileSize.x, j * tileSize.y));
+                  collisionRects.push_back(rect);
+                }
+            }
+        return true;
+}

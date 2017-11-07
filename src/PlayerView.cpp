@@ -35,10 +35,6 @@ void PlayerView::setContext(sf::RenderWindow* window){
   window->setView(camera);
 }
 
-void PlayerView::setCollisionMap(CollisionMap* collisionMap){
-    this->targetCollisionMap = collisionMap;
-}
-
 void PlayerView::setGameLogic(GameLogic gameLogic) {
     this->gameLogic = gameLogic;
 }
@@ -72,7 +68,6 @@ void PlayerView::update(float &deltaTime){
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
 	    character.move(-speed * deltaTime, 0.f);
 	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
-      checkTiles();
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
 	    character.move(speed * deltaTime, 0.f);
@@ -89,10 +84,7 @@ void PlayerView::update(float &deltaTime){
   updateCamera();
 }
 
-void PlayerView::checkTiles(){
-  int tileX = (int)(character.getPosition().x / 16);
-  int tileY = (int)(character.getPosition().y / 16);
-  targetCollisionMap->checkCollision(tileX, tileY);
+void PlayerView::checkTileCollisions(){
 }
 
 /* Draw view. */

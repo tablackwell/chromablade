@@ -24,8 +24,7 @@ void ChromaBlade::init(){
     /* Load sample game room. */
     m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_base.csv", sf::Vector2u(16, 16), 100, 38);
     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_overlay.csv", sf::Vector2u(16, 16),100, 38);
-		m_collisionMap.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_collisions.csv", sf::Vector2u(16, 16), 100, 38);
-		m_view.setCollisionMap(&m_collisionMap); // breaks our rules of encapsulation, only for debug
+		m_collisionMap.loadCollisionsFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_collisions.csv", sf::Vector2u(16, 16), 100, 38);
 	  m_window.setVerticalSyncEnabled(true);
 
     /* Attach PlayerView, GameLogic, and Audio to ProcessManager. */
@@ -82,6 +81,7 @@ void ChromaBlade::render() {
         case GameState::Game:
             m_window.draw(m_map);
             m_window.draw(m_overlay);
+						m_collisionMap.drawBoxes(&m_window);
             m_view.draw();
             break;
     }
