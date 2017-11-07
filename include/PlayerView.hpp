@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "Process.hpp"
 #include "GameLogic.hpp"
-#include "CollisionMap.hpp"
+#include "TileMap.hpp"
 
 
 class PlayerView : public Process {
@@ -17,21 +17,22 @@ public:
 	void handleEvents(float);
 	bool isOpen();
 	void setGameLogic(GameLogic gameLogic);
-	void setCollisionMap(CollisionMap* collisionMap);
+	void setCollisionMap(TileMap* m_collisionMap);
 	void checkTiles();
 private: //methods
 
 private: //vars and objs
   sf::RenderWindow* targetWindow;
 	sf::Sprite character;
+	sf::RectangleShape debugBox;
 	sf::Texture charTexture;
 	float speed;
 	bool notReleased;
 	GameLogic gameLogic;
-	CollisionMap* targetCollisionMap;
+	TileMap* m_collisionMap;
 	sf::View camera;
 	void updateCamera();
-	
+
 };
 
 #endif

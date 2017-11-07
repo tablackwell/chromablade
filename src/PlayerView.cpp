@@ -20,8 +20,8 @@ void PlayerView::init(){
 		// ERROR
 	}
 	character.setTexture(charTexture);
-	character.setPosition(sf::Vector2f(180, 210));
-	character.setScale(1.f,1.f);
+	character.setPosition(sf::Vector2f(128, 256));
+	//character.setScale(1.f,1.f);
   setState(Process::RUNNING);
   speed = INIT_SPEED;
   camera.setSize(800,600);

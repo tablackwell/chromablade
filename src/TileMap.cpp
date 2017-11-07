@@ -107,8 +107,15 @@ int TileMap::checkCollision(int actorX, int actorY){
   std::cout << tileX << "\n";
   std::cout << tileY << "\n";
   std::cout << "Tile Value:" << "\n";
-  int tileVal = tileNumbers.at(tileX + tileY * m_width);
-  std::cout << tileVal << "\n";
+  int tileVal;
+  try{
+    tileVal = tileNumbers.at(tileX + tileY * m_width);
+    std::cout << tileVal << "\n";
+  }
+  catch(const std::exception& e) {
+     std::cout << "Out of bounds!" << "\n";
+  }
+  return tileVal;
 }
 
 /*
