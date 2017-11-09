@@ -27,12 +27,12 @@ class DynamicActor {
 	private:
 
 	private:
-		Color activeColor;
-		float health;
-		float damage; // Attack damage
-		std::tuple<float, float> position;
-		sf::Texture texture;
-		int speed;
+		Color m_activeColor;
+		float m_health;
+		float m_damage; // Attack damage
+		std::tuple<float, float> m_position;
+		sf::Texture m_texture;
+		int m_speed;
 };
 
 

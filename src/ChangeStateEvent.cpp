@@ -5,16 +5,16 @@
 #include "ChangeStateEvent.hpp"
 
 ChangeStateEvent::ChangeStateEvent(GameState state) {
-    this->type = EventType::changeStateEvent;
-    this->newState = state;
+    this->m_type = EventType::changeStateEvent;
+    this->m_newState = state;
 }
 
 /* Return event type. */
 const EventType& ChangeStateEvent::getEventType() const {
-    return type;
+    return m_type;
 }
 
 /* Return game state. */
 const GameState ChangeStateEvent::getGameState() const {
-    return newState;
+    return m_newState;
 }

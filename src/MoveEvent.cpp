@@ -1,7 +1,7 @@
 #include "MoveEvent.hpp"
 
 MoveEvent::MoveEvent(Direction direction) {
-    dir = direction;
+    m_dir = direction;
 }
 
 const EventType& MoveEvent::getEventType() const{
@@ -10,9 +10,9 @@ const EventType& MoveEvent::getEventType() const{
 
 /* Set the movement direction */
 void MoveEvent::setDirection(Direction direction){
-    dir = direction;
+    m_dir = direction;
 }
 
 Direction MoveEvent::getDirection(){
-    return dir;
+    return m_dir;
 }

@@ -17,12 +17,12 @@ class MoveEvent : public EventInterface {
 	    virtual const EventType& getEventType(void) const;
 	    void setDirection(Direction direction);
 	    Direction getDirection();
+        static const EventType eventType = EventType::moveEvent;
 	private:
     
 	private:
-    static const EventType eventType = EventType::moveEvent;
 	    // event data
-	    Direction dir;
+	    Direction m_dir;
 };
 
 #endif

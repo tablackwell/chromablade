@@ -19,16 +19,16 @@ public:
 	bool isOpen();
 	void setGameLogic(GameLogic gameLogic);
 private: //methods
+	void moveEventListener(const EventInterface& moveEvent);
 
 private: //vars and objs
     EventManager *m_eventManager;
-    sf::RenderWindow* targetWindow;
-	sf::Sprite character;
-	sf::Texture charTexture;
-	void moveEventListener(const EventInterface& moveEvent);
-	float speed;
-	bool notReleased;
-	GameLogic gameLogic;
+    sf::RenderWindow* m_targetWindow;
+	sf::Sprite m_character;
+	sf::Texture m_charTexture;
+	float m_speed;
+	bool m_notReleased;
+	GameLogic m_gameLogic;
 };
 
 #endif

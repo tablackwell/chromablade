@@ -2,15 +2,15 @@
 #include <SFML/Graphics.hpp>
 
 Room::Room(int x, int y){
-  xBounds = x;
-  yBounds = y;
+  m_xBounds = x;
+  m_yBounds = y;
 
-  sf::RectangleShape topWall(sf::Vector2f(800,32));
-  sf::RectangleShape botWall(sf::Vector2f(800,32));
-  sf::RectangleShape leftWall(sf::Vector2f(32,600));
-  sf::RectangleShape rightWall(sf::Vector2f(32,600));
-  topWall.setPosition(0,0);
-  botWall.setPosition(0,568);
-  leftWall.setPosition(0,0);
-  rightWall.setPosition(768,0);
+  m_topWall.setSize(sf::Vector2f(800,32));
+  m_botWall.setSize(sf::Vector2f(800,32));
+  m_leftWall.setSize(sf::Vector2f(32,600));
+  m_rightWall.setSize(sf::Vector2f(32,600));
+  m_topWall.setPosition(0,0);
+  m_botWall.setPosition(0,568);
+  m_leftWall.setPosition(0,0);
+  m_rightWall.setPosition(768,0);
 }

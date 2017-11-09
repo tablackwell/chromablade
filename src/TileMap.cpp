@@ -109,7 +109,7 @@ int TileMap::checkCollision(int actorX, int actorY){
   std::cout << "Tile Value:" << "\n";
   int tileVal;
   try{
-    tileVal = tileNumbers.at(tileX + tileY * m_width);
+    tileVal = m_tileNumbers.at(tileX + tileY * m_width);
     std::cout << tileVal << "\n";
   }
   catch(const std::exception& e) {
@@ -122,8 +122,8 @@ int TileMap::checkCollision(int actorX, int actorY){
 Debug method for indicating where collisions should be
 */
 void TileMap::drawBoxes(sf::RenderWindow* target){
-  for(int i = 0; i < collisionRects.size(); i++){
-    target->draw(collisionRects.at(i));
+  for(int i = 0; i < m_collisionRects.size(); i++){
+    target->draw(m_collisionRects.at(i));
   }
 }
 
@@ -144,13 +144,13 @@ bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string tex
      if(inputFile.peek() == ','){ // skip commas
        inputFile.ignore();
      }
-     tileNumbers.push_back(number); //add the number
+     m_tileNumbers.push_back(number); //add the number
   }
 
   inputFile.close();
 
   // This is hacky and I probably dont need to do it
-  const int *tileArray = &tileNumbers[0];
+  const int *tileArray = &m_tileNumbers[0];
   inputFile.close();
 
         // resize the vertex array to fit the level size
@@ -168,7 +168,7 @@ bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string tex
                   sf::RectangleShape rect(sf::Vector2f(16,16));
                   rect.setFillColor(sf::Color(150, 50, 250, 125));
                   rect.setPosition(sf::Vector2f(i * tileSize.x, j * tileSize.y));
-                  collisionRects.push_back(rect);
+                  m_collisionRects.push_back(rect);
                 }
             }
         return true;

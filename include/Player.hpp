@@ -20,7 +20,7 @@ class Player: public DynamicActor{
     private:
 
     private:
-        std::map<Color, bool> colorsAvail; // Hash map of available colors.
+        std::map<Color, bool> m_colorsAvail; // Hash map of available colors.
         //int colorTimer;
 };
 

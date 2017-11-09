@@ -10,10 +10,9 @@
 
 class CollisionEvent : public EventInterface {
 	public:
+	    static const EventType eventType;
 	private:
 	    const EventType& getEventType(void) const { return eventType;};
-	private:
-	    static const EventType eventType;
 };
 
 const EventType CollisionEvent::eventType = EventType(&CollisionEvent::eventType);

@@ -19,9 +19,10 @@ public:
     int checkCollision(int actorX, int actorY);
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
     sf::VertexArray m_vertices;
-    std::vector<sf::RectangleShape> collisionRects;
-    std::vector<int> tileNumbers;
+    std::vector<sf::RectangleShape> m_collisionRects;
+    std::vector<int> m_tileNumbers;
     sf::Texture m_tileset;
     int m_height;
     int m_width;

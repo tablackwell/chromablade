@@ -15,8 +15,8 @@ public:
     virtual const EventType& getEventType(void) const;
     const GameState getGameState(void) const;
 private:
-    GameState newState;
-    EventType type;
+    GameState m_newState;
+    EventType m_type;
 private:
 };
 

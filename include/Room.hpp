@@ -8,11 +8,11 @@ class Room{
 public:
   Room(int x, int y);
 private:
-  int yBounds;
-  int xBounds;
-  sf::RectangleShape topWall;
-  sf::RectangleShape botWall;
-  sf::RectangleShape leftWall;
-  sf::RectangleShape rightWall;
+  int m_yBounds;
+  int m_xBounds;
+  sf::RectangleShape m_topWall;
+  sf::RectangleShape m_botWall;
+  sf::RectangleShape m_leftWall;
+  sf::RectangleShape m_rightWall;
 };
 #endif

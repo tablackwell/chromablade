@@ -15,8 +15,8 @@ public:
 	virtual const EventType& getEventType(void) const;
 	const sf::Event getSFMLEvent() const;
 private:
-	sf::Event event;
-    EventType type;
+	sf::Event m_event;
+    EventType m_type;
 private:
 };
 
