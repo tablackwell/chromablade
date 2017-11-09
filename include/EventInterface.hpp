@@ -11,9 +11,13 @@
 class EventInterface {
 public:
     virtual const EventType& getEventType(void) const = 0;
+    const float getDeltaTime(void) { return deltaTime; }
 private:
 private:
     EventType type;
+    float deltaTime;
+protected:
+    void setDeltaTime(float deltaTime) {this->deltaTime = deltaTime; }
 };
 
 #endif
