@@ -34,8 +34,6 @@ public:
 	virtual void queueEvent(sf::Event event);
 	virtual void triggerEvent(EventInterface &event);
 	virtual void update(void);
-    std::list<EventListener> m_listeners; // List of listeners
-
 
 private:
 private:

@@ -37,24 +37,23 @@ void EventManager::queueEvent(sf::Event event) {
 void EventManager::addListener(const EventListener &listener, const EventType &type) {
 
     auto eventType = m_eventMap.find(type);
-    
+    std::list<EventListener> listeners;
+
     // Event type already in map.
     if (eventType != m_eventMap.end()) {
-        m_listeners = m_eventMap.find(type)->second;
+        listeners = m_eventMap.find(type)->second;
         
-        // Listener not in list m_listeners. Add to list.
-        if (std::find(m_listeners.begin(), m_listeners.end(), listener) == m_listeners.end()) {
+        // Listener not in list. Add to list.
+        if (std::find(listeners.begin(), listeners.end(), listener) == listeners.end()) {
             auto newListener = std::move(listener);
-//            m_listeners.push_back(newListener);
             std::cout<<"Adding";
             eventType->second.push_back(newListener);
         }
         
    // Event type not already in map.
     } else {
-        m_listeners.clear();
-        m_listeners.push_front(listener);
-        m_eventMap.emplace(type, m_listeners);
+        listeners.push_front(listener);
+        m_eventMap.emplace(type, listeners);
     }
     std::cout<<"Event type "<<type<<"Listener "<<listener.getId()<<"\n";
     
@@ -81,10 +80,11 @@ void EventManager::triggerEvent(EventInterface& event) {
 	
 	// Trigger all events in listener list.
 	else {
-//        m_listeners = listItr;
-        m_listeners = listItr->second;
+        std::list<EventListener> listeners;
+
+        listeners = listItr->second;
         std::cout<<"EVENT TYPE: "<<event.getEventType()<<" ";
-        for (auto m_funcItr = m_listeners.begin(); m_funcItr != m_listeners.end(); m_funcItr++){
+        for (auto m_funcItr = listeners.begin(); m_funcItr != listeners.end(); m_funcItr++){
             m_funcItr->callFunction(event);
             std::cout<<"Calling: "<<m_funcItr->getId()<<" ";
         }
