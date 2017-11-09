@@ -4,6 +4,7 @@
 #include <SFML/Window.hpp>
 #include <cstdio>
 #include <tuple>
+#include <iostream>
 
 #define MAX_SPEED 200.f
 #define INIT_SPEED 110.f
@@ -64,7 +65,8 @@ void PlayerView::update1(const EventInterface &event) {
         
         auto key = sfmlEvent.key.code;
         float deltaTime = event.getDeltaTime();
-        
+        std::cout<<"Moving: "<<(speed * deltaTime);
+
         if (key == sf::Keyboard::Left){
             character.move(-speed * deltaTime, 0.f);
             gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));

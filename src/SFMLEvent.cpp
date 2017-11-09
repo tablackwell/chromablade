@@ -4,9 +4,10 @@
 
  #include "SFMLEvent.hpp"
 
-SFMLEvent::SFMLEvent(sf::Event event) {
-  this->event = event;
-  this->type = EventType::sfmlEvent;
+SFMLEvent::SFMLEvent(sf::Event event, float deltaTime) {
+    this->event = event;
+    this->type = EventType::sfmlEvent;
+    EventInterface::setDeltaTime(deltaTime);
 }
 
 /* Return SFML Event of sf::Event type. */

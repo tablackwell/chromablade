@@ -28,7 +28,7 @@ void EventManager::queueEvent(EventInterface *event, float deltaTime) {
 
 /* Queue SFML event. */
 void EventManager::queueEvent(sf::Event event, float deltaTime) {
-    SFMLEvent *newEvent = new SFMLEvent(event);
+    SFMLEvent *newEvent = new SFMLEvent(event, deltaTime);
     std::cout<<"Delta time: "<<newEvent->getDeltaTime()<<std::endl;
     m_registerQueue->m_eventList.push_back((EventInterface*)newEvent);
 }

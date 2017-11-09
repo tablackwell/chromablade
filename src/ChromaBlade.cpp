@@ -62,6 +62,8 @@ void ChromaBlade::handleEvents(float deltaTime) {
         // Only queue input events to avoid overloading event manager.
         if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed) {
             m_eventManager.queueEvent(event, deltaTime);
+            std::cout<<deltaTime;
+
         }
     }
     
