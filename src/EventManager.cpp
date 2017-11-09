@@ -19,7 +19,7 @@ void EventManager::setWindow(sf::RenderWindow *mainWindow) {
 
 
 /* Queue event. */
-void EventManager::queueEvent(EventInterface *event) {
+void EventManager::queueEvent(EventInterface *event, float deltaTime) {
     m_registerQueue->m_eventList.push_back(event);
     std::cout<<" Size "<<m_registerQueue->m_eventList.size();
     std::cout<<" Queuing event "<<event->getEventType()<<"\n";
@@ -27,8 +27,9 @@ void EventManager::queueEvent(EventInterface *event) {
 
 
 /* Queue SFML event. */
-void EventManager::queueEvent(sf::Event event) {
+void EventManager::queueEvent(sf::Event event, float deltaTime) {
     SFMLEvent *newEvent = new SFMLEvent(event);
+    std::cout<<"Delta time: "<<newEvent->getDeltaTime()<<std::endl;
     m_registerQueue->m_eventList.push_back((EventInterface*)newEvent);
 }
 

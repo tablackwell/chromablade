@@ -30,8 +30,8 @@ public:
 	void setWindow(sf::RenderWindow *mainWindow);
 	void addListener(const EventListener &listener, const EventType &type);
 	void removeListener(EventListener &listener, EventType &type);
-	virtual void queueEvent(EventInterface *event);
-	virtual void queueEvent(sf::Event event);
+	virtual void queueEvent(EventInterface *event, float deltaTime);
+	virtual void queueEvent(sf::Event event, float deltaTime);
 	virtual void triggerEvent(EventInterface &event);
 	virtual void update(void);
 

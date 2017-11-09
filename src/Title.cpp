@@ -104,6 +104,7 @@ void Title::update(const EventInterface &event) {
     if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)){
         
         sf::Event sfmlEvent = sfEvent->getSFMLEvent();
+        std::cout<<"Title event delta time: "<<event.getDeltaTime()<<std::endl;
         
         if (sfmlEvent.type == sf::Event::KeyPressed) {
             if (sfmlEvent.key.code == sf::Keyboard::Down) {
@@ -113,14 +114,14 @@ void Title::update(const EventInterface &event) {
             } else if (sfmlEvent.key.code == sf::Keyboard::Return) {
                 // Exit game
                 if (checkCursor(m_exit)) {
-                    sf::Event event;
-                    event.type = sf::Event::Closed;
-                    m_eventManager->queueEvent(event);
+                    sf::Event close;
+                    close.type = sf::Event::Closed;
+                    m_eventManager->queueEvent(close, event.getDeltaTime());
                 }
                 // Change game state
                 else {
-                    const ChangeStateEvent *event = new ChangeStateEvent(GameState::Game);
-                    m_eventManager->queueEvent((EventInterface*)event);
+                    const ChangeStateEvent *change = new ChangeStateEvent(GameState::Game);
+                    m_eventManager->queueEvent((EventInterface*)change, event.getDeltaTime());
                 }
             }
         }
