@@ -32,7 +32,6 @@ float DynamicActor::getHealth() {
 }
 
 void DynamicActor::attack() {
-
 }
 
 void DynamicActor::setPosition(std::tuple<float, float> position) {

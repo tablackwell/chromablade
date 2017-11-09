@@ -1,6 +1,6 @@
 #include "ProcessManager.hpp"
+#include "Process.hpp"
 #include <algorithm>
-#include <cstdio>
 
 ProcessManager::ProcessManager() { };
 ProcessManager::~ProcessManager() { };

@@ -6,6 +6,8 @@
 
 #include "ProcessManager.hpp"
 #include "PlayerView.hpp"
+#include "EventManager.hpp"
+#include "ChangeStateEvent.hpp"
 #include "GameLogic.hpp"
 #include "GameState.hpp"
 #include "TileMap.hpp"
@@ -21,16 +23,18 @@ public:
     void init();
     void run();
     void pause();
-    void shutdown();
+    void shutdown(const EventInterface &event);
 
 private: // functions
     void handleEvents();
     void update(float &deltaTime);
+    void updateState(const EventInterface &event);
     void render();
 
 private: // vars and objs
     GameLogic m_gameLogic;
     PlayerView m_view;
+    EventManager m_eventManager;
     sf::RenderWindow m_window;
     sf::Clock m_fpsTimer;
     TileMap m_map;

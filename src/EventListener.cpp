@@ -2,7 +2,19 @@
  * Event listener.
  */
 
+#include <iostream>
 #include "EventListener.hpp"
+
+EventListener::EventListener(std::function<void(const EventInterface&)> function) {
+	setFunction(function);
+}
+
+
+EventListener::EventListener(std::function<void(const EventInterface&)> function, float id) {
+	setFunction(function);
+	setId(id);
+}
+
 
 /* Set function. */
 void EventListener::setFunction(std::function<void(const EventInterface&)> function) {
