@@ -49,15 +49,14 @@ void ChromaBlade::init(){
 void ChromaBlade::run(){
 	/* Main game loop */
 	while(m_window.isOpen()){
-		handleEvents();
+        float deltaTime = m_fpsTimer.restart().asSeconds();
+		handleEvents(deltaTime);
         //update(deltaTime);
         render();
 	}
 }
 
-void ChromaBlade::handleEvents() {
-    float deltaTime = m_fpsTimer.restart().asSeconds();
-
+void ChromaBlade::handleEvents(float deltaTime) {
     sf::Event event;
     while (m_window.pollEvent(event)) {
         // Only queue input events to avoid overloading event manager.
@@ -92,6 +91,8 @@ void ChromaBlade::updateState(const EventInterface &event) {
                 std::cout<<"TITLE";
                 break;
             case GameState::Game:
+                // TODO: remove Title listener
+                m_view.setListener(&m_eventManager);
                 std::cout<<"GAME";
                 break;
         }

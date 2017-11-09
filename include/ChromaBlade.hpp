@@ -26,7 +26,7 @@ public:
     void shutdown(const EventInterface &event);
 
 private: // functions
-    void handleEvents();
+    void handleEvents(float deltaTime);
     void update(float &deltaTime);
     void updateState(const EventInterface &event);
     void render();

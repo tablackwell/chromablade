@@ -37,8 +37,18 @@ void PlayerView::setGameLogic(GameLogic gameLogic) {
 }
 
 
+void PlayerView::setListener(EventManager *eventManager) {
+    m_eventManager = eventManager;
+    
+    // Create function for listener. Add to event manager.
+    std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::update1, this, std::placeholders::_1);
+    const EventListener m_listener = EventListener(move, 3);
+    m_eventManager->addListener(m_listener, EventType::sfmlEvent);
+}
+
+
 /* Update view. */
-void PlayerView::update(const EventInterface &event) {
+void PlayerView::update1(const EventInterface &event) {
     const EventInterface *ptr = &event;
     
     // Convert to SFML inherited class.
