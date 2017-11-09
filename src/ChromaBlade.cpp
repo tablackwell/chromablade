@@ -85,7 +85,6 @@ void ChromaBlade::updateState(const EventInterface &event) {
     const EventInterface *ptr = &event;
     std::cout<<"State change";
     if (const ChangeStateEvent *stateEvent = dynamic_cast<const ChangeStateEvent*>(ptr)){
-        std::cout<<"If";
         m_state = stateEvent->getGameState();
         switch(m_state) {
             case GameState::Title:
@@ -109,7 +108,6 @@ void ChromaBlade::render() {
             m_title.draw(m_window);
             break;
         case GameState::Game:
-            std::cout<<"state game";
             m_window.draw(m_map);
             m_window.draw(m_overlay);
             m_view.draw();
