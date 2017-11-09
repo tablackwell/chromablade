@@ -2,6 +2,7 @@
 #define TITLE_HPP
 #include <SFML/Graphics.hpp>
 
+#include "ChromaBlade.hpp"
 #include "EventListener.hpp"
 #include "EventManager.hpp"
 #include "EventInterface.hpp"
@@ -11,7 +12,7 @@ public:
     Title();
     ~Title();
     
-    void setListener(EventManager *eventManager);
+    void setContext(EventManager *eventManager);
 
     void draw(sf::RenderWindow &window);
 	void update(const EventInterface& event);
@@ -21,7 +22,8 @@ private:
     void centerText(sf::Text &text);
     void moveCursor(const sf::Text &text);
     int checkCursor(const sf::Text &text);
-
+    
+    EventManager *m_eventManager;
     sf::Texture m_texture;
     sf::RectangleShape m_background;
     sf::Font m_font;

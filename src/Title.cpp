@@ -59,12 +59,13 @@ void Title::init() {
     moveCursor(m_play);
 }
 
-void Title::setListener(EventManager *eventManager) {
+void Title::setContext(EventManager *eventManager) {
+    m_eventManager = eventManager;
+    
     // Create function for listener. Add to event manager.
     std::function<void(const EventInterface &event)> titleScreen = std::bind(&Title::update, this, std::placeholders::_1);
-    const EventListener m_listener = EventListener(titleScreen, 1);
-    eventManager->addListener(m_listener, EventType::sfmlEvent);
-    std::cout<<"Title listener";
+    const EventListener m_listener = EventListener(titleScreen, 2);
+    m_eventManager->addListener(m_listener, EventType::sfmlEvent);
 }
 
 void Title::draw(sf::RenderWindow &window) {
@@ -107,6 +108,19 @@ void Title::update(const EventInterface &event) {
                 if (checkCursor(m_play)) moveCursor(m_exit);
             } else if (sfmlEvent.key.code == sf::Keyboard::Up) {
                 if (checkCursor(m_exit)) moveCursor(m_play);
+                
+            } else if (sfmlEvent.key.code == sf::Keyboard::Return) {
+                // Exit game
+                if (checkCursor(m_exit)) {
+                    sf::Event event;
+                    event.type = sf::Event::Closed;
+                    m_eventManager->queueEvent(event);
+                }
+                // Change game state
+                else {
+                    const ChangeStateEvent *event = new ChangeStateEvent(GameState::Game);
+                    m_eventManager->queueEvent((EventInterface*)event);
+                }
             }
         }
     }

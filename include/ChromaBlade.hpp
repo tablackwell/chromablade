@@ -7,6 +7,7 @@
 #include "ProcessManager.hpp"
 #include "PlayerView.hpp"
 #include "EventManager.hpp"
+#include "ChangeStateEvent.hpp"
 #include "GameLogic.hpp"
 #include "GameState.hpp"
 #include "TileMap.hpp"
@@ -27,6 +28,7 @@ public:
 private: // functions
     void handleEvents();
     void update(float &deltaTime);
+    void updateState(const EventInterface &event);
     void render();
 
 private: // vars and objs

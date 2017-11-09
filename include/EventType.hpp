@@ -6,10 +6,11 @@
 #define EVENTTYPE_HPP
 
 enum EventType {
-   collisionEvent,
-   attackEvent,
-   moveEvent,
-   sfmlEvent
+    collisionEvent,
+    attackEvent,
+    moveEvent,
+    sfmlEvent,
+    changeStateEvent
 };
 
 #endif

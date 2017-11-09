@@ -28,3 +28,7 @@ void DynamicActor::changeColor(Color color) {
 float DynamicActor::getHealth() {
     return health;
 }
+
+void DynamicActor::attack() {
+    
+}

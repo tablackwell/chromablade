@@ -9,11 +9,11 @@
 #include <SFML/Window.hpp>
 
 class EventInterface {
-	public:
-	    virtual const EventType& getEventType(void) const = 0;
-	private:
-	private:
-			EventType type;
+public:
+    virtual const EventType& getEventType(void) const = 0;
+private:
+private:
+    EventType type;
 };
 
 #endif
