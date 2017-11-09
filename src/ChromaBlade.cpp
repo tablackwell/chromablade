@@ -12,6 +12,7 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 void ChromaBlade::init(){
     m_view.setContext(&m_window);
     m_eventManager.setWindow(&m_window);
+    m_title.setWindow(&m_window);
     
     /* Subscribe to events. */
     std::function<void(const EventInterface &event)> closeScreen = std::bind(&ChromaBlade::shutdown, this, std::placeholders::_1);
