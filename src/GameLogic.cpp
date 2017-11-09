@@ -11,7 +11,7 @@ void GameLogic::init(){
 }
 
 void GameLogic::update(float &deltaTime){
-	m_eventManager.update();
+	m_eventManager.update(deltaTime);
 }
 
 Level GameLogic::getLevel(){

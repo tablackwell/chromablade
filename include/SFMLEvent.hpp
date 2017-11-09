@@ -11,7 +11,7 @@
 
 class SFMLEvent : public EventInterface{
 public:
-    SFMLEvent(sf::Event event, float deltaTime);
+    SFMLEvent(sf::Event event);
 	virtual const EventType& getEventType(void) const;
 	const sf::Event getSFMLEvent() const;
 private:

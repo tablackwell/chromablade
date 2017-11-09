@@ -19,7 +19,7 @@ void EventManager::setWindow(sf::RenderWindow *mainWindow) {
 
 
 /* Queue event. */
-void EventManager::queueEvent(EventInterface *event, float deltaTime) {
+void EventManager::queueEvent(EventInterface *event) {
     m_registerQueue->m_eventList.push_back(event);
     std::cout<<" Size "<<m_registerQueue->m_eventList.size();
     std::cout<<" Queuing event "<<event->getEventType()<<"\n";
@@ -27,9 +27,8 @@ void EventManager::queueEvent(EventInterface *event, float deltaTime) {
 
 
 /* Queue SFML event. */
-void EventManager::queueEvent(sf::Event event, float deltaTime) {
-    SFMLEvent *newEvent = new SFMLEvent(event, deltaTime);
-    std::cout<<"Delta time: "<<newEvent->getDeltaTime()<<std::endl;
+void EventManager::queueEvent(sf::Event event) {
+    SFMLEvent *newEvent = new SFMLEvent(event);
     m_registerQueue->m_eventList.push_back((EventInterface*)newEvent);
 }
 
@@ -70,7 +69,7 @@ void EventManager::addListener(const EventListener &listener, const EventType &t
 
 
 /* Trigger event. */
-void EventManager::triggerEvent(EventInterface& event) {
+void EventManager::triggerEvent(EventInterface& event, float deltaTime) {
     // Find listeners mapped to event type.
     auto listItr = m_eventMap.find(event.getEventType());
     
@@ -81,6 +80,9 @@ void EventManager::triggerEvent(EventInterface& event) {
 	
 	// Trigger all events in listener list.
 	else {
+        event.setDeltaTime(deltaTime);
+        std::cout<<"Setting delta "<<event.getDeltaTime()<<std::endl;
+        
         std::list<EventListener> listeners;
 
         listeners = listItr->second;
@@ -95,7 +97,7 @@ void EventManager::triggerEvent(EventInterface& event) {
 
 
 /* Process all events in event queue. */
-void EventManager::update() {
+void EventManager::update(float deltaTime) {
     // Swap queues and clear old queue.
     std::swap(m_processQueue, m_registerQueue);
     m_registerQueue->m_eventList.clear();
@@ -104,7 +106,7 @@ void EventManager::update() {
     while (m_processQueue->m_eventList.size() > 0) {
         EventInterface *event = m_processQueue->m_eventList.front();
         m_processQueue->m_eventList.pop_front(); // No return value
-        triggerEvent(*event);
+        triggerEvent(*event, deltaTime);
 
     }
 }

@@ -61,13 +61,11 @@ void ChromaBlade::handleEvents(float deltaTime) {
     while (m_window.pollEvent(event)) {
         // Only queue input events to avoid overloading event manager.
         if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed) {
-            m_eventManager.queueEvent(event, deltaTime);
-            std::cout<<deltaTime;
-
+            m_eventManager.queueEvent(event);
         }
     }
     
-    m_eventManager.update();
+    m_eventManager.update(deltaTime);
 }
 
 void ChromaBlade::update(float &deltaTime) {
