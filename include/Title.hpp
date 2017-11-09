@@ -12,7 +12,6 @@ public:
     Title();
     ~Title();
     
-    void setContext(EventManager *eventManager);
     void setWindow(sf::RenderWindow *window);
     void setListener(EventManager *eventManager);
 
