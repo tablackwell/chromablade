@@ -3,10 +3,11 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include <cstdio>
+#include <tuple>
 
 #define MAX_SPEED 200.f
-#define INIT_SPEED 50.f
-#define ACCELERATION 100.f
+#define INIT_SPEED 110.f
+//#define ACCELERATION 100.f
 
 PlayerView::PlayerView() : Process() {
     init();
@@ -20,7 +21,7 @@ void PlayerView::init(){
 	}
 	character.setTexture(charTexture);
 	character.setPosition(sf::Vector2f(180, 210));
-	character.setScale(2.f,2.f);
+	character.setScale(1.f,1.f);
     setState(Process::RUNNING);
     speed = INIT_SPEED;
 }
@@ -29,6 +30,10 @@ void PlayerView::init(){
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
 	targetWindow = window;
+}
+
+void PlayerView::setGameLogic(GameLogic gameLogic) {
+    this->gameLogic = gameLogic;
 }
 
 
@@ -47,6 +52,7 @@ void PlayerView::update(float &deltaTime){
             notReleased = true;
         }
 	}
+    /*
 	if (notReleased){
 	    if (speed <= MAX_SPEED){
 	        speed += deltaTime * ACCELERATION;
@@ -55,17 +61,22 @@ void PlayerView::update(float &deltaTime){
 	else{
 	    speed = INIT_SPEED;
 	}
+    */
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
 	    character.move(-speed * deltaTime, 0.f);
+	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
 	    character.move(speed * deltaTime, 0.f);
+	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
 	    character.move(0.f, -speed * deltaTime);
+	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
 	}
 	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
 	    character.move(0.f, speed * deltaTime);
+	    gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
 	}
 }
 

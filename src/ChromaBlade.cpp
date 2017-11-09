@@ -13,7 +13,11 @@ void ChromaBlade::init(){
     m_view.setContext(&m_window);
     m_eventManager.setWindow(&m_window);
     m_title.setWindow(&m_window);
-    
+  	m_view.setGameLogic(m_gameLogic);
+
+    /* Load title screen. */
+    m_title.init();
+  
     /* Subscribe to events. */
     std::function<void(const EventInterface &event)> closeScreen = std::bind(&ChromaBlade::shutdown, this, std::placeholders::_1);
     const EventListener m_listener = EventListener(closeScreen, 0);
@@ -24,7 +28,7 @@ void ChromaBlade::init(){
     m_eventManager.addListener(m_listener1, EventType::changeStateEvent);
     
     m_title.setListener(&m_eventManager);
-    
+
     /* Play music on start. */
     m_audio.init();
 

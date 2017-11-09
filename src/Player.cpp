@@ -12,6 +12,7 @@ Player::Player() {
     // Initialize hash map. Start with red by default.
     colorsAvail[Color::RED] = true;
     changeColor(Color::RED);
+    setPosition(std::make_tuple(0, 0)); // Initialize player position as a tuple
 }
 
 /* Change active color of player's sword to given color. */
@@ -21,5 +22,9 @@ void Player::changeSwordColor(Color color) {
 
 /* Unlock color. */
 void Player::unlockColor(Color color) {
-	// colorsAvail[color] = true;
+	 colorsAvail[color] = true;
+}
+
+void Player::attack() {
+
 }

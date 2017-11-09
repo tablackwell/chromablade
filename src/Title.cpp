@@ -2,8 +2,7 @@
 #include "Title.hpp"
 
 #include <iostream>
-
-Title::Title() { init(); };
+Title::Title() { };
 Title::~Title() { };
 
 void Title::init() {
@@ -96,7 +95,6 @@ void Title::moveCursor(const sf::Text &text) {
 int Title::checkCursor(const sf::Text &text) {
     return m_cursor.getPosition().y == text.getPosition().y;
 }
-
 
 /* Update title screen based on keyPressed event. */
 void Title::update(const EventInterface &event) {

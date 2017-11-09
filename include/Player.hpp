@@ -12,15 +12,16 @@
 #include "DynamicActor.hpp"
 
 class Player: public DynamicActor{
-public:
-	Player();
-   	void changeSwordColor(Color color);
-   	void unlockColor(Color color);
-private:
-    
-private:
-   	std::map<Color, bool> colorsAvail; // Hash map of available colors.
-   	//int colorTimer;
+    public:
+        Player();
+        void changeSwordColor(Color color);
+        void unlockColor(Color color);
+        void attack();
+    private:
+
+    private:
+        std::map<Color, bool> colorsAvail; // Hash map of available colors.
+        //int colorTimer;
 };
 
 #endif

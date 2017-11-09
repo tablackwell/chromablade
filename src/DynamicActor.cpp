@@ -3,6 +3,8 @@
  */
 
 #include "DynamicActor.hpp"
+#include <iostream>
+#include <tuple>
 
 
 DynamicActor::DynamicActor() {
@@ -10,7 +12,7 @@ DynamicActor::DynamicActor() {
 }
 
 
-DynamicActor::DynamicActor(Color color, float health, float damage, std::tuple<int, int> startPos, sf::Texture texture, int speed) {
+DynamicActor::DynamicActor(Color color, float health, float damage, std::tuple<float, float> startPos, sf::Texture texture, int speed) {
     this->activeColor = color;
     this->health = health;
     this->damage = damage;
@@ -30,5 +32,8 @@ float DynamicActor::getHealth() {
 }
 
 void DynamicActor::attack() {
-    
+}
+
+void DynamicActor::setPosition(std::tuple<float, float> position) {
+    this->position = position;
 }

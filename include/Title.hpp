@@ -15,11 +15,11 @@ public:
     void setWindow(sf::RenderWindow *window);
     void setListener(EventManager *eventManager);
 
+    void init();
     void draw(sf::RenderWindow &window);
 	void update(const EventInterface& event);
     
 private:
-    void init();
     void centerText(sf::Text &text);
     void moveCursor(const sf::Text &text);
     int checkCursor(const sf::Text &text);

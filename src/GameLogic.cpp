@@ -18,3 +18,8 @@ Level GameLogic::getLevel(){
 	return m_level;
 }
 
+void GameLogic::setCharPosition(std::tuple<float, float> position) {
+    m_player.setPosition(position);
+}
+
+

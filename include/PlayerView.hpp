@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include "EventInterface.hpp"
 #include "Process.hpp"
+#include "GameLogic.hpp"
 
 class PlayerView : public Process {
 public:
@@ -14,6 +15,7 @@ public:
 	void setContext(sf::RenderWindow* window);
 	void handleEvents();
 	bool isOpen();
+	void setGameLogic(GameLogic gameLogic);
 private: //methods
 
 private: //vars and objs
@@ -23,6 +25,7 @@ private: //vars and objs
 	void moveEventListener(const EventInterface& moveEvent);
 	float speed;
 	bool notReleased;
+	GameLogic gameLogic;
 };
 
 #endif

@@ -4,6 +4,8 @@
 #include "EventManager.hpp"
 #include "Process.hpp"
 #include "Player.hpp"
+#include <tuple>
+
 enum Level { red, blue, yellow, green, orange, purple };
 
 class GameLogic : public Process {
@@ -12,6 +14,8 @@ class GameLogic : public Process {
 		void init();
 		void update(float &deltaTime);
 		Level getLevel();
+		void setCharPosition(std::tuple<float, float> position);
+
 	private:
 		Level m_level;
 		Player m_player;
