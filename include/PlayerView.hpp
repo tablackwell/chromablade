@@ -11,6 +11,7 @@ public:
     PlayerView();
 	void init();
 	void update(float &deltaTime);
+    void update(const EventInterface &event);
     void draw();
 	void setContext(sf::RenderWindow* window);
 	void handleEvents();

@@ -38,6 +38,43 @@ void PlayerView::setGameLogic(GameLogic gameLogic) {
 
 
 /* Update view. */
+void PlayerView::update(const EventInterface &event) {
+    const EventInterface *ptr = &event;
+    
+    // Convert to SFML inherited class.
+    if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)) {
+        
+        sf::Event sfmlEvent = sfEvent->getSFMLEvent();
+        
+        if (sfmlEvent.type == sf::Event::KeyReleased) {
+            notReleased = false;
+        } else if (sfmlEvent.type == sf::Event::KeyPressed) {
+            notReleased = true;
+        }
+        
+        auto key = sfmlEvent.key.code;
+        float deltaTime = event.getDeltaTime();
+        
+        if (key == sf::Keyboard::Left){
+            character.move(-speed * deltaTime, 0.f);
+            gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
+        } else if (key == sf::Keyboard::Right){
+            character.move(speed * deltaTime, 0.f);
+            gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
+        }
+        
+        if (key == sf::Keyboard::Up){
+            character.move(0.f, -speed * deltaTime);
+            gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
+        } else if (key == sf::Keyboard::Down){
+            character.move(0.f, speed * deltaTime);
+            gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
+        }
+    }
+}
+
+
+/* Update view. */
 void PlayerView::update(float &deltaTime){
 	sf::Event event;
 	while(targetWindow->pollEvent(event)){
