@@ -63,22 +63,22 @@ void PlayerView::update1(const EventInterface &event) {
             notReleased = true;
         }
         
-        auto key = sfmlEvent.key.code;
         float deltaTime = event.getDeltaTime();
         std::cout<<"Moving: "<<(speed * deltaTime);
-
-        if (key == sf::Keyboard::Left){
+        
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
             character.move(-speed * deltaTime, 0.f);
             gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
-        } else if (key == sf::Keyboard::Right){
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
             character.move(speed * deltaTime, 0.f);
             gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
         }
-        
-        if (key == sf::Keyboard::Up){
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
             character.move(0.f, -speed * deltaTime);
             gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
-        } else if (key == sf::Keyboard::Down){
+        }
+        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
             character.move(0.f, speed * deltaTime);
             gameLogic.setCharPosition(std::make_tuple(character.getPosition().x, character.getPosition().y));
         }
