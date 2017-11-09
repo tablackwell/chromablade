@@ -23,7 +23,7 @@ void ChromaBlade::init(){
     const EventListener m_listener1 = EventListener(changeState, 1);
     m_eventManager.addListener(m_listener1, EventType::changeStateEvent);
     
-    m_title.setContext(&m_eventManager);
+    m_title.setListener(&m_eventManager);
     
     /* Play music on start. */
     m_audio.init();

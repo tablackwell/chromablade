@@ -64,6 +64,8 @@ void Title::setWindow(sf::RenderWindow *window) {
 }
 
 void Title::setListener(EventManager *eventManager) {
+    m_eventManager = eventManager;
+    
     // Create function for listener. Add to event manager.
     std::function<void(const EventInterface &event)> titleScreen = std::bind(&Title::update, this, std::placeholders::_1);
     const EventListener m_listener = EventListener(titleScreen, 2);
