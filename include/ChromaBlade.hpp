@@ -33,6 +33,7 @@ private: // functions
     GameState getState();
     void setState(GameState state);
     void handleInput(float);
+    void ChromaBlade::registerListeners();
 
 private: // vars and objs
     GameLogic m_gameLogic;
