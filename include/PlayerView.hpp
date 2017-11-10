@@ -16,17 +16,18 @@ class PlayerView : public Process {
         PlayerView();
         void init();
         void update(float &deltaTime);
-        void update1(const EventInterface &event);
         void draw();
         void setContext(sf::RenderWindow* window);
-        void setListener(EventManager *eventManager);
         void handleInput(float);
         bool isOpen();
         void setGameLogic(GameLogic* gameLogic);
         void setGameApplication(ChromaBlade* game);
 
+        // event related methods
+        void update1(const EventInterface &event);
+        void setListener(EventManager *eventManager);
+
     private: //methods
-        void moveEventListener(const EventInterface& moveEvent);
     private: //vars and objs
         EventManager *m_eventManager;
         sf::RenderWindow* m_window;
