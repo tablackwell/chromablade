@@ -1,11 +1,15 @@
 #include "ChromaBlade.hpp"
+#include "PlayerView.hpp"
+#include "GameLogic.hpp"
 
 #include <cstdio>
 #include <iostream>
 
-
+/* The game application layer */
 ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
 {
+    /* Start on the Title screen. */
+    m_state = GameState::Title;
 }
 
 
@@ -13,10 +17,9 @@ void ChromaBlade::init(){
     m_view.setContext(&m_window);
     m_eventManager.setWindow(&m_window);
     m_title.setWindow(&m_window);
-  	m_view.setGameLogic(m_gameLogic);
-
-    /* Load title screen. */
-    m_title.init();
+  	m_view.setGameLogic(&m_gameLogic);
+  	m_view.setGameApplication(this);
+  	m_window.setVerticalSyncEnabled(true);
   
     /* Subscribe to events. */
     std::function<void(const EventInterface &event)> closeScreen = std::bind(&ChromaBlade::shutdown, this, std::placeholders::_1);
@@ -35,15 +38,12 @@ void ChromaBlade::init(){
     /* Load sample game room. */
     m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
-	m_window.setVerticalSyncEnabled(true);
+
 
     /* Attach PlayerView, GameLogic, and Audio to ProcessManager. */
     m_processManager.attachProcess(&m_view);
     m_processManager.attachProcess(&m_gameLogic);
     m_processManager.attachProcess(&m_audio);
-
-    /* Start on the Title screen. */
-    m_state = GameState::Title;
 }
 
 void ChromaBlade::run(){

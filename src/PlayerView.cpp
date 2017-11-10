@@ -7,8 +7,7 @@
 #include <iostream>
 
 
-#define MAX_SPEED 200.f
-#define INIT_SPEED 110.f
+#define SPEED 200.f
 //#define ACCELERATION 100.f
 
 PlayerView::PlayerView() : Process() {
@@ -17,6 +16,14 @@ PlayerView::PlayerView() : Process() {
 
 /* Initialize player view by loading files and setting initial positions */
 void PlayerView::init(){
+
+    // Load title screen.
+    m_title.init();
+
+    // Load map and overlay of sample room
+     m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
+     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
+
 	// Load texture for character
 	if(!m_charTexture.loadFromFile("../res/Char.png")) {
 		// ERROR
@@ -25,18 +32,26 @@ void PlayerView::init(){
 	m_character.setPosition(sf::Vector2f(180, 210));
 	m_character.setScale(1.f,1.f);
     setState(Process::RUNNING);
-    m_speed = INIT_SPEED;
+    m_speed = SPEED;
 }
 
 
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
-	m_targetWindow = window;
+	m_window = window;
 }
 
+
+/* Link the game logic with player view */
 void PlayerView::setGameLogic(GameLogic& gameLogic) {
     this->m_gameLogic = gameLogic;
 }
+
+
+/* Link the game application with player view, so that we can check game state. */
+ void PlayerView::setGameApplication(ChromaBlade* game) {
+     m_game = game;
+ }
 
 
 void PlayerView::setListener(EventManager *eventManager) {
@@ -58,30 +73,24 @@ void PlayerView::update1(const EventInterface &event) {
         
         sf::Event sfmlEvent = sfEvent->getSFMLEvent();
         
-        if (sfmlEvent.type == sf::Event::KeyReleased) {
-            m_notReleased = false;
-        } else if (sfmlEvent.type == sf::Event::KeyPressed) {
-            m_notReleased = true;
-        }
-        
         float deltaTime = event.getDeltaTime();
         std::cout<<"Moving: "<<(m_speed * deltaTime);
         
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
             m_character.move(-m_speed * deltaTime, 0.f);
-            m_gameLogic.setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
             m_character.move(m_speed * deltaTime, 0.f);
-            m_gameLogic.setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
             m_character.move(0.f, -m_speed * deltaTime);
-            m_gameLogic.setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
         }
         else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
             m_character.move(0.f, m_speed * deltaTime);
-            m_gameLogic.setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
         }
     }
 }
@@ -89,58 +98,71 @@ void PlayerView::update1(const EventInterface &event) {
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
-	sf::Event event;
-	while(m_targetWindow->pollEvent(event)){
-		// Close window
-		if(event.type == sf::Event::Closed){
-			m_targetWindow->close();
-		}
-		else if(event.type == sf::Event::KeyReleased){
-		    m_notReleased = false;
-		}
-		else if(event.type == sf::Event::KeyPressed){
-            m_notReleased = true;
-        }
-	}
-    /*
-	if (m_notReleased){
-	    if (m_speed <= MAX_SPEED){
-	        m_speed += deltaTime * ACCELERATION;
-	    }
-	}
-	else{
-	    m_speed = INIT_SPEED;
-	}
-    */
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-	    m_character.move(-m_speed * deltaTime, 0.f);
-	    m_gameLogic.setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-	    m_character.move(m_speed * deltaTime, 0.f);
-	    m_gameLogic.setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-	}
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-	    m_character.move(0.f, -m_speed * deltaTime);
-	    m_gameLogic.setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-	    m_character.move(0.f, m_speed * deltaTime);
-	    m_gameLogic.setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-	}
+    // currently does nothing
 }
 
-/* Draw view. */
+/* Render */
 void PlayerView::draw() {
-    m_targetWindow->draw(m_character);
+    m_window->clear();
+    GameState state = m_game->getState();
+    // Render the content depending on the game state
+    switch(state) {
+        case GameState::Title:
+            m_title.draw(*m_window);
+            break;
+        case GameState::Game:
+            m_window->draw(m_map);
+            m_window->draw(m_overlay);
+            m_window->draw(m_character);
+            break;
+    }
+    m_window->display();
 }
 
 /* Check if the window is open */
 bool PlayerView::isOpen(){
-	return m_targetWindow->isOpen();
+	return m_window->isOpen();
 }
 
 
-void PlayerView::handleInput(float deltaTime){
-    // TO DO: move the input handling from chromablade.cpp to here
-}
+/* Handle user inputs */
+void PlayerView::handleInput(float deltaTime) {
+    // First check game state
+    GameState state = m_game->getState();
+    switch(state) {
+      case GameState::Title:
+          int rc;
+          rc = m_title.update(*m_window);
+          // Moved the cursor
+          if (rc == 0) {}
+          // Selected Play
+          else if (rc == 1) m_game->setState(GameState::Game);
+          // Selected Exit
+          else m_window->close();
+          break;
+      case GameState::Game:
+          sf::Event event;
+          while(m_window->pollEvent(event)){
+              // Close window
+              if(event.type == sf::Event::Closed){
+                  m_window->close();
+              }
+          }
+          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+              m_character.move(-m_speed * deltaTime, 0.f);
+              m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+          }
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+              m_character.move(m_speed * deltaTime, 0.f);
+              m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+          }
+          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+              m_character.move(0.f, -m_speed * deltaTime);
+              m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+          }
+          else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+              m_character.move(0.f, m_speed * deltaTime);
+              m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+          }
+        break;
+  }
