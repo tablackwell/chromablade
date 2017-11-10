@@ -140,5 +140,6 @@ bool PlayerView::isOpen(){
 }
 
 
-void PlayerView::handleEvents(){
+void PlayerView::handleInput(float deltaTime){
+    // TO DO: move the input handling from chromablade.cpp to here
 }

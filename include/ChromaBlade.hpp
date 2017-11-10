@@ -30,6 +30,9 @@ private: // functions
     void update(float &deltaTime);
     void updateState(const EventInterface &event);
     void render();
+    GameState getState();
+    void setState(GameState state);
+    void handleInput(float);
 
 private: // vars and objs
     GameLogic m_gameLogic;

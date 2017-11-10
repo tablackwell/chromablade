@@ -68,6 +68,13 @@ void ChromaBlade::handleEvents(float deltaTime) {
     m_eventManager.update(deltaTime);
 }
 
+
+/* Calls playerView to handle player inputs */
+void ChromaBlade::handleInput(float deltaTime) {
+    m_view.handleInput(deltaTime);
+}
+
+
 void ChromaBlade::update(float &deltaTime) {
     /* Naive switch to handle game state transitions. */
     switch (m_state) {
