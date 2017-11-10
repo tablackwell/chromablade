@@ -15,10 +15,9 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 
 void ChromaBlade::init(){
     m_view.setContext(&m_window);
+    m_view.setGameLogic(&m_gameLogic);
+    m_view.setGameApplication(this);
     m_eventManager.setWindow(&m_window);
-    m_title.setWindow(&m_window);
-  	m_view.setGameLogic(&m_gameLogic);
-  	m_view.setGameApplication(this);
   	m_window.setVerticalSyncEnabled(true);
   
     /* Subscribe to events. */

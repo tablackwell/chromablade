@@ -7,7 +7,7 @@ Title::~Title() { };
 
 void Title::init() {
 
-    // background
+    // load background
     if (!m_texture.loadFromFile("../res/chromablade.png")) {
         fprintf(stderr, "%s:%d: cannot load texture\n",
                 __FILE__, __LINE__);
@@ -17,7 +17,7 @@ void Title::init() {
     m_background.setSize(sf::Vector2f(WIDTH / 2, HEIGHT / 2));
     m_background.setPosition(sf::Vector2f(200, 40));
 
-    // create font
+    // load font
     if (!m_font.loadFromFile("../res/PressStart2P.ttf")) {
         fprintf(stderr, "%s:%d: cannot load font\n",
                 __FILE__, __LINE__);
@@ -58,9 +58,6 @@ void Title::init() {
     moveCursor(m_play);
 }
 
-void Title::setWindow(sf::RenderWindow *window) {
-    m_window = window;
-}
 
 void Title::setListener(EventManager *eventManager) {
     m_eventManager = eventManager;
@@ -71,12 +68,15 @@ void Title::setListener(EventManager *eventManager) {
     m_eventManager->addListener(m_listener, EventType::sfmlEvent);
 }
 
+
+/* Draw the title page */
 void Title::draw(sf::RenderWindow &window) {
     window.draw(m_background);
     window.draw(m_play);
     window.draw(m_exit);
     window.draw(m_cursor);
 }
+
 
 /* Centers text based on dimensions. */
 void Title::centerText(sf::Text &text) {
@@ -85,17 +85,20 @@ void Title::centerText(sf::Text &text) {
     text.setPosition((WIDTH - g.width) / 2, g.top - l.top);
 }
 
-/* Moves the menu cursor on Up and Down keypress. */
+
+/* Moves the menu cursor on Up and Down key press. */
 void Title::moveCursor(const sf::Text &text) {
     m_cursor.setPosition(text.getPosition().x - WIDTH / 20.0,
                        text.getPosition().y);
 }
+
 
 /* Checks which option the cursor is at. */
 int Title::checkCursor(const sf::Text &text) {
     return m_cursor.getPosition().y == text.getPosition().y;
 }
 
+// TODO: decouple title from event system
 /* Update title screen based on keyPressed event. */
 void Title::update(const EventInterface &event) {
     const EventInterface *ptr = &event;
