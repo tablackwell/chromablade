@@ -6,6 +6,7 @@
 #include <tuple>
 #include <iostream>
 
+
 #define MAX_SPEED 200.f
 #define INIT_SPEED 110.f
 //#define ACCELERATION 100.f
@@ -33,7 +34,7 @@ void PlayerView::setContext(sf::RenderWindow* window){
 	m_targetWindow = window;
 }
 
-void PlayerView::setGameLogic(GameLogic gameLogic) {
+void PlayerView::setGameLogic(GameLogic& gameLogic) {
     this->m_gameLogic = gameLogic;
 }
 

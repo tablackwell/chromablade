@@ -6,6 +6,7 @@
 #include "Process.hpp"
 #include "GameLogic.hpp"
 
+
 class PlayerView : public Process {
     public:
         PlayerView();
@@ -17,7 +18,7 @@ class PlayerView : public Process {
         void setListener(EventManager *eventManager);
         void handleInput(float);
         bool isOpen();
-        void setGameLogic(GameLogic gameLogic);
+        void setGameLogic(GameLogic& gameLogic);
 
     private: //methods
         void moveEventListener(const EventInterface& moveEvent);
