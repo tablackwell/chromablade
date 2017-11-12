@@ -107,6 +107,8 @@ int Title::update(sf::RenderWindow &window) {
             case sf::Event::Closed:
                 return 2;
                 break;
+            default:
+                break;
         }
     }
     return 0;
