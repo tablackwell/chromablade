@@ -9,13 +9,9 @@ class Title {
 public:
     Title();
     ~Title();
-    
     void setWindow(sf::RenderWindow *window);
-    void setListener(EventManager *eventManager);
-
     void init();
     void draw(sf::RenderWindow &window);
-	void update(const EventInterface& event);
 	int update(sf::RenderWindow &window);
     
 private:
@@ -23,7 +19,7 @@ private:
     void moveCursor(const sf::Text &text);
     int checkCursor(const sf::Text &text);
     
-    EventManager *m_eventManager;
+private:
     sf::Texture m_texture;
     sf::RectangleShape m_background;
     sf::Font m_font;
