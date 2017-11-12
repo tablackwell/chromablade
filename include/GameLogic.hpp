@@ -1,7 +1,7 @@
 #ifndef GAMELOGIC_HPP
 #define GAMELOGIC_HPP
 
-#include "EventManager.hpp"
+
 #include "Process.hpp"
 #include "Player.hpp"
 #include <tuple>
@@ -19,7 +19,6 @@ class GameLogic : public Process {
 	private:
 		Level m_level;
 		Player m_player;
-		EventManager m_eventManager;
 	private:
 };
 
