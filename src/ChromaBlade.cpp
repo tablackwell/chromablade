@@ -55,9 +55,13 @@ void ChromaBlade::handleInput(float deltaTime) {
 
 /* Updates game logic */
 void ChromaBlade::update(float &deltaTime) {
-    if (m_state == GameState::Game) {
-        //m_processManager.update(deltaTime); // update audio, player view, game logic; could be hard-coded instead
-        // TODO: update game logic here
+    /* Naive switch to handle game state transitions. */
+    switch (m_state) {
+        case GameState::Title:
+            break;
+        case GameState::Game:
+            m_processManager.update(deltaTime);
+            break;
     }
 }
 

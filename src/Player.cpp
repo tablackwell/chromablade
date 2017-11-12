@@ -12,7 +12,7 @@ Player::Player() {
     // Initialize hash map. Start with red by default.
     m_colorsAvail[Color::RED] = true;
     changeColor(Color::RED);
-    setPosition(std::make_tuple(180, 210)); // Initialize player position as a tuple
+    setPosition(std::make_tuple(196, 235)); // Initialize player position as a tuple
 }
 
 

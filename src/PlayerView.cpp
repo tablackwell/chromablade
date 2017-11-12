@@ -30,7 +30,7 @@ void PlayerView::init(){
     if(!m_charTexture.loadFromFile("../res/sprite.png")) {
 		// ERROR
 	}
-    m_character.setTextureRect(sf::IntRect(32, 0, 32, 32));
+//    m_character.setTextureRect(sf::IntRect(32, 0, 32, 32));
     
     walkingDown.setSpriteSheet(m_charTexture);
     walkingDown.addFrame(sf::IntRect(32, 0, 32, 32));
@@ -58,9 +58,9 @@ void PlayerView::init(){
 
     currAnimation = &walkingDown;
     animatedSprite.setPosition(START_POS);
-    m_character.setTexture(m_charTexture);
-	m_character.setPosition(START_POS);
-	m_character.setScale(1.f,1.f);
+//    m_character.setTexture(m_charTexture);
+//	m_character.setPosition(START_POS);
+//	m_character.setScale(1.f,1.f);
     setState(Process::RUNNING);
     m_speed = SPEED;
     registerListener();
@@ -111,7 +111,6 @@ void PlayerView::handleInput(float deltaTime) {
             if (sf::Keyboard::isKeyPressed(LEFT)){
                 MoveEvent *move = new MoveEvent(Direction::Left);
                 m_game->queueEvent(move);
-
             }
             else if (sf::Keyboard::isKeyPressed(RIGHT)){
                 MoveEvent *move = new MoveEvent(Direction::Right);
@@ -143,7 +142,7 @@ void PlayerView::draw() {
         case GameState::Game:
             m_window->draw(m_map);
             m_window->draw(m_overlay);
-            m_window->draw(m_character);
+            m_window->draw(animatedSprite);
             break;
     }
     m_window->display();
@@ -158,7 +157,7 @@ bool PlayerView::isOpen(){
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
-    // currently does nothing, used by processManager
+
 }
 
 
@@ -177,18 +176,43 @@ void PlayerView::moveChar(const EventInterface& event) {
     const MoveEvent *moveEvent = dynamic_cast<const MoveEvent*>(ptr);
     Direction dir = moveEvent->getDirection();
     float deltaTime = moveEvent->getDeltaTime();
+    bool noKeyPressed = true;
+    sf::Vector2f moving;
     switch (dir){
     case Up:
-        m_character.move(0.f, -m_speed * deltaTime);
+//        m_character.move(0.f, -m_speed * deltaTime);
+        currAnimation = &walkingUp;
+        moving = sf::Vector2f(0.f, -m_speed * deltaTime);
+        noKeyPressed = false;
         break;
     case Down:
-        m_character.move(0.f, m_speed * deltaTime);
+//        m_character.move(0.f, m_speed * deltaTime);
+        currAnimation = &walkingDown;
+        moving = sf::Vector2f(0.f, m_speed * deltaTime);
+        noKeyPressed = false;
         break;
     case Left:
-        m_character.move(-m_speed * deltaTime, 0.f);
+//        m_character.move(-m_speed * deltaTime, 0.f);
+        currAnimation = &walkingLeft;
+        moving = sf::Vector2f(-m_speed * deltaTime, 0.f);
+        noKeyPressed = false;
         break;
     case Right:
-        m_character.move(m_speed * deltaTime, 0.f);
+//        m_character.move(m_speed * deltaTime, 0.f);
+        currAnimation = &walkingRight;
+        moving = sf::Vector2f(m_speed * deltaTime, 0.f);
+        noKeyPressed = false;
         break;
     }
+    animatedSprite.play(*currAnimation);
+    animatedSprite.move(moving);
+
+    if (noKeyPressed) {
+        animatedSprite.stop();
+    }
+    noKeyPressed = true;
+
+    animatedSprite.update((sf::seconds(deltaTime)));
+    std::cout << animatedSprite.getPosition().x << "\n";
+    std::cout << animatedSprite.getPosition().y << "\n";
 }

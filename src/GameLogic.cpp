@@ -32,6 +32,8 @@ void GameLogic::setGameApplication(ChromaBlade* game) {
 /* Sets the position of character */
 void GameLogic::setCharPosition(std::tuple<float, float> position) {
     m_player.setPosition(position);
+    std::cout << std::get<0>(position) << "\n";
+    std::cout << std::get<1>(position) << "\n";
 }
 
 
