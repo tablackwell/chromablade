@@ -79,6 +79,7 @@ void PlayerView::handleInput(float deltaTime) {
                     m_window->close();
                 }
             }
+            // TODO: MoveEvent
             if (sf::Keyboard::isKeyPressed(LEFT)){
                 m_character.move(-m_speed * deltaTime, 0.f);
                 m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));

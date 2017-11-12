@@ -1,10 +1,10 @@
-/*
- * Event types.
- */
-
 #ifndef EVENTTYPE_HPP
 #define EVENTTYPE_HPP
 
+
+/*
+ * Event types.
+ */
 enum EventType {
     collisionEvent,
     attackEvent,
