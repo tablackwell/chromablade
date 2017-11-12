@@ -33,34 +33,34 @@ void PlayerView::init(){
 //    m_character.setTextureRect(sf::IntRect(32, 0, 32, 32));
     
     walkingDown.setSpriteSheet(m_charTexture);
-    walkingDown.addFrame(sf::IntRect(32, 0, 32, 32));
-    walkingDown.addFrame(sf::IntRect(64, 0, 32, 32));
-    walkingDown.addFrame(sf::IntRect(32, 0, 32, 32));
-    walkingDown.addFrame(sf::IntRect( 0, 0, 32, 32));
+    walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
+    walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
+    walkingDown.addFrame(sf::IntRect(0, 64, 32, 32));
+    walkingDown.addFrame(sf::IntRect(0, 96, 32, 32));
     
     walkingLeft.setSpriteSheet(m_charTexture);
+    walkingLeft.addFrame(sf::IntRect(32, 0, 32, 32));
     walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
-    walkingLeft.addFrame(sf::IntRect(64, 32, 32, 32));
     walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
-    walkingLeft.addFrame(sf::IntRect( 0, 32, 32, 32));
+    walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
     
     walkingRight.setSpriteSheet(m_charTexture);
-    walkingRight.addFrame(sf::IntRect(32, 64, 32, 32));
-    walkingRight.addFrame(sf::IntRect(64, 64, 32, 32));
-    walkingRight.addFrame(sf::IntRect(32, 64, 32, 32));
-    walkingRight.addFrame(sf::IntRect( 0, 64, 32, 32));
+    walkingRight.addFrame(sf::IntRect(96, 0, 32, 32));
+    walkingRight.addFrame(sf::IntRect(96, 32, 32, 32));
+    walkingRight.addFrame(sf::IntRect(96, 64, 32, 32));
+    walkingRight.addFrame(sf::IntRect(96, 96, 32, 32));
     
     walkingUp.setSpriteSheet(m_charTexture);
-    walkingUp.addFrame(sf::IntRect(32, 96, 32, 32));
+    walkingUp.addFrame(sf::IntRect(64, 0, 32, 32));
+    walkingUp.addFrame(sf::IntRect(64, 32, 32, 32));
+    walkingUp.addFrame(sf::IntRect(64, 64, 32, 32));
     walkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
-    walkingUp.addFrame(sf::IntRect(32, 96, 32, 32));
-    walkingUp.addFrame(sf::IntRect( 0, 96, 32, 32));
 
     currAnimation = &walkingDown;
     animatedSprite.setPosition(START_POS);
 //    m_character.setTexture(m_charTexture);
 //	m_character.setPosition(START_POS);
-//	m_character.setScale(1.f,1.f);
+	animatedSprite.setScale(1.2f,1.2f);
     setState(Process::RUNNING);
     m_speed = SPEED;
     registerListener();
