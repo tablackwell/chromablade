@@ -5,6 +5,7 @@
 #include "EventInterface.hpp"
 #include "Process.hpp"
 #include "GameLogic.hpp"
+#include "AnimatedSprite.hpp"
 
 class PlayerView : public Process {
 public:
@@ -23,6 +24,12 @@ private: //methods
 
 private: //vars and objs
     EventManager *m_eventManager;
+    Animation *currAnimation;
+    Animation walkingDown;
+    Animation walkingUp;
+    Animation walkingRight;
+    Animation walkingLeft;
+    AnimatedSprite animatedSprite;
     sf::RenderWindow* m_targetWindow;
 	sf::Sprite m_character;
 	sf::Texture m_charTexture;

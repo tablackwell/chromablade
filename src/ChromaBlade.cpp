@@ -51,7 +51,7 @@ void ChromaBlade::run(){
 	while(m_window.isOpen()){
         float deltaTime = m_fpsTimer.restart().asSeconds();
 		handleEvents(deltaTime);
-        //update(deltaTime);
+        update(deltaTime);
         render();
 	}
 }
