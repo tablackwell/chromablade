@@ -39,7 +39,6 @@ class PlayerView : public Process {
         TileMap m_map;
         TileMap m_overlay;
         Title m_title;
-
 };
 
 #endif

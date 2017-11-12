@@ -23,6 +23,7 @@ class DynamicActor {
 		void changeColor(Color color);
 		void setHealth(float health);
 		void setPosition(std::tuple<float, float>);
+		std::tuple<float, float> getPosition();
 
 	private:
 

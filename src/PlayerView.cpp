@@ -2,6 +2,7 @@
 #include "GameState.hpp"
 #include "ChromaBlade.hpp"
 #include "KeySetting.hpp"
+#include "MoveEvent.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -79,22 +80,30 @@ void PlayerView::handleInput(float deltaTime) {
                     m_window->close();
                 }
             }
-            // TODO: MoveEvent
             if (sf::Keyboard::isKeyPressed(LEFT)){
                 m_character.move(-m_speed * deltaTime, 0.f);
-                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+//                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+                MoveEvent move(Direction::Left);
+                m_game->queueEvent(&move);
+
             }
             else if (sf::Keyboard::isKeyPressed(RIGHT)){
                 m_character.move(m_speed * deltaTime, 0.f);
-                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+//                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+                MoveEvent move(Direction::Right);
+                m_game->queueEvent(&move);
             }
             if (sf::Keyboard::isKeyPressed(UP)){
                 m_character.move(0.f, -m_speed * deltaTime);
-                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+//                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+                MoveEvent move(Direction::Up);
+                m_game->queueEvent(&move);
             }
             else if (sf::Keyboard::isKeyPressed(DOWN)){
                 m_character.move(0.f, m_speed * deltaTime);
-                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+//                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+                MoveEvent move(Direction::Down);
+                m_game->queueEvent(&move);
             }
           break;
     }
@@ -133,43 +142,43 @@ void PlayerView::update(float &deltaTime){
 }
 
 
-void PlayerView::setListener(EventManager *eventManager) {
-    m_eventManager = eventManager;
+//void PlayerView::setListener(EventManager *eventManager) {
+//    m_eventManager = eventManager;
+//
+//    // Create function for listener. Add to event manager.
+//    std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::update1, this, std::placeholders::_1);
+//    const EventListener m_listener = EventListener(move, 3);
+//    m_eventManager->addListener(m_listener, EventType::sfmlEvent);
+//}
 
-    // Create function for listener. Add to event manager.
-    std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::update1, this, std::placeholders::_1);
-    const EventListener m_listener = EventListener(move, 3);
-    m_eventManager->addListener(m_listener, EventType::sfmlEvent);
-}
 
-
-/* Update view. */
-void PlayerView::update1(const EventInterface &event) {
-    const EventInterface *ptr = &event;
-
-    // Convert to SFML inherited class.
-    if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)) {
-
-        sf::Event sfmlEvent = sfEvent->getSFMLEvent();
-
-        float deltaTime = event.getDeltaTime();
-        std::cout<<"Moving: "<<(m_speed * deltaTime);
-
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-            m_character.move(-m_speed * deltaTime, 0.f);
-            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-            m_character.move(m_speed * deltaTime, 0.f);
-            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-        }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-            m_character.move(0.f, -m_speed * deltaTime);
-            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-        }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-            m_character.move(0.f, m_speed * deltaTime);
-            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-        }
-    }
-}
+///* Update view. */
+//void PlayerView::update1(const EventInterface &event) {
+//    const EventInterface *ptr = &event;
+//
+//    // Convert to SFML inherited class.
+//    if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)) {
+//
+//        sf::Event sfmlEvent = sfEvent->getSFMLEvent();
+//
+//        float deltaTime = event.getDeltaTime();
+//        std::cout<<"Moving: "<<(m_speed * deltaTime);
+//
+//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+//            m_character.move(-m_speed * deltaTime, 0.f);
+//            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+//        }
+//        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+//            m_character.move(m_speed * deltaTime, 0.f);
+//            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+//        }
+//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+//            m_character.move(0.f, -m_speed * deltaTime);
+//            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+//        }
+//        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+//            m_character.move(0.f, m_speed * deltaTime);
+//            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
+//        }
+//    }
+//}

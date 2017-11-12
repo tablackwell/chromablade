@@ -9,7 +9,7 @@
 /* The game application layer */
 ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
 {
-    /* Start on the Title screen. */
+    /* Starts on the Title screen. */
     m_state = GameState::Title;
 }
 
@@ -49,16 +49,16 @@ void ChromaBlade::handleInput(float deltaTime) {
 }
 
 
-/* Update game logic */
+/* Updates game logic */
 void ChromaBlade::update(float &deltaTime) {
     if (m_state == GameState::Game) {
         //m_processManager.update(deltaTime); // update audio, player view, game logic; could be hard-coded instead
-        // TODO: updat game logic here
+        // TODO: update game logic here
     }
 }
 
 
-/* Process events in eventManager */
+/* Processes events in eventManager */
 void ChromaBlade::handleEvents(float deltaTime) {
     m_eventManager.update(deltaTime);
 }
@@ -70,13 +70,25 @@ void ChromaBlade::render() {
 }
 
 
-/* Set the game state */
+/* Sets the game state */
 void ChromaBlade::setState(GameState state) {
     m_state = state;
 }
 
 
- /* Get the game state */
+ /* Gets the game state */
 GameState ChromaBlade::getState() {
     return m_state;
+}
+
+
+/* Allows other components to register listeners */
+void ChromaBlade::registerListener(const EventListener& listener, const EventType& eventType) {
+    m_eventManager.addListener(listener, eventType);
+}
+
+
+/* Allows other components to queue events */
+void ChromaBlade::queueEvent(EventInterface *event) {
+    m_eventManager.queueEvent(event);
 }

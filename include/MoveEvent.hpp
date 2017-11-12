@@ -13,13 +13,15 @@ enum Direction { Up, Down, Left, Right };
  */
 class MoveEvent : public EventInterface {
 	public:
-        MoveEvent(Direction direction);
-	    Direction getDirection();
+        MoveEvent(Direction direction) { m_dir = direction; m_type = moveEvent; }
+	    Direction getDirection() const { return m_dir; }
+	    const EventType& getEventType(void) const { return m_type; }
 
 	private:
     
 	private: // event data
 	    Direction m_dir;
+	    EventType m_type;
 };
 
 #endif

@@ -13,6 +13,7 @@
 #include "TileMap.hpp"
 #include "Title.hpp"
 #include "Audio.hpp"
+#include "EventType.hpp"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -25,6 +26,8 @@ public:
     void pause();
     GameState getState();
     void setState(GameState state);
+    void registerListener(const EventListener& listener, const EventType& eventType);
+    void queueEvent(EventInterface *event);
 
 private: // functions
     void handleInput(float);

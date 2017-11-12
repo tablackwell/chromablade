@@ -4,9 +4,19 @@
 
 #include "Process.hpp"
 #include "Player.hpp"
+#include "EventInterface.hpp"
+#include "MoveEvent.hpp"
+#include "EventManager.hpp"
+#include "EventListener.hpp"
+#include "EventType.hpp"
 #include <tuple>
+#include <functional>
+
+#define SPEED 200.f
 
 enum Level { red, blue, yellow, green, orange, purple };
+
+class ChromaBlade;
 
 class GameLogic : public Process {
 	public:
@@ -17,9 +27,13 @@ class GameLogic : public Process {
 		void setCharPosition(std::tuple<float, float> position);
 
 	private:
-		Level m_level;
-		Player m_player;
+		void moveChar(const EventInterface& event);
+		void registerListener();
+
 	private:
+        Level m_level;
+        Player m_player;
+        ChromaBlade* m_game;
 };
 
 #endif
