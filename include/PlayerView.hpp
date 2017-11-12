@@ -26,6 +26,8 @@ class PlayerView : public Process {
         // event related methods
         void update1(const EventInterface &event);
         void setListener(EventManager *eventManager);
+        void registerListener();
+        void moveChar(const EventInterface& event);
 
     private: //methods
     private: //vars and objs

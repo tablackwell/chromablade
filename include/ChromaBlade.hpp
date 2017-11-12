@@ -26,7 +26,8 @@ public:
     void pause();
     GameState getState();
     void setState(GameState state);
-    void registerListener(const EventListener& listener, const EventType& eventType);
+//    void registerListener(const EventListener& listener, const EventType& eventType);
+    void registerListener(EventListener listener, EventType eventType);
     void queueEvent(EventInterface *event);
 
 private: // functions

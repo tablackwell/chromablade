@@ -14,7 +14,6 @@
 #define SPEED 200.f
 
 PlayerView::PlayerView() : Process() {
-    init();
 }
 
 /* Initialize player view by loading files and setting initial positions */
@@ -36,6 +35,7 @@ void PlayerView::init(){
 	m_character.setScale(1.f,1.f);
     setState(Process::RUNNING);
     m_speed = SPEED;
+    registerListener();
 }
 
 
@@ -81,29 +81,25 @@ void PlayerView::handleInput(float deltaTime) {
                 }
             }
             if (sf::Keyboard::isKeyPressed(LEFT)){
-                m_character.move(-m_speed * deltaTime, 0.f);
-//                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-                MoveEvent move(Direction::Left);
-                m_game->queueEvent(&move);
+//                m_character.move(-m_speed * deltaTime, 0.f);
+                MoveEvent *move = new MoveEvent(Direction::Left);
+                m_game->queueEvent(move);
 
             }
             else if (sf::Keyboard::isKeyPressed(RIGHT)){
-                m_character.move(m_speed * deltaTime, 0.f);
-//                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-                MoveEvent move(Direction::Right);
-                m_game->queueEvent(&move);
+//                m_character.move(m_speed * deltaTime, 0.f);
+                MoveEvent *move = new MoveEvent(Direction::Right);
+                m_game->queueEvent(move);
             }
             if (sf::Keyboard::isKeyPressed(UP)){
-                m_character.move(0.f, -m_speed * deltaTime);
-//                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-                MoveEvent move(Direction::Up);
-                m_game->queueEvent(&move);
+//                m_character.move(0.f, -m_speed * deltaTime);
+                MoveEvent *move = new MoveEvent(Direction::Up);
+                m_game->queueEvent(move);
             }
             else if (sf::Keyboard::isKeyPressed(DOWN)){
-                m_character.move(0.f, m_speed * deltaTime);
-//                m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-                MoveEvent move(Direction::Down);
-                m_game->queueEvent(&move);
+//                m_character.move(0.f, m_speed * deltaTime);
+                MoveEvent *move = new MoveEvent(Direction::Down);
+                m_game->queueEvent(move);
             }
           break;
     }
@@ -134,7 +130,6 @@ bool PlayerView::isOpen(){
 	return m_window->isOpen();
 }
 
-///////////////////////// event related methods
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
@@ -142,43 +137,33 @@ void PlayerView::update(float &deltaTime){
 }
 
 
-//void PlayerView::setListener(EventManager *eventManager) {
-//    m_eventManager = eventManager;
-//
-//    // Create function for listener. Add to event manager.
-//    std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::update1, this, std::placeholders::_1);
-//    const EventListener m_listener = EventListener(move, 3);
-//    m_eventManager->addListener(m_listener, EventType::sfmlEvent);
-//}
+/* Adds listeners to eventManager */
+void PlayerView::registerListener() {
+    // Create function for listener. Add to event manager.
+    std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
+    const EventListener listener = EventListener(move, 4);
+    m_game->registerListener(listener, EventType::moveEvent);
+}
 
 
-///* Update view. */
-//void PlayerView::update1(const EventInterface &event) {
-//    const EventInterface *ptr = &event;
-//
-//    // Convert to SFML inherited class.
-//    if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)) {
-//
-//        sf::Event sfmlEvent = sfEvent->getSFMLEvent();
-//
-//        float deltaTime = event.getDeltaTime();
-//        std::cout<<"Moving: "<<(m_speed * deltaTime);
-//
-//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
-//            m_character.move(-m_speed * deltaTime, 0.f);
-//            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-//        }
-//        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
-//            m_character.move(m_speed * deltaTime, 0.f);
-//            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-//        }
-//        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
-//            m_character.move(0.f, -m_speed * deltaTime);
-//            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-//        }
-//        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
-//            m_character.move(0.f, m_speed * deltaTime);
-//            m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
-//        }
-//    }
-//}
+/* Used to build a listener for moveEvent */
+void PlayerView::moveChar(const EventInterface& event) {
+    const EventInterface *ptr = &event;
+    const MoveEvent *moveEvent = dynamic_cast<const MoveEvent*>(ptr);
+    Direction dir = moveEvent->getDirection();
+    float deltaTime = moveEvent->getDeltaTime();
+    switch (dir){
+    case Up:
+        m_character.move(0.f, -m_speed * deltaTime);
+        break;
+    case Down:
+        m_character.move(0.f, m_speed * deltaTime);
+        break;
+    case Left:
+        m_character.move(-m_speed * deltaTime, 0.f);
+        break;
+    case Right:
+        m_character.move(m_speed * deltaTime, 0.f);
+        break;
+    }
+}

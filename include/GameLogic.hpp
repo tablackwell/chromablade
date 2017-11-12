@@ -25,6 +25,7 @@ class GameLogic : public Process {
 		void update(float &deltaTime);
 		Level getLevel();
 		void setCharPosition(std::tuple<float, float> position);
+		void setGameApplication(ChromaBlade* game);
 
 	private:
 		void moveChar(const EventInterface& event);

@@ -11,15 +11,19 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 {
     /* Starts on the Title screen. */
     m_state = GameState::Title;
+
+    m_gameLogic.setGameApplication(this);
+    m_view.setGameLogic(&m_gameLogic);
+    m_view.setContext(&m_window);
+    m_view.setGameApplication(this);
+    m_eventManager.setWindow(&m_window);
+    m_window.setVerticalSyncEnabled(true);
 }
 
 
 void ChromaBlade::init(){
-    m_view.setContext(&m_window);
-    m_view.setGameLogic(&m_gameLogic);
-    m_view.setGameApplication(this);
-    m_eventManager.setWindow(&m_window);
-  	m_window.setVerticalSyncEnabled(true);
+    m_gameLogic.init();
+    m_view.init();
 
     /* Play music on start. */
     m_audio.init();
@@ -83,7 +87,7 @@ GameState ChromaBlade::getState() {
 
 
 /* Allows other components to register listeners */
-void ChromaBlade::registerListener(const EventListener& listener, const EventType& eventType) {
+void ChromaBlade::registerListener(EventListener listener, EventType eventType) {
     m_eventManager.addListener(listener, eventType);
 }
 
