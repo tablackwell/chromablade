@@ -1,6 +1,7 @@
 #include "PlayerView.hpp"
 #include "GameState.hpp"
 #include "ChromaBlade.hpp"
+#include "KeySetting.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -78,19 +79,19 @@ void PlayerView::handleInput(float deltaTime) {
                     m_window->close();
                 }
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left)){
+            if (sf::Keyboard::isKeyPressed(LEFT)){
                 m_character.move(-m_speed * deltaTime, 0.f);
                 m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right)){
+            else if (sf::Keyboard::isKeyPressed(RIGHT)){
                 m_character.move(m_speed * deltaTime, 0.f);
                 m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
             }
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up)){
+            if (sf::Keyboard::isKeyPressed(UP)){
                 m_character.move(0.f, -m_speed * deltaTime);
                 m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
             }
-            else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down)){
+            else if (sf::Keyboard::isKeyPressed(DOWN)){
                 m_character.move(0.f, m_speed * deltaTime);
                 m_gameLogic->setCharPosition(std::make_tuple(m_character.getPosition().x, m_character.getPosition().y));
             }
