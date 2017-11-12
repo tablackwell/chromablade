@@ -37,3 +37,7 @@ void DynamicActor::attack() {
 void DynamicActor::setPosition(std::tuple<float, float> position) {
     this->m_position = position;
 }
+
+std::tuple<float, float> DynamicActor::getPosition() {
+    return m_position;
+}

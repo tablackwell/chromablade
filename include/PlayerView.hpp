@@ -6,21 +6,30 @@
 #include "Process.hpp"
 #include "GameLogic.hpp"
 #include "AnimatedSprite.hpp"
+#include "Title.hpp"
+#include "TileMap.hpp"
+
+class ChromaBlade; // Forward declaration of class ChromaBlade, so that we can declare a pointer to ChromaBlade in PlayerView
+
 
 class PlayerView : public Process {
-public:
-    PlayerView();
-	void init();
-	void update(float &deltaTime);
-    void update1(const EventInterface &event);
-    void draw();
-	void setContext(sf::RenderWindow* window);
-    void setListener(EventManager *eventManager);
-	void handleEvents();
-	bool isOpen();
-	void setGameLogic(GameLogic gameLogic);
-private: //methods
-	void moveEventListener(const EventInterface& moveEvent);
+    public:
+        PlayerView();
+        void init();
+        void update(float &deltaTime);
+        void draw();
+        void setContext(sf::RenderWindow* window);
+        void handleInput(float);
+        bool isOpen();
+        void setGameLogic(GameLogic* gameLogic);
+        void setGameApplication(ChromaBlade* game);
+
+        // event related methods
+        void update1(const EventInterface &event);
+        void setListener(EventManager *eventManager);
+        void registerListener();
+        void moveChar(const EventInterface& event);
+
 
 private: //vars and objs
     EventManager *m_eventManager;
@@ -30,12 +39,17 @@ private: //vars and objs
     Animation walkingRight;
     Animation walkingLeft;
     AnimatedSprite animatedSprite;
-    sf::RenderWindow* m_targetWindow;
+    sf::RenderWindow* m_window;
 	sf::Sprite m_character;
 	sf::Texture m_charTexture;
 	float m_speed;
 	bool m_notReleased;
-	GameLogic m_gameLogic;
+    GameLogic* m_gameLogic;
+    ChromaBlade* m_game;
+    TileMap m_map;
+    TileMap m_overlay;
+    Title m_title;
+
 };
 
 #endif

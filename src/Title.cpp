@@ -7,7 +7,7 @@ Title::~Title() { };
 
 void Title::init() {
 
-    // background
+    // load background
     if (!m_texture.loadFromFile("../res/chromablade.png")) {
         fprintf(stderr, "%s:%d: cannot load texture\n",
                 __FILE__, __LINE__);
@@ -17,7 +17,7 @@ void Title::init() {
     m_background.setSize(sf::Vector2f(WIDTH / 2, HEIGHT / 2));
     m_background.setPosition(sf::Vector2f(200, 40));
 
-    // create font
+    // load font
     if (!m_font.loadFromFile("../res/PressStart2P.ttf")) {
         fprintf(stderr, "%s:%d: cannot load font\n",
                 __FILE__, __LINE__);
@@ -58,25 +58,15 @@ void Title::init() {
     moveCursor(m_play);
 }
 
-void Title::setWindow(sf::RenderWindow *window) {
-    m_window = window;
-}
 
-void Title::setListener(EventManager *eventManager) {
-    m_eventManager = eventManager;
-    
-    // Create function for listener. Add to event manager.
-    std::function<void(const EventInterface &event)> titleScreen = std::bind(&Title::update, this, std::placeholders::_1);
-    const EventListener m_listener = EventListener(titleScreen, 2);
-    m_eventManager->addListener(m_listener, EventType::sfmlEvent);
-}
-
+/* Draws the title page */
 void Title::draw(sf::RenderWindow &window) {
     window.draw(m_background);
     window.draw(m_play);
     window.draw(m_exit);
     window.draw(m_cursor);
 }
+
 
 /* Centers text based on dimensions. */
 void Title::centerText(sf::Text &text) {
@@ -85,44 +75,39 @@ void Title::centerText(sf::Text &text) {
     text.setPosition((WIDTH - g.width) / 2, g.top - l.top);
 }
 
-/* Moves the menu cursor on Up and Down keypress. */
+
+/* Moves the menu cursor on Up and Down key press. */
 void Title::moveCursor(const sf::Text &text) {
     m_cursor.setPosition(text.getPosition().x - WIDTH / 20.0,
                        text.getPosition().y);
 }
+
 
 /* Checks which option the cursor is at. */
 int Title::checkCursor(const sf::Text &text) {
     return m_cursor.getPosition().y == text.getPosition().y;
 }
 
-/* Update title screen based on keyPressed event. */
-void Title::update(const EventInterface &event) {
-    const EventInterface *ptr = &event;
-    
-    // Convert to SFML inherited class.
-    if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)){
-        
-        sf::Event sfmlEvent = sfEvent->getSFMLEvent();
-        
-        if (sfmlEvent.type == sf::Event::KeyPressed) {
-            if (sfmlEvent.key.code == sf::Keyboard::Down) {
-                if (checkCursor(m_play)) moveCursor(m_exit);
-            } else if (sfmlEvent.key.code == sf::Keyboard::Up) {
-                if (checkCursor(m_exit)) moveCursor(m_play);
-            } else if (sfmlEvent.key.code == sf::Keyboard::Return) {
-                // Exit game
-                if (checkCursor(m_exit)) {
-                    sf::Event close;
-                    close.type = sf::Event::Closed;
-                    m_eventManager->queueEvent(close);
+
+/* Returns an integer that indicates the action based on keyboard input. */
+int Title::update(sf::RenderWindow &window) {
+    sf::Event event;
+    while(window.pollEvent(event)) {
+        switch (event.type) {
+            case sf::Event::KeyPressed:
+                if (event.key.code == sf::Keyboard::Down) {
+                    if (checkCursor(m_play)) moveCursor(m_exit); // will return 0
+                } else if (event.key.code == sf::Keyboard::Up) {
+                    if (checkCursor(m_exit)) moveCursor(m_play); // will return 0
+                } else if (event.key.code == sf::Keyboard::Return) {
+                    if (checkCursor(m_play)) return 1;
+                    else if (checkCursor(m_exit)) return 2;
                 }
-                // Change game state
-                else {
-                    const ChangeStateEvent *change = new ChangeStateEvent(GameState::Game);
-                    m_eventManager->queueEvent((EventInterface*)change);
-                }
-            }
+                break;
+            case sf::Event::Closed:
+                return 2;
+                break;
         }
     }
+    return 0;
 }
