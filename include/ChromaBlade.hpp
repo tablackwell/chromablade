@@ -30,12 +30,7 @@ private: // functions
     void handleInput(float);
     void update(float &deltaTime);
     void render();
-
-    // event related methods
     void handleEvents(float deltaTime);
-    void registerListeners();
-    void updateState(const EventInterface &event);
-    void shutdown(const EventInterface &event);
 
 private: // vars and objs
     GameLogic m_gameLogic;

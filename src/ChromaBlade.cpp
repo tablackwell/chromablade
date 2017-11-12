@@ -36,8 +36,8 @@ void ChromaBlade::run(){
 	while(m_window.isOpen()){
         float deltaTime = m_fpsTimer.restart().asSeconds();
         handleInput(deltaTime);
-//		handleEvents(deltaTime);
         update(deltaTime);
+        handleEvents(deltaTime);
         render();
 	}
 }
@@ -49,11 +49,18 @@ void ChromaBlade::handleInput(float deltaTime) {
 }
 
 
-/* Update game logic, currently does nothing */
+/* Update game logic */
 void ChromaBlade::update(float &deltaTime) {
     if (m_state == GameState::Game) {
         //m_processManager.update(deltaTime); // update audio, player view, game logic; could be hard-coded instead
+        // TODO: updat game logic here
     }
+}
+
+
+/* Process events in eventManager */
+void ChromaBlade::handleEvents(float deltaTime) {
+    m_eventManager.update(deltaTime);
 }
 
 
@@ -73,58 +80,3 @@ void ChromaBlade::setState(GameState state) {
 GameState ChromaBlade::getState() {
     return m_state;
 }
-
-
-//void ChromaBlade::registerListeners() {
-//    /* Subscribe to events. */
-//    std::function<void(const EventInterface &event)> closeScreen = std::bind(&ChromaBlade::shutdown, this, std::placeholders::_1);
-//    const EventListener m_listener = EventListener(closeScreen, 0);
-//    m_eventManager.addListener(m_listener, EventType::sfmlEvent);
-//
-//    std::function<void(const EventInterface &event)> changeState = std::bind(&ChromaBlade::updateState, this, std::placeholders::_1);
-//    const EventListener m_listener1 = EventListener(changeState, 1);
-//    m_eventManager.addListener(m_listener1, EventType::changeStateEvent);
-//}
-//
-//
-//void ChromaBlade::handleEvents(float deltaTime) {
-//    sf::Event event;
-//    while (m_window.pollEvent(event)) {
-//        // Only queue input events to avoid overloading event manager.
-//        if (event.type == sf::Event::Closed || event.type == sf::Event::KeyPressed) {
-//            m_eventManager.queueEvent(event);
-//        }
-//    }
-//    m_eventManager.update(deltaTime);
-//}
-//
-//
-//void ChromaBlade::shutdown(const EventInterface &event) {
-//    const EventInterface *ptr = &event;
-//
-//    // Convert to SFML inherited class.
-//    if (const SFMLEvent *sfEvent = dynamic_cast<const SFMLEvent*>(ptr)){
-//        if (sfEvent->getSFMLEvent().type == sf::Event::Closed) {
-//            m_window.close();
-//        }
-//    }
-//}
-//
-///* Update m_state to game state. */
-//void ChromaBlade::updateState(const EventInterface &event) {
-//    const EventInterface *ptr = &event;
-//    std::cout<<"State change";
-//    if (const ChangeStateEvent *stateEvent = dynamic_cast<const ChangeStateEvent*>(ptr)){
-//        m_state = stateEvent->getGameState();
-//        switch(m_state) {
-//            case GameState::Title:
-//                std::cout<<"TITLE";
-//                break;
-//            case GameState::Game:
-//                // TODO: remove Title listener
-//                m_view.setListener(&m_eventManager);
-//                std::cout<<"GAME";
-//                break;
-//        }
-//    }
-//}
