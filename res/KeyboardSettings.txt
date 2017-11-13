@@ -1,3 +1,0 @@
-Up Down Left Right
-1 2 3
-Space

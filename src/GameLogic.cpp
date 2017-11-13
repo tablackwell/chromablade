@@ -12,7 +12,6 @@ GameLogic::GameLogic() : Process() {
 void GameLogic::init(){
 	m_level = red;
     setState(Process::RUNNING);
-    registerListener();
 }
 
 void GameLogic::update(float &deltaTime){
@@ -64,9 +63,9 @@ void GameLogic::moveChar(const EventInterface& event) {
 
 
 /* Adds listeners to eventManager */
-void GameLogic::registerListener() {
+void GameLogic::setListener() {
     // Create function for listener. Add to event manager.
     std::function<void(const EventInterface &event)> move = std::bind(&GameLogic::moveChar, this, std::placeholders::_1);
-    const EventListener listener = EventListener(move, 5);
+    const EventListener listener = EventListener(move, 3);
     m_game->registerListener(listener, EventType::moveEvent);
 }

@@ -26,10 +26,10 @@ class GameLogic : public Process {
 		Level getLevel();
 		void setCharPosition(std::tuple<float, float> position);
 		void setGameApplication(ChromaBlade* game);
+        void setListener();
 
 	private:
 		void moveChar(const EventInterface& event);
-		void registerListener();
 
 	private:
         Level m_level;

@@ -64,7 +64,6 @@ void PlayerView::init(){
 	animatedSprite.setScale(1.2f,1.2f);
     setState(Process::RUNNING);
     m_speed = SPEED;
-    registerListener();
 }
 
 
@@ -97,7 +96,11 @@ void PlayerView::handleInput(float deltaTime) {
             // Moved the cursor
             if (rc == 0) {}
             // Selected Play
-            else if (rc == 1) m_game->setState(GameState::Game);
+            else if (rc == 1) {
+//                m_game->setState(GameState::Game);
+                ChangeStateEvent* change = new ChangeStateEvent(GameState::Game);
+                m_game->queueEvent(change);
+            }
             // Selected Exit
             else m_window->close();
             break;
@@ -164,10 +167,10 @@ void PlayerView::update(float &deltaTime){
 
 
 /* Adds listeners to eventManager */
-void PlayerView::registerListener() {
+void PlayerView::setListener() {
     // Create function for listener. Add to event manager.
     std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
-    const EventListener listener = EventListener(move, 4);
+    const EventListener listener = EventListener(move, 2);
     m_game->registerListener(listener, EventType::moveEvent);
 }
 
