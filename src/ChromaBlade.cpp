@@ -18,6 +18,7 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
     m_view.setGameApplication(this);
     m_eventManager.setWindow(&m_window);
     m_window.setVerticalSyncEnabled(true);
+    m_window.setKeyRepeatEnabled(false);
     registerListeners();
 }
 

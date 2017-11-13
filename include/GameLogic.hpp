@@ -30,6 +30,7 @@ class GameLogic : public Process {
 
 	private:
 		void moveChar(const EventInterface& event);
+		void attack(const EventInterface& event);
 
 	private:
         Level m_level;

@@ -12,12 +12,11 @@ DynamicActor::DynamicActor() {
 }
 
 
-DynamicActor::DynamicActor(Color color, float health, float damage, std::tuple<float, float> startPos, sf::Texture texture, int speed) {
+DynamicActor::DynamicActor(Color color, float health, float damage, std::tuple<float, float> startPos, int speed) {
     this->m_activeColor = color;
     this->m_health = health;
     this->m_damage = damage;
     this->m_position = startPos;
-    this->m_texture = texture;
     this->m_speed = speed;
 }
 
@@ -40,4 +39,8 @@ void DynamicActor::setPosition(std::tuple<float, float> position) {
 
 std::tuple<float, float> DynamicActor::getPosition() {
     return m_position;
+}
+
+float DynamicActor::getDamage() {
+    return m_damage;
 }
