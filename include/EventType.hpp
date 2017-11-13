@@ -10,7 +10,8 @@ enum EventType {
     attackEvent,
     moveEvent,
     sfmlEvent,
-    changeStateEvent
+    changeStateEvent,
+    doorEvent
 };
 
 #endif

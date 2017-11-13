@@ -4,6 +4,7 @@
 #include "KeySetting.hpp"
 #include "MoveEvent.hpp"
 #include "StaticActor.hpp"
+#include "DoorEvent.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -172,6 +173,11 @@ void PlayerView::registerListener() {
     std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
     const EventListener listener = EventListener(move, 4);
     m_game->registerListener(listener, EventType::moveEvent);
+
+    // DoorEvent
+    std::function<void(const EventInterface &event)> door = std::bind(&PlayerView::useDoor, this, std::placeholders::_1);
+    const EventListener doorListener = EventListener(door, 4);
+    m_game->registerListener(doorListener, EventType::doorEvent);
 }
 
 
@@ -220,4 +226,12 @@ void PlayerView::moveChar(const EventInterface& event) {
     animatedSprite.update((sf::seconds(deltaTime)));
     std::cout << animatedSprite.getPosition().x << "\n";
     std::cout << animatedSprite.getPosition().y << "\n";
+}
+
+/* Triggered by a DoorEvent. */
+void PlayerView::useDoor(const EventInterface& event) {
+    const EventInterface *ptr = &event;
+    const DoorEvent *doorEvent = dynamic_cast<const DoorEvent*>(ptr);
+
+    fprintf(stderr, "useDoor!\n");
 }

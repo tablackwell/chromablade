@@ -6,6 +6,7 @@
 
 class Room{
 public:
+    Room();
   Room(int x, int y);
 private:
   int m_yBounds;

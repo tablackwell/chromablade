@@ -29,6 +29,7 @@ class PlayerView : public Process {
         void setListener(EventManager *eventManager);
         void registerListener();
         void moveChar(const EventInterface& event);
+        void useDoor(const EventInterface& event);
 
 
 private: //vars and objs
