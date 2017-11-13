@@ -14,12 +14,11 @@
 
 #define SPEED 200.f
 
-enum Level { red, blue, yellow, green, orange, purple };
-
 class ChromaBlade;
 
 class GameLogic : public Process {
 	public:
+        enum Level { red, blue, yellow, green, orange, purple };
 		GameLogic();
 		void init();
 		void update(float &deltaTime);
