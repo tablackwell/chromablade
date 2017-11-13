@@ -326,16 +326,16 @@ void PlayerView::loadMap(const EventInterface& event) {
         fprintf(stderr, "loading RedLevel!\n");
             m_map.loadFromText("../res/tilesets/lightworld.png",
                     "../res/level/dungeon_base.csv",
-                    sf::Vector2u(16, 16), 100, 38);
+                    sf::Vector2u(16, 16), 50, 38);
             m_overlay.loadFromText("../res/tilesets/lightworld.png",
                     "../res/level/dungeon_overlay.csv",
-                    sf::Vector2u(16, 16),100, 38);
+                    sf::Vector2u(16, 16), 50, 38);
             m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png",
                     "../res/level/dungeon_collisions.csv",
-                    sf::Vector2u(16, 16), 100, 38);
+                    sf::Vector2u(16, 16), 50, 38);
             m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
                     "../res/level/dungeon_doors.csv",
-                    sf::Vector2u(16, 16), 100, 38);
+                    sf::Vector2u(16, 16), 50, 38);
         break;
     }
 }

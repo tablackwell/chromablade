@@ -225,4 +225,5 @@ bool TileMap::loadDoorsFromText(const std::string& tileset, std::string textFile
 void TileMap::clear() {
     m_boxes.clear();
     m_tileNumbers.clear();
+    m_vertices.clear();
 }
