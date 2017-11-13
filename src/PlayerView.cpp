@@ -65,7 +65,7 @@ void PlayerView::init(){
     animatedSprite.setPosition(START_POS);
 //    m_character.setTexture(m_charTexture);
 //  m_character.setPosition(START_POS);
-      animatedSprite.setScale(1.0f,1.0f);
+      animatedSprite.setScale(0.9f,0.9f);
     setState(Process::RUNNING);
     camera.setSize(800,600);
     m_speed = SPEED;
