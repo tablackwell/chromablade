@@ -30,7 +30,9 @@ class PlayerView : public Process {
         void update1(const EventInterface &event);
         void setListener();
         void moveChar(const EventInterface& event);
+        void useDoor(const EventInterface& event);
         void updateCamera(int newX, int newY);
+        void loadMap(const EventInterface& event);
 
 private: //vars and objs
     EventManager *m_eventManager;

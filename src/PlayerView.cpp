@@ -3,7 +3,10 @@
 #include "ChromaBlade.hpp"
 #include "KeySetting.hpp"
 #include "MoveEvent.hpp"
+#include "StaticActor.hpp"
+#include "DoorEvent.hpp"
 #include "AttackEvent.hpp"
+#include "LoadMapEvent.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -23,12 +26,6 @@ void PlayerView::init(){
 
     // Load title screen.
     m_title.init();
-
-    // Load map and overlay of sample room
-    m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_base.csv", sf::Vector2u(16, 16), 100, 38);
-    m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_overlay.csv", sf::Vector2u(16, 16),100, 38);
-    m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_collisions.csv", sf::Vector2u(16, 16), 100, 38);
-    m_doors.loadDoorsFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_doors.csv", sf::Vector2u(16, 16), 100, 38);
 
     // Load texture for character
     if(!m_charTexture.loadFromFile("../res/spritenew.png")) {
@@ -72,7 +69,6 @@ void PlayerView::init(){
     m_speed = SPEED;
 }
 
-
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
     m_window = window;
@@ -105,14 +101,16 @@ void PlayerView::handleInput(float deltaTime) {
             if (rc == 0) {}
             // Selected Play
             else if (rc == 1) {
-//                m_game->setState(GameState::Game);
-                ChangeStateEvent* change = new ChangeStateEvent(GameState::Game);
+//                m_game->setState(GameState::Hub);
+                ChangeStateEvent* change = new ChangeStateEvent(GameState::Hub);
+                LoadMapEvent* loadMapEvent = new LoadMapEvent(GameState::Hub);
                 m_game->queueEvent(change);
+                m_game->queueEvent(loadMapEvent);
             }
             // Selected Exit
             else m_window->close();
             break;
-        case GameState::Game:
+        case GameState::Hub:
             sf::Event event;
             while(m_window->pollEvent(event)){
                 // Close window
@@ -158,13 +156,14 @@ void PlayerView::updateCamera(int newX, int newY){
 void PlayerView::draw() {
     m_window->clear();
     GameState state = m_game->getState();
+    StaticActor rock(StaticActor::Rock, sf::Vector2f(32,32), sf::Vector2f(100,100));
 
     // Render the content depending on the game state
     switch(state) {
         case GameState::Title:
             m_title.draw(*m_window);
             break;
-        case GameState::Game:
+        case GameState::Hub:
             m_window->draw(m_map);
             m_window->draw(m_overlay);
             m_window->draw(animatedSprite);
@@ -176,6 +175,7 @@ void PlayerView::draw() {
             // m_collisions.drawBoxes(m_window);
             break;
     }
+    rock.draw(*m_window);
     m_window->display();
 }
 
@@ -198,6 +198,16 @@ void PlayerView::setListener() {
     std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
     const EventListener listener = EventListener(move, 2);
     m_game->registerListener(listener, EventType::moveEvent);
+
+    // DoorEvent
+    std::function<void(const EventInterface &event)> door = std::bind(&PlayerView::useDoor, this, std::placeholders::_1);
+    const EventListener doorListener = EventListener(door, 4);
+    m_game->registerListener(doorListener, EventType::doorEvent);
+
+    // LoadMapEvent
+    std::function<void(const EventInterface &event)> loadMap = std::bind(&PlayerView::loadMap, this, std::placeholders::_1);
+    const EventListener loadMapListener = EventListener(loadMap, 5);
+    m_game->registerListener(loadMapListener, EventType::loadMapEvent);
 }
 
 
@@ -266,4 +276,38 @@ void PlayerView::moveChar(const EventInterface& event) {
     animatedSprite.update((sf::seconds(deltaTime)));
     std::cout << animatedSprite.getPosition().x << "\n";
     std::cout << animatedSprite.getPosition().y << "\n";
+}
+
+/* Triggered by a LoadMapEvent. */
+void PlayerView::loadMap(const EventInterface& event) {
+    const EventInterface *ptr = &event;
+    const LoadMapEvent *loadMapEvent = dynamic_cast<const LoadMapEvent*>(ptr);
+    const GameState state = loadMapEvent->getGameState();
+
+    switch (state) {
+        case GameState::Hub:
+            m_map.loadFromText("../res/tilesets/lightworld.png",
+                    "../res/level/TestLevel/test_base.csv",
+                    sf::Vector2u(16, 16), 100, 38);
+            m_overlay.loadFromText("../res/tilesets/lightworld.png",
+                    "../res/level/TestLevel/test_overlay.csv",
+                    sf::Vector2u(16, 16),100, 38);
+            m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png",
+                    "../res/level/TestLevel/test_collisions.csv",
+                    sf::Vector2u(16, 16), 100, 38);
+            m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
+                    "../res/level/TestLevel/test_doors.csv",
+                    sf::Vector2u(16, 16), 100, 38);
+        break;
+        case GameState::RedLevel:
+        break;
+    }
+}
+
+/* Triggered by a DoorEvent. */
+void PlayerView::useDoor(const EventInterface& event) {
+    const EventInterface *ptr = &event;
+    const DoorEvent *doorEvent = dynamic_cast<const DoorEvent*>(ptr);
+
+    fprintf(stderr, "useDoor!\n");
 }
