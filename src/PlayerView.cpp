@@ -30,7 +30,7 @@ void PlayerView::init(){
     m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_collisions.csv", sf::Vector2u(16, 16), 100, 38);
 
     // Load texture for character
-    if(!m_charTexture.loadFromFile("../res/sprite.png")) {
+    if(!m_charTexture.loadFromFile("../res/spritenew.png")) {
         // ERROR
     }
     m_buffer.loadFromFile("../res/swordSwing.wav");
@@ -65,7 +65,7 @@ void PlayerView::init(){
     animatedSprite.setPosition(START_POS);
 //    m_character.setTexture(m_charTexture);
 //  m_character.setPosition(START_POS);
-      animatedSprite.setScale(1.2f,1.2f);
+      animatedSprite.setScale(1.0f,1.0f);
     setState(Process::RUNNING);
     camera.setSize(800,600);
     m_speed = SPEED;
