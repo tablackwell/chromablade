@@ -61,8 +61,9 @@ void PlayerView::init(){
     animatedSprite.setPosition(START_POS);
 //    m_character.setTexture(m_charTexture);
 //	m_character.setPosition(START_POS);
-	animatedSprite.setScale(1.2f,1.2f);
+	  animatedSprite.setScale(1.2f,1.2f);
     setState(Process::RUNNING);
+    camera.setSize(800,600);
     m_speed = SPEED;
 }
 
@@ -70,6 +71,8 @@ void PlayerView::init(){
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
 	m_window = window;
+  sf::View camera = window->getDefaultView();
+  window->setView(camera);
 }
 
 
@@ -132,12 +135,17 @@ void PlayerView::handleInput(float deltaTime) {
     }
 }
 
+void PlayerView::updateCamera(int newX, int newY){
+  camera.setCenter(newX, newY);
+  m_window->setView(camera);
+}
 
 
 /* Render */
 void PlayerView::draw() {
     m_window->clear();
     GameState state = m_game->getState();
+
     // Render the content depending on the game state
     switch(state) {
         case GameState::Title:
@@ -147,7 +155,12 @@ void PlayerView::draw() {
             m_window->draw(m_map);
             m_window->draw(m_overlay);
             m_window->draw(animatedSprite);
-            m_collisions.drawBoxes(m_window); //If you need to debug collisions
+            /* Some nice debug stuff */
+            // sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
+            // debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
+            // debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
+            // m_window->draw(debugRectangle);
+            // m_collisions.drawBoxes(m_window);
             break;
     }
     m_window->display();
@@ -230,6 +243,7 @@ void PlayerView::moveChar(const EventInterface& event) {
       animatedSprite.setPosition(prevX, prevY);
       m_gameLogic->setCharPosition(std::make_tuple(prevX, prevY));
     }
+    boundaryBox = animatedSprite.getGlobalBounds();
     animatedSprite.update((sf::seconds(deltaTime)));
     std::cout << animatedSprite.getPosition().x << "\n";
     std::cout << animatedSprite.getPosition().y << "\n";
