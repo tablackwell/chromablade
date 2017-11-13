@@ -125,6 +125,9 @@ void TileMap::drawBoxes(sf::RenderWindow* target){
   for(int i = 0; i < m_collisionRects.size(); i++){
     target->draw(m_collisionRects.at(i));
   }
+  for(int i = 0; i < m_doorRects.size(); i++){
+    target->draw(m_doorRects.at(i));
+  }
 }
 
 bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
@@ -172,4 +175,51 @@ bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string tex
                 }
             }
         return true;
+}
+
+bool TileMap::loadDoorsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
+    std::ifstream inputFile;
+    m_height = height;
+    m_width = width;
+    // load the tileset texture
+    if (!m_tileset.loadFromFile(tileset)){
+      return false;
+    }
+  
+    // load the csv file
+    inputFile.open(textFileName, std::ifstream::in);
+  
+    int number;
+    while(inputFile >> number){ //until document ends
+       if(inputFile.peek() == ','){ // skip commas
+         inputFile.ignore();
+       }
+       m_tileNumbers.push_back(number); //add the number
+    }
+  
+    inputFile.close();
+  
+    // This is hacky and I probably dont need to do it
+    const int *tileArray = &m_tileNumbers[0];
+    inputFile.close();
+
+    // resize the vertex array to fit the level size
+    m_vertices.setPrimitiveType(sf::Quads);
+    m_vertices.resize(width * height * 4);
+
+    // file vertex array with quads for each tile
+    for (unsigned int i = 0; i < width; ++i)
+        for (unsigned int j = 0; j < height; ++j)
+        {
+            // get the current tile number
+            int tileNumber = tileArray[i + j * width];
+
+            if(tileNumber == 3){
+              sf::RectangleShape rect(sf::Vector2f(16,16));
+              rect.setFillColor(sf::Color(256, 0, 0, 125));
+              rect.setPosition(sf::Vector2f(i * tileSize.x, j * tileSize.y));
+              m_doorRects.push_back(rect);
+            }
+        }
+    return true;
 }

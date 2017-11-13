@@ -28,6 +28,7 @@ void PlayerView::init(){
     m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_base.csv", sf::Vector2u(16, 16), 100, 38);
     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_overlay.csv", sf::Vector2u(16, 16),100, 38);
     m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_collisions.csv", sf::Vector2u(16, 16), 100, 38);
+    m_doors.loadDoorsFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_doors.csv", sf::Vector2u(16, 16), 100, 38);
 
     // Load texture for character
     if(!m_charTexture.loadFromFile("../res/spritenew.png")) {
@@ -254,6 +255,12 @@ void PlayerView::moveChar(const EventInterface& event) {
     if(collisionDetected){
       animatedSprite.setPosition(prevX, prevY);
       m_gameLogic->setCharPosition(std::make_tuple(prevX, prevY));
+    }
+    for(int i = 0; i < m_doors.m_doorRects.size(); i++){
+      if (animatedSprite.getGlobalBounds().intersects(m_doors.m_doorRects[i].getGlobalBounds())){
+        std::cout << "DOOR! \n";
+        break;
+      }
     }
     boundaryBox = animatedSprite.getGlobalBounds();
     animatedSprite.update((sf::seconds(deltaTime)));
