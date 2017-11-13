@@ -55,6 +55,7 @@ private: //vars and objs
     TileMap m_map;
     TileMap m_overlay;
     TileMap m_collisions;
+    TileMap m_doors;
     Title m_title;
     sf::Sound m_sound;
     sf::SoundBuffer m_buffer;

@@ -15,9 +15,11 @@ class TileMap: public sf::Drawable, public sf::Transformable { //Inherits from s
 public:
     bool loadFromText(const std::string& tileset, std::string fileName, sf::Vector2u tileSize, unsigned int width, unsigned int height);
     bool loadCollisionsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height);
+    bool loadDoorsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height);
     void drawBoxes(sf::RenderWindow* target);
     int checkCollision(int actorX, int actorY);
     std::vector<sf::RectangleShape> m_collisionRects;
+    std::vector<sf::RectangleShape> m_doorRects;
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
