@@ -46,8 +46,8 @@ void PlayerView::init(){
     walkingLeft.setSpriteSheet(m_charTexture);
     walkingLeft.addFrame(sf::IntRect(32, 0, 32, 32));
     walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
-    walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
-    walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
+    walkingLeft.addFrame(sf::IntRect(32, 64, 32, 32));
+    walkingLeft.addFrame(sf::IntRect(32, 96, 32, 32));
 
     walkingRight.setSpriteSheet(m_charTexture);
     walkingRight.addFrame(sf::IntRect(96, 0, 32, 32));
