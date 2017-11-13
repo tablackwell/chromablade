@@ -3,6 +3,7 @@
 #include "ChromaBlade.hpp"
 #include "KeySetting.hpp"
 #include "MoveEvent.hpp"
+#include "StaticActor.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -135,6 +136,7 @@ void PlayerView::handleInput(float deltaTime) {
 void PlayerView::draw() {
     m_window->clear();
     GameState state = m_game->getState();
+    StaticActor rock(StaticActor::Rock, sf::Vector2f(32,32), sf::Vector2f(100,100));
     // Render the content depending on the game state
     switch(state) {
         case GameState::Title:
@@ -147,6 +149,7 @@ void PlayerView::draw() {
           //  m_collisions.drawBoxes(m_window); //If you need to debug collisions
             break;
     }
+    rock.draw(*m_window);
     m_window->display();
 }
 
