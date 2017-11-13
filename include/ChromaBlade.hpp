@@ -13,6 +13,7 @@
 #include "TileMap.hpp"
 #include "Title.hpp"
 #include "Audio.hpp"
+#include "EventType.hpp"
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -23,13 +24,16 @@ public:
     void init();
     void run();
     void pause();
-    void shutdown(const EventInterface &event);
+    GameState getState();
+    void setState(GameState state);
+    void registerListener(EventListener listener, EventType eventType);
+    void queueEvent(EventInterface *event);
 
 private: // functions
-    void handleEvents(float deltaTime);
+    void handleInput(float);
     void update(float &deltaTime);
-    void updateState(const EventInterface &event);
     void render();
+    void handleEvents(float deltaTime);
 
 private: // vars and objs
     GameLogic m_gameLogic;
@@ -37,9 +41,6 @@ private: // vars and objs
     EventManager m_eventManager;
     sf::RenderWindow m_window;
     sf::Clock m_fpsTimer;
-    TileMap m_map;
-    TileMap m_overlay;
-    Title m_title;
     ProcessManager m_processManager;
     Audio m_audio;
     GameState m_state;

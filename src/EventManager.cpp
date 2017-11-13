@@ -5,6 +5,7 @@
 #include "EventManager.hpp"
 #include <iostream>
 
+
 EventManager::EventManager() {
 }
 
@@ -21,8 +22,6 @@ void EventManager::setWindow(sf::RenderWindow *mainWindow) {
 /* Queue event. */
 void EventManager::queueEvent(EventInterface *event) {
     m_registerQueue->m_eventList.push_back(event);
-    std::cout<<" Size "<<m_registerQueue->m_eventList.size();
-    std::cout<<" Queuing event "<<event->getEventType()<<"\n";
 }
 
 
@@ -46,7 +45,6 @@ void EventManager::addListener(const EventListener &listener, const EventType &t
         // Listener not in list. Add to list.
         if (std::find(listeners.begin(), listeners.end(), listener) == listeners.end()) {
             auto newListener = std::move(listener);
-            std::cout<<"Adding";
             eventType->second.push_back(newListener);
         }
         
@@ -55,16 +53,15 @@ void EventManager::addListener(const EventListener &listener, const EventType &t
         listeners.push_front(listener);
         m_eventMap.emplace(type, listeners);
     }
-    std::cout<<"Event type "<<type<<"Listener "<<listener.getId()<<"\n";
     
-    auto map = m_eventMap.find(type);
-
-    std::cout<<"Inserting: "<<listener.getId()<<" Size "<<map->second.size();
-    std::cout << "KEY: " << m_eventMap.find(type)->first << " Values: ";
-    for (auto list_iter = map->second.begin(); list_iter != map->second.end(); list_iter++) {
-        std::cout << " " << list_iter->getId();
-    }
-    std::cout<<std::endl;
+//    auto map = m_eventMap.find(type);
+//
+//    std::cout<<"Inserting: "<<listener.getId()<<" Size "<<map->second.size();
+//    std::cout << "KEY: " << m_eventMap.find(type)->first << " Values: ";
+//    for (auto list_iter = map->second.begin(); list_iter != map->second.end(); list_iter++) {
+//        std::cout << " " << list_iter->getId();
+//    }
+//    std::cout<<std::endl;
 }
 
 
@@ -81,17 +78,12 @@ void EventManager::triggerEvent(EventInterface& event, float deltaTime) {
 	// Trigger all events in listener list.
 	else {
         event.setDeltaTime(deltaTime);
-        std::cout<<"Setting delta "<<event.getDeltaTime()<<std::endl;
-        
         std::list<EventListener> listeners;
 
         listeners = listItr->second;
-        std::cout<<"EVENT TYPE: "<<event.getEventType()<<" ";
         for (auto m_funcItr = listeners.begin(); m_funcItr != listeners.end(); m_funcItr++){
             m_funcItr->callFunction(event);
-            std::cout<<"Calling: "<<m_funcItr->getId()<<" ";
         }
-        std::cout<<std::endl;
     }
 }
 

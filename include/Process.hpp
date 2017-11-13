@@ -24,7 +24,7 @@ public:
     //void Unpause();
     bool isDead() { return (m_state == SUCCESS) || (m_state == FAILED) || 
         (m_state == ABORTED); }
-    bool setState(States state) { m_state = state; }
+    void setState(States state) { m_state = state; }
     int state() { return m_state; }
 
     bool hasChild() { return m_child; }
