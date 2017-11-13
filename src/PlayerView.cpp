@@ -23,33 +23,34 @@ void PlayerView::init(){
     m_title.init();
 
     // Load map and overlay of sample room
-     m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_base.csv", sf::Vector2u(16, 16), 50, 38);
-     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/demolevel_overlay.csv", sf::Vector2u(16, 16), 50, 38);
+    m_map.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_base.csv", sf::Vector2u(16, 16), 100, 38);
+    m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_overlay.csv", sf::Vector2u(16, 16),100, 38);
+    m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_collisions.csv", sf::Vector2u(16, 16), 100, 38);
 
 	// Load texture for character
     if(!m_charTexture.loadFromFile("../res/sprite.png")) {
 		// ERROR
 	}
 //    m_character.setTextureRect(sf::IntRect(32, 0, 32, 32));
-    
+
     walkingDown.setSpriteSheet(m_charTexture);
     walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
     walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
     walkingDown.addFrame(sf::IntRect(0, 64, 32, 32));
     walkingDown.addFrame(sf::IntRect(0, 96, 32, 32));
-    
+
     walkingLeft.setSpriteSheet(m_charTexture);
     walkingLeft.addFrame(sf::IntRect(32, 0, 32, 32));
     walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
     walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
     walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
-    
+
     walkingRight.setSpriteSheet(m_charTexture);
     walkingRight.addFrame(sf::IntRect(96, 0, 32, 32));
     walkingRight.addFrame(sf::IntRect(96, 32, 32, 32));
     walkingRight.addFrame(sf::IntRect(96, 64, 32, 32));
     walkingRight.addFrame(sf::IntRect(96, 96, 32, 32));
-    
+
     walkingUp.setSpriteSheet(m_charTexture);
     walkingUp.addFrame(sf::IntRect(64, 0, 32, 32));
     walkingUp.addFrame(sf::IntRect(64, 32, 32, 32));
@@ -143,6 +144,7 @@ void PlayerView::draw() {
             m_window->draw(m_map);
             m_window->draw(m_overlay);
             m_window->draw(animatedSprite);
+          //  m_collisions.drawBoxes(m_window); //If you need to debug collisions
             break;
     }
     m_window->display();

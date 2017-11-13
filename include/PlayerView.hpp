@@ -40,14 +40,15 @@ private: //vars and objs
     Animation walkingLeft;
     AnimatedSprite animatedSprite;
     sf::RenderWindow* m_window;
-	sf::Sprite m_character;
-	sf::Texture m_charTexture;
+	  sf::Sprite m_character;
+	   sf::Texture m_charTexture;
 	float m_speed;
 	bool m_notReleased;
     GameLogic* m_gameLogic;
     ChromaBlade* m_game;
     TileMap m_map;
     TileMap m_overlay;
+    TileMap m_collisions;
     Title m_title;
 
 };
