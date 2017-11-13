@@ -1,5 +1,6 @@
 #include "GameLogic.hpp"
 #include "MoveEvent.hpp"
+#include "AttackEvent.hpp"
 #include "ChromaBlade.hpp"
 
 #include <tuple>
@@ -12,7 +13,6 @@ GameLogic::GameLogic() : Process() {
 void GameLogic::init(){
 	m_level = red;
     setState(Process::RUNNING);
-    registerListener();
 }
 
 void GameLogic::update(float &deltaTime){
@@ -64,9 +64,24 @@ void GameLogic::moveChar(const EventInterface& event) {
 
 
 /* Adds listeners to eventManager */
-void GameLogic::registerListener() {
+void GameLogic::setListener() {
     // Create function for listener. Add to event manager.
     std::function<void(const EventInterface &event)> move = std::bind(&GameLogic::moveChar, this, std::placeholders::_1);
-    const EventListener listener = EventListener(move, 5);
-    m_game->registerListener(listener, EventType::moveEvent);
+    const EventListener moveListener = EventListener(move, 3);
+    m_game->registerListener(moveListener, EventType::moveEvent);
+    std::function<void(const EventInterface &event)> attack = std::bind(&GameLogic::attack, this, std::placeholders::_1);
+        const EventListener attackListener = EventListener(attack, 4);
+        m_game->registerListener(attackListener, EventType::attackEvent);
+}
+
+
+void GameLogic::attack(const EventInterface& event) {
+    const EventInterface *ptr = &event;
+    const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
+    if (attackEvent->getInitiator() == NULL) { // player attack
+        // TODO: look for enemies nearby
+        m_player.attack();
+        std::cout << "player attack\n";
+    }
+
 }

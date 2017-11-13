@@ -18,6 +18,8 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
     m_view.setGameApplication(this);
     m_eventManager.setWindow(&m_window);
     m_window.setVerticalSyncEnabled(true);
+    m_window.setKeyRepeatEnabled(false);
+    registerListeners();
 }
 
 
@@ -99,4 +101,32 @@ void ChromaBlade::registerListener(EventListener listener, EventType eventType) 
 /* Allows other components to queue events */
 void ChromaBlade::queueEvent(EventInterface *event) {
     m_eventManager.queueEvent(event);
+}
+
+
+void ChromaBlade::registerListeners() {
+    // Subscribe to events.
+    std::function<void(const EventInterface &event)> changeState = std::bind(&ChromaBlade::updateState, this, std::placeholders::_1);
+    const EventListener m_listener1 = EventListener(changeState, 0);
+    m_eventManager.addListener(m_listener1, EventType::changeStateEvent);
+}
+
+
+/* Update m_state to game state. */
+void ChromaBlade::updateState(const EventInterface &event) {
+    const EventInterface *ptr = &event;
+    std::cout<<"State change";
+    if (const ChangeStateEvent *stateEvent = dynamic_cast<const ChangeStateEvent*>(ptr)){
+        m_state = stateEvent->getGameState();
+        switch(m_state) {
+            case GameState::Title:
+                std::cout<<"TITLE";
+                break;
+            case GameState::Game:
+                m_view.setListener();
+                m_gameLogic.setListener();
+                std::cout<<"GAME";
+                break;
+        }
+    }
 }

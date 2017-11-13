@@ -17,11 +17,11 @@ public:
     bool loadCollisionsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height);
     void drawBoxes(sf::RenderWindow* target);
     int checkCollision(int actorX, int actorY);
+    std::vector<sf::RectangleShape> m_collisionRects;
 private:
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
     sf::VertexArray m_vertices;
-    std::vector<sf::RectangleShape> m_collisionRects;
     std::vector<int> m_tileNumbers;
     sf::Texture m_tileset;
     int m_height;

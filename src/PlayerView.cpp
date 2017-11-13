@@ -5,14 +5,16 @@
 #include "MoveEvent.hpp"
 #include "StaticActor.hpp"
 #include "DoorEvent.hpp"
+#include "AttackEvent.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 #include <cstdio>
 #include <tuple>
 #include <iostream>
 
-#define START_POS sf::Vector2f(196, 235)
+#define START_POS sf::Vector2f(196, 255)
 #define SPEED 200.f
 
 PlayerView::PlayerView() : Process() {
@@ -29,10 +31,12 @@ void PlayerView::init(){
     m_overlay.loadFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_overlay.csv", sf::Vector2u(16, 16),100, 38);
     m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png","../res/level/TestLevel/test_collisions.csv", sf::Vector2u(16, 16), 100, 38);
 
-	// Load texture for character
-    if(!m_charTexture.loadFromFile("../res/sprite.png")) {
-		// ERROR
-	}
+    // Load texture for character
+    if(!m_charTexture.loadFromFile("../res/spritenew.png")) {
+        // ERROR
+    }
+    m_buffer.loadFromFile("../res/swordSwing.wav");
+    m_sound.setBuffer(m_buffer);
 //    m_character.setTextureRect(sf::IntRect(32, 0, 32, 32));
 
     walkingDown.setSpriteSheet(m_charTexture);
@@ -44,8 +48,8 @@ void PlayerView::init(){
     walkingLeft.setSpriteSheet(m_charTexture);
     walkingLeft.addFrame(sf::IntRect(32, 0, 32, 32));
     walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
-    walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
-    walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
+    walkingLeft.addFrame(sf::IntRect(32, 64, 32, 32));
+    walkingLeft.addFrame(sf::IntRect(32, 96, 32, 32));
 
     walkingRight.setSpriteSheet(m_charTexture);
     walkingRight.addFrame(sf::IntRect(96, 0, 32, 32));
@@ -62,17 +66,19 @@ void PlayerView::init(){
     currAnimation = &walkingDown;
     animatedSprite.setPosition(START_POS);
 //    m_character.setTexture(m_charTexture);
-//	m_character.setPosition(START_POS);
-	animatedSprite.setScale(1.2f,1.2f);
+//  m_character.setPosition(START_POS);
+      animatedSprite.setScale(1.0f,1.0f);
     setState(Process::RUNNING);
+    camera.setSize(800,600);
     m_speed = SPEED;
-    registerListener();
 }
 
 
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
-	m_window = window;
+    m_window = window;
+  sf::View camera = window->getDefaultView();
+  window->setView(camera);
 }
 
 
@@ -99,7 +105,11 @@ void PlayerView::handleInput(float deltaTime) {
             // Moved the cursor
             if (rc == 0) {}
             // Selected Play
-            else if (rc == 1) m_game->setState(GameState::Game);
+            else if (rc == 1) {
+//                m_game->setState(GameState::Game);
+                ChangeStateEvent* change = new ChangeStateEvent(GameState::Game);
+                m_game->queueEvent(change);
+            }
             // Selected Exit
             else m_window->close();
             break;
@@ -109,6 +119,14 @@ void PlayerView::handleInput(float deltaTime) {
                 // Close window
                 if(event.type == sf::Event::Closed){
                     m_window->close();
+                }
+                else if (event.type == sf::Event::KeyPressed) {
+                    if (event.key.code == ATTACK) {
+                        AttackEvent *attack = new AttackEvent();
+                        m_game->queueEvent(attack);
+                        std::cout << "attack event \n";
+                        m_sound.play();
+                    }
                 }
             }
             if (sf::Keyboard::isKeyPressed(LEFT)){
@@ -131,6 +149,10 @@ void PlayerView::handleInput(float deltaTime) {
     }
 }
 
+void PlayerView::updateCamera(int newX, int newY){
+  camera.setCenter(newX, newY);
+  m_window->setView(camera);
+}
 
 
 /* Render */
@@ -138,6 +160,7 @@ void PlayerView::draw() {
     m_window->clear();
     GameState state = m_game->getState();
     StaticActor rock(StaticActor::Rock, sf::Vector2f(32,32), sf::Vector2f(100,100));
+
     // Render the content depending on the game state
     switch(state) {
         case GameState::Title:
@@ -147,7 +170,12 @@ void PlayerView::draw() {
             m_window->draw(m_map);
             m_window->draw(m_overlay);
             m_window->draw(animatedSprite);
-          //  m_collisions.drawBoxes(m_window); //If you need to debug collisions
+            /* Some nice debug stuff */
+            // sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
+            // debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
+            // debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
+            // m_window->draw(debugRectangle);
+            // m_collisions.drawBoxes(m_window);
             break;
     }
     rock.draw(*m_window);
@@ -157,7 +185,7 @@ void PlayerView::draw() {
 
 /* Check if the window is open */
 bool PlayerView::isOpen(){
-	return m_window->isOpen();
+    return m_window->isOpen();
 }
 
 
@@ -168,10 +196,10 @@ void PlayerView::update(float &deltaTime){
 
 
 /* Adds listeners to eventManager */
-void PlayerView::registerListener() {
+void PlayerView::setListener() {
     // Create function for listener. Add to event manager.
     std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
-    const EventListener listener = EventListener(move, 4);
+    const EventListener listener = EventListener(move, 2);
     m_game->registerListener(listener, EventType::moveEvent);
 
     // DoorEvent
@@ -216,13 +244,27 @@ void PlayerView::moveChar(const EventInterface& event) {
         break;
     }
     animatedSprite.play(*currAnimation);
+    prevX = animatedSprite.getPosition().x;
+    prevY = animatedSprite.getPosition().y;
     animatedSprite.move(moving);
 
     if (noKeyPressed) {
         animatedSprite.stop();
     }
     noKeyPressed = true;
-
+    bool collisionDetected = false;
+    for(int i = 0; i < m_collisions.m_collisionRects.size(); i++){
+      if (animatedSprite.getGlobalBounds().intersects(m_collisions.m_collisionRects[i].getGlobalBounds())){
+        std::cout << "COLLISION! \n";
+        collisionDetected = true;
+        break;
+      }
+    }
+    if(collisionDetected){
+      animatedSprite.setPosition(prevX, prevY);
+      m_gameLogic->setCharPosition(std::make_tuple(prevX, prevY));
+    }
+    boundaryBox = animatedSprite.getGlobalBounds();
     animatedSprite.update((sf::seconds(deltaTime)));
     std::cout << animatedSprite.getPosition().x << "\n";
     std::cout << animatedSprite.getPosition().y << "\n";

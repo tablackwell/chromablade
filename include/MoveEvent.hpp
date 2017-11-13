@@ -12,16 +12,16 @@ enum Direction { Up, Down, Left, Right };
  * A MoveEvent is generated when the player presses keys associated with character movement.
  */
 class MoveEvent : public EventInterface {
-	public:
+    public:
         MoveEvent(Direction direction) { m_dir = direction; m_type = moveEvent; }
-	    Direction getDirection() const { return m_dir; }
-	    const EventType& getEventType(void) const { return m_type; }
+        Direction getDirection() const { return m_dir; }
+        const EventType& getEventType(void) const { return m_type; }
 
-	private:
+    private:
     
-	private: // event data
-	    Direction m_dir;
-	    EventType m_type;
+    private: // event data
+        Direction m_dir;
+        EventType m_type;
 };
 
 #endif
