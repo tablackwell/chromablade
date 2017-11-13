@@ -41,6 +41,8 @@ private: //vars and objs
     sf::RenderWindow* m_window;
 	  sf::Sprite m_character;
 	   sf::Texture m_charTexture;
+     int prevX;
+     int prevY;
 	float m_speed;
 	bool m_notReleased;
     GameLogic* m_gameLogic;

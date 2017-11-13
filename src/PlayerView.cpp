@@ -10,7 +10,7 @@
 #include <tuple>
 #include <iostream>
 
-#define START_POS sf::Vector2f(196, 235)
+#define START_POS sf::Vector2f(196, 255)
 #define SPEED 200.f
 
 PlayerView::PlayerView() : Process() {
@@ -147,7 +147,7 @@ void PlayerView::draw() {
             m_window->draw(m_map);
             m_window->draw(m_overlay);
             m_window->draw(animatedSprite);
-          //  m_collisions.drawBoxes(m_window); //If you need to debug collisions
+            m_collisions.drawBoxes(m_window); //If you need to debug collisions
             break;
     }
     m_window->display();
@@ -210,13 +210,26 @@ void PlayerView::moveChar(const EventInterface& event) {
         break;
     }
     animatedSprite.play(*currAnimation);
+    prevX = animatedSprite.getPosition().x;
+    prevY = animatedSprite.getPosition().y;
     animatedSprite.move(moving);
 
     if (noKeyPressed) {
         animatedSprite.stop();
     }
     noKeyPressed = true;
-
+    bool collisionDetected = false;
+    for(int i = 0; i < m_collisions.m_collisionRects.size(); i++){
+      if (animatedSprite.getGlobalBounds().intersects(m_collisions.m_collisionRects[i].getGlobalBounds())){
+        std::cout << "COLLISION! \n";
+        collisionDetected = true;
+        break;
+      }
+    }
+    if(collisionDetected){
+      animatedSprite.setPosition(prevX, prevY);
+      m_gameLogic->setCharPosition(std::make_tuple(prevX, prevY));
+    }
     animatedSprite.update((sf::seconds(deltaTime)));
     std::cout << animatedSprite.getPosition().x << "\n";
     std::cout << animatedSprite.getPosition().y << "\n";
