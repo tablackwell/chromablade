@@ -1,9 +1,10 @@
 #include "DoorEvent.hpp"
 
-DoorEvent::DoorEvent(GameState state, int room) {
+DoorEvent::DoorEvent(GameState state, int room, Direction dir) {
+    m_type = doorEvent;
     m_state = state;
     m_room = room;
-    m_type = doorEvent;
+    m_dir = dir;
 }
 
 const EventType& DoorEvent::getEventType() const {
@@ -16,4 +17,8 @@ const GameState DoorEvent::getGameState() const {
 
 const int DoorEvent::getRoom() const {
     return m_room;
+}
+
+const Direction DoorEvent::getDirection() const {
+    return m_dir;
 }

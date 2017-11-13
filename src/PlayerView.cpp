@@ -278,7 +278,7 @@ void PlayerView::moveChar(const EventInterface& event) {
         std::cout << "onDoor\n";
         m_onDoor = true;
 
-        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 0);
+        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 0, dir);
         m_game->queueEvent(doorEvent);
     } else if (!doorDetected && m_onDoor) {
         std::cout << "not onDoor\n";
@@ -349,6 +349,7 @@ void PlayerView::useDoor(const EventInterface& event) {
     GameState curState = m_game->getState();
     const GameState newState = doorEvent->getGameState();
     const int room = doorEvent->getRoom();
+    const Direction dir = doorEvent->getDirection();
 
     if (newState != curState) {
         fprintf(stderr, "door leads to %d\n", newState);
@@ -356,5 +357,11 @@ void PlayerView::useDoor(const EventInterface& event) {
         LoadMapEvent* loadMapEvent = new LoadMapEvent(newState);
         m_game->queueEvent(change);
         m_game->queueEvent(loadMapEvent);
+    }
+
+    if (dir == Direction::Left) {
+        animatedSprite.setPosition(WIDTH - 20, 288);
+    } else {
+        animatedSprite.setPosition(20, 288);
     }
 }
