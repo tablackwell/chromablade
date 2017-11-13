@@ -3,14 +3,16 @@
 
 #include "EventInterface.hpp"
 #include "EventType.hpp"
-#include "Level.hpp"
+#include "GameState.hpp"
 
 class DoorEvent : public EventInterface {
 public:
-    DoorEvent(Level level) { m_level = level; m_room = 0; m_type = doorEvent; }
-    const EventType& getEventType(void) const { return m_type; };
+    DoorEvent(GameState state, int room);
+    const EventType& getEventType(void) const;
+    const int getRoom() const;
+    const GameState getGameState() const;
 private:
-    Level m_level;
+    GameState m_state;
     int m_room;
     EventType m_type;
 };

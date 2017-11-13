@@ -87,6 +87,7 @@ bool TileMap::loadFromText(const std::string& tileset, std::string textFileName,
                 quad[2].texCoords = sf::Vector2f((tu + 1) * tileSize.x, (tv + 1) * tileSize.y);
                 quad[3].texCoords = sf::Vector2f(tu * tileSize.x, (tv + 1) * tileSize.y);
             }
+        fprintf(stderr, "loadFromText!\n");
         return true;
 }
 
@@ -122,11 +123,8 @@ int TileMap::checkCollision(int actorX, int actorY){
 Debug method for indicating where collisions should be
 */
 void TileMap::drawBoxes(sf::RenderWindow* target){
-  for(int i = 0; i < m_collisionRects.size(); i++){
-    target->draw(m_collisionRects.at(i));
-  }
-  for(int i = 0; i < m_doorRects.size(); i++){
-    target->draw(m_doorRects.at(i));
+  for(int i = 0; i < m_boxes.size(); i++){
+    target->draw(m_boxes.at(i));
   }
 }
 
@@ -171,7 +169,7 @@ bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string tex
                   sf::RectangleShape rect(sf::Vector2f(16,16));
                   rect.setFillColor(sf::Color(150, 50, 250, 125));
                   rect.setPosition(sf::Vector2f(i * tileSize.x, j * tileSize.y));
-                  m_collisionRects.push_back(rect);
+                  m_boxes.push_back(rect);
                 }
             }
         return true;
@@ -216,10 +214,15 @@ bool TileMap::loadDoorsFromText(const std::string& tileset, std::string textFile
 
             if(tileNumber == 3){
               sf::RectangleShape rect(sf::Vector2f(16,16));
-              rect.setFillColor(sf::Color(256, 0, 0, 125));
+              rect.setFillColor(sf::Color(255, 0, 0, 125));
               rect.setPosition(sf::Vector2f(i * tileSize.x, j * tileSize.y));
-              m_doorRects.push_back(rect);
+              m_boxes.push_back(rect);
             }
         }
     return true;
+}
+
+void TileMap::clear() {
+    m_boxes.clear();
+    m_tileNumbers.clear();
 }

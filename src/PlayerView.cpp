@@ -110,7 +110,7 @@ void PlayerView::handleInput(float deltaTime) {
             // Selected Exit
             else m_window->close();
             break;
-        case GameState::Hub:
+        default:
             sf::Event event;
             while(m_window->pollEvent(event)){
                 // Close window
@@ -163,7 +163,7 @@ void PlayerView::draw() {
         case GameState::Title:
             m_title.draw(*m_window);
             break;
-        case GameState::Hub:
+        default:
             m_window->draw(m_map);
             m_window->draw(m_overlay);
             m_window->draw(animatedSprite);
@@ -172,7 +172,8 @@ void PlayerView::draw() {
             // debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
             // debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
             // m_window->draw(debugRectangle);
-            // m_collisions.drawBoxes(m_window);
+            m_collisions.drawBoxes(m_window);
+            m_doors.drawBoxes(m_window);
             break;
     }
     rock.draw(*m_window);
@@ -255,9 +256,9 @@ void PlayerView::moveChar(const EventInterface& event) {
     }
     noKeyPressed = true;
     bool collisionDetected = false;
-    for(int i = 0; i < m_collisions.m_collisionRects.size(); i++){
-      if (animatedSprite.getGlobalBounds().intersects(m_collisions.m_collisionRects[i].getGlobalBounds())){
-        std::cout << "COLLISION! \n";
+    for(int i = 0; i < m_collisions.m_boxes.size(); i++){
+      if (animatedSprite.getGlobalBounds().intersects(m_collisions.m_boxes[i].getGlobalBounds())){
+        //std::cout << "COLLISION! \n";
         collisionDetected = true;
         break;
       }
@@ -266,23 +267,45 @@ void PlayerView::moveChar(const EventInterface& event) {
       animatedSprite.setPosition(prevX, prevY);
       m_gameLogic->setCharPosition(std::make_tuple(prevX, prevY));
     }
-    for(int i = 0; i < m_doors.m_doorRects.size(); i++){
-      if (animatedSprite.getGlobalBounds().intersects(m_doors.m_doorRects[i].getGlobalBounds())){
-        std::cout << "DOOR! \n";
+    bool doorDetected = false;
+    for(int i = 0; i < m_doors.m_boxes.size(); i++){
+      if (animatedSprite.getGlobalBounds().intersects(m_doors.m_boxes[i].getGlobalBounds())){
+        doorDetected = true;
         break;
       }
     }
+    if (doorDetected && !m_onDoor) {
+        std::cout << "onDoor\n";
+        m_onDoor = true;
+
+        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 0);
+        m_game->queueEvent(doorEvent);
+    } else if (!doorDetected && m_onDoor) {
+        std::cout << "not onDoor\n";
+        m_onDoor = false;
+    }
     boundaryBox = animatedSprite.getGlobalBounds();
     animatedSprite.update((sf::seconds(deltaTime)));
-    std::cout << animatedSprite.getPosition().x << "\n";
-    std::cout << animatedSprite.getPosition().y << "\n";
+    //std::cout << animatedSprite.getPosition().x << "\n";
+    //std::cout << animatedSprite.getPosition().y << "\n";
+}
+
+void PlayerView::clearTileMaps() {
+    fprintf(stderr, "clearTileMaps!\n");
+    m_map.clear();
+    m_overlay.clear();
+    m_collisions.clear();
+    m_doors.clear();
 }
 
 /* Triggered by a LoadMapEvent. */
 void PlayerView::loadMap(const EventInterface& event) {
+    fprintf(stderr, "loadMap!\n");
     const EventInterface *ptr = &event;
     const LoadMapEvent *loadMapEvent = dynamic_cast<const LoadMapEvent*>(ptr);
     const GameState state = loadMapEvent->getGameState();
+
+    clearTileMaps();
 
     switch (state) {
         case GameState::Hub:
@@ -300,6 +323,7 @@ void PlayerView::loadMap(const EventInterface& event) {
                     sf::Vector2u(16, 16), 100, 38);
         break;
         case GameState::RedLevel:
+        fprintf(stderr, "loading RedLevel!\n");
             m_map.loadFromText("../res/tilesets/lightworld.png",
                     "../res/level/dungeon_base.csv",
                     sf::Vector2u(16, 16), 100, 38);
@@ -318,8 +342,19 @@ void PlayerView::loadMap(const EventInterface& event) {
 
 /* Triggered by a DoorEvent. */
 void PlayerView::useDoor(const EventInterface& event) {
+    fprintf(stderr, "useDoor!\n");
+
     const EventInterface *ptr = &event;
     const DoorEvent *doorEvent = dynamic_cast<const DoorEvent*>(ptr);
+    GameState curState = m_game->getState();
+    const GameState newState = doorEvent->getGameState();
+    const int room = doorEvent->getRoom();
 
-    fprintf(stderr, "useDoor!\n");
+    if (newState != curState) {
+        fprintf(stderr, "door leads to %d\n", newState);
+        ChangeStateEvent* change = new ChangeStateEvent(newState);
+        LoadMapEvent* loadMapEvent = new LoadMapEvent(newState);
+        m_game->queueEvent(change);
+        m_game->queueEvent(loadMapEvent);
+    }
 }

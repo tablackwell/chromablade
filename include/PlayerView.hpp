@@ -25,6 +25,7 @@ class PlayerView : public Process {
         bool isOpen();
         void setGameLogic(GameLogic* gameLogic);
         void setGameApplication(ChromaBlade* game);
+        void clearTileMaps();
 
         // event related methods
         void update1(const EventInterface &event);
@@ -45,12 +46,13 @@ private: //vars and objs
     sf::FloatRect boundaryBox;
     AnimatedSprite animatedSprite;
     sf::RenderWindow* m_window;
-	  sf::Sprite m_character;
-	  sf::Texture m_charTexture;
+    sf::Sprite m_character;
+    sf::Texture m_charTexture;
     int prevX;
     int prevY;
-	  float m_speed;
-	  bool m_notReleased;
+    float m_speed;
+    bool m_notReleased;
+    bool m_onDoor;
     GameLogic* m_gameLogic;
     ChromaBlade* m_game;
     TileMap m_map;

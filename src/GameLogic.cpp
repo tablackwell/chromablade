@@ -32,8 +32,8 @@ void GameLogic::setGameApplication(ChromaBlade* game) {
 /* Sets the position of character */
 void GameLogic::setCharPosition(std::tuple<float, float> position) {
     m_player.setPosition(position);
-    std::cout << std::get<0>(position) << "\n";
-    std::cout << std::get<1>(position) << "\n";
+    //std::cout << std::get<0>(position) << "\n";
+    //std::cout << std::get<1>(position) << "\n";
 }
 
 
@@ -66,9 +66,9 @@ void GameLogic::moveChar(const EventInterface& event) {
 /* Adds listeners to eventManager */
 void GameLogic::setListener() {
     // Create function for listener. Add to event manager.
-    std::function<void(const EventInterface &event)> move = std::bind(&GameLogic::moveChar, this, std::placeholders::_1);
-    const EventListener moveListener = EventListener(move, 3);
-    m_game->registerListener(moveListener, EventType::moveEvent);
+//    std::function<void(const EventInterface &event)> move = std::bind(&GameLogic::moveChar, this, std::placeholders::_1);
+//    const EventListener moveListener = EventListener(move, 3);
+//    m_game->registerListener(moveListener, EventType::moveEvent);
     std::function<void(const EventInterface &event)> attack = std::bind(&GameLogic::attack, this, std::placeholders::_1);
         const EventListener attackListener = EventListener(attack, 4);
         m_game->registerListener(attackListener, EventType::attackEvent);

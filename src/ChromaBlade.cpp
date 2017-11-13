@@ -115,17 +115,19 @@ void ChromaBlade::registerListeners() {
 /* Update m_state to game state. */
 void ChromaBlade::updateState(const EventInterface &event) {
     const EventInterface *ptr = &event;
-    std::cout<<"State change";
     if (const ChangeStateEvent *stateEvent = dynamic_cast<const ChangeStateEvent*>(ptr)){
         m_state = stateEvent->getGameState();
         switch(m_state) {
             case GameState::Title:
-                std::cout<<"TITLE";
+                std::cout<<"Changed state to Title!\n";
                 break;
             case GameState::Hub:
                 m_view.setListener();
                 m_gameLogic.setListener();
-                std::cout<<"GAME";
+                std::cout<<"Changed state to Game!\n";
+                break;
+            case GameState::RedLevel:
+                std::cout<<"Changed state to RedLevel!\n";
                 break;
         }
     }
