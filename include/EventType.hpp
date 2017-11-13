@@ -11,7 +11,8 @@ enum EventType {
     moveEvent,
     sfmlEvent,
     changeStateEvent,
-    doorEvent
+    doorEvent,
+    loadMapEvent
 };
 
 #endif

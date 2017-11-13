@@ -61,7 +61,7 @@ void ChromaBlade::update(float &deltaTime) {
     switch (m_state) {
         case GameState::Title:
             break;
-        case GameState::Game:
+        case GameState::Hub:
             m_processManager.update(deltaTime);
             break;
     }
@@ -122,7 +122,7 @@ void ChromaBlade::updateState(const EventInterface &event) {
             case GameState::Title:
                 std::cout<<"TITLE";
                 break;
-            case GameState::Game:
+            case GameState::Hub:
                 m_view.setListener();
                 m_gameLogic.setListener();
                 std::cout<<"GAME";
