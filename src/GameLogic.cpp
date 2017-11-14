@@ -89,6 +89,7 @@ void GameLogic::attack(const EventInterface& event) {
 }
 
 void GameLogic::spawn(const EventInterface& event) {
+    printf("spawn!\n");
     const EventInterface *ptr = &event;
     const SpawnEvent *spawnEvent = dynamic_cast<const SpawnEvent*>(ptr);
     const Actor::Type actorType = spawnEvent->getActorType();
@@ -96,7 +97,40 @@ void GameLogic::spawn(const EventInterface& event) {
     const sf::Vector2f size = spawnEvent->getSize();
     const sf::Vector2f center = spawnEvent->getCenter();
 
-    printf("%d %d\n", actorType, count);
-    printf("%f %f\n", size.x, size.y);
-    printf("%f %f\n", center.x, center.y);
+    int x,y,r,i,j;
+    int minX = center.x - size.x / 2 + 48;
+    int minY = center.y - size.y / 2 + 48;
+
+    int numBlocks = 3;
+    int blockSizeX = size.x / numBlocks;
+    int blockSizeY = size.y / numBlocks;
+
+    int hash[9] = {0};
+
+    int n=0;
+    while (n < count) {
+        do {
+            r = rand() % 9;
+        } while (r == 3 || hash[r]);
+
+        hash[r]++;
+        i = r % 3;
+        j = r / 3;
+
+        x = rand() % (blockSizeX-144) + i*blockSizeX + minX;
+        y = rand() % (blockSizeY-144) + j*blockSizeY + minY;
+        printf("%d %d %d %d %d\n", r, i, j, x, y);
+        Actor *rock = new Actor(Actor::Rock, sf::Vector2f(32,32), sf::Vector2f(x,y));
+        m_rocks.push_back(rock);
+
+        n++;
+    }
+}
+
+std::vector<Actor*> GameLogic::getRocks() {
+    return m_rocks;
+}
+
+void GameLogic::clearRocks() {
+    m_rocks.clear();
 }
