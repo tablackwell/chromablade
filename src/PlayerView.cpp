@@ -2,10 +2,12 @@
 #include "GameState.hpp"
 #include "ChromaBlade.hpp"
 #include "KeySetting.hpp"
+#include "Actor.hpp"
+
 #include "MoveEvent.hpp"
-#include "StaticActor.hpp"
 #include "DoorEvent.hpp"
 #include "AttackEvent.hpp"
+#include "SpawnEvent.hpp"
 #include "LoadMapEvent.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -156,7 +158,7 @@ void PlayerView::updateCamera(int newX, int newY){
 void PlayerView::draw() {
     m_window->clear();
     GameState state = m_game->getState();
-    StaticActor rock(StaticActor::Rock, sf::Vector2f(32,32), sf::Vector2f(100,100));
+    Actor rock(Actor::Rock, sf::Vector2f(32,32), sf::Vector2f(100,100));
 
     // Render the content depending on the game state
     switch(state) {
@@ -197,17 +199,17 @@ void PlayerView::update(float &deltaTime){
 void PlayerView::setListener() {
     // Create function for listener. Add to event manager.
     std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
-    const EventListener listener = EventListener(move, 2);
+    const EventListener listener = EventListener(move, EventType::moveEvent);
     m_game->registerListener(listener, EventType::moveEvent);
 
     // DoorEvent
     std::function<void(const EventInterface &event)> door = std::bind(&PlayerView::useDoor, this, std::placeholders::_1);
-    const EventListener doorListener = EventListener(door, 4);
+    const EventListener doorListener = EventListener(door, EventType::doorEvent);
     m_game->registerListener(doorListener, EventType::doorEvent);
 
     // LoadMapEvent
     std::function<void(const EventInterface &event)> loadMap = std::bind(&PlayerView::loadMap, this, std::placeholders::_1);
-    const EventListener loadMapListener = EventListener(loadMap, 5);
+    const EventListener loadMapListener = EventListener(loadMap, EventType::loadMapEvent);
     m_game->registerListener(loadMapListener, EventType::loadMapEvent);
 }
 
@@ -278,7 +280,7 @@ void PlayerView::moveChar(const EventInterface& event) {
         std::cout << "onDoor\n";
         m_onDoor = true;
 
-        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 0, dir);
+        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
         m_game->queueEvent(doorEvent);
     } else if (!doorDetected && m_onDoor) {
         std::cout << "not onDoor\n";
@@ -357,6 +359,16 @@ void PlayerView::useDoor(const EventInterface& event) {
         LoadMapEvent* loadMapEvent = new LoadMapEvent(newState);
         m_game->queueEvent(change);
         m_game->queueEvent(loadMapEvent);
+    }
+
+    if (room > 0) {
+        if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room)
+                == m_clearedRooms.end()) {
+            sf::Vector2f center = m_window->getView().getCenter();
+            sf::Vector2f size = m_window->getView().getSize();
+            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 1, size, center);
+            m_game->queueEvent(spawnEvent);
+        }
     }
 
     if (dir == Direction::Left) {

@@ -107,7 +107,7 @@ void ChromaBlade::queueEvent(EventInterface *event) {
 void ChromaBlade::registerListeners() {
     // Subscribe to events.
     std::function<void(const EventInterface &event)> changeState = std::bind(&ChromaBlade::updateState, this, std::placeholders::_1);
-    const EventListener m_listener1 = EventListener(changeState, 0);
+    const EventListener m_listener1 = EventListener(changeState, EventType::changeStateEvent);
     m_eventManager.addListener(m_listener1, EventType::changeStateEvent);
 }
 

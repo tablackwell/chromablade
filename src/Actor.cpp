@@ -1,7 +1,7 @@
-#include "StaticActor.hpp"
+#include "Actor.hpp"
 
-StaticActor::StaticActor(StaticActor::Type type, sf::Vector2f size, sf::Vector2f pos) {
-    if (type == StaticActor::Rock) {
+Actor::Actor(Actor::Type type, sf::Vector2f size, sf::Vector2f pos) {
+    if (type == Actor::Rock) {
         m_rect.setSize(size);
         m_rect.setPosition(pos);
         m_rect.setFillColor(sf::Color(150,75,0));
@@ -16,7 +16,7 @@ StaticActor::StaticActor(StaticActor::Type type, sf::Vector2f size, sf::Vector2f
     m_type = type;
 }
 
-void StaticActor::draw(sf::RenderWindow &window) {
+void Actor::draw(sf::RenderWindow &window) {
     window.draw(m_rect);
 }
 
