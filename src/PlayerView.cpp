@@ -169,6 +169,9 @@ void PlayerView::draw() {
             break;
         default:
             m_window->draw(m_map);
+            for (int i=0; i<rocks.size(); i++) {
+                rocks[i]->draw(m_window);
+            }
             m_window->draw(m_overlay);
             m_window->draw(m_filter);
             m_window->draw(animatedSprite);
@@ -180,9 +183,6 @@ void PlayerView::draw() {
             m_collisions.drawBoxes(m_window);
             m_doors.drawBoxes(m_window);
 
-            for (int i=0; i<rocks.size(); i++) {
-                rocks[i]->draw(m_window);
-            }
             break;
     }
     m_window->display();
