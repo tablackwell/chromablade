@@ -330,13 +330,13 @@ void PlayerView::loadMap(const EventInterface& event) {
         break;
         case GameState::RedLevel:
         fprintf(stderr, "loading RedLevel!\n");
-
+            camera.setCenter(400,300);
             m_map.loadFromText("../res/tilesets/dungeon.png",
                     "../res/level/DemoDungeon/dungeon_base.csv",
                     sf::Vector2u(16, 16), 100, 114);
-            m_overlay.loadFromText("../res/tilesets/dungeon.png",
-                    "../res/level/DemoDungeon/dungeon_overlay.csv",
-                    sf::Vector2u(16, 16), 100, 114);
+            // m_overlay.loadFromText("../res/tilesets/dungeon.png",
+            //         "../res/level/DemoDungeon/dungeon_overlay.csv",
+            //         sf::Vector2u(16, 16), 100, 114);
             m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
                     "../res/level/DemoDungeon/dungeon_collision.csv",
                     sf::Vector2u(16, 16), 100, 114);
@@ -357,7 +357,7 @@ void PlayerView::useDoor(const EventInterface& event) {
     const GameState newState = doorEvent->getGameState();
     const int room = doorEvent->getRoom();
     const Direction dir = doorEvent->getDirection();
-
+    bool dontChangeCamera = false;
     if (newState != curState) {
         fprintf(stderr, "door leads to %d\n", newState);
         ChangeStateEvent* change = new ChangeStateEvent(newState);
@@ -367,8 +367,20 @@ void PlayerView::useDoor(const EventInterface& event) {
     }
 
     if (dir == Direction::Left) {
-        animatedSprite.setPosition(WIDTH - 20, 288);
-    } else {
-        animatedSprite.setPosition(20, 288);
+        animatedSprite.setPosition(prevX - 100, prevY);
+        updateCamera(camera.getCenter().x - 800, camera.getCenter().y);
+    }
+    else if (dir == Direction::Right){
+        animatedSprite.setPosition(prevX + 100, prevY);
+        updateCamera(camera.getCenter().x + 800, camera.getCenter().y);
+    }
+    else if (dir == Direction::Up){
+        animatedSprite.setPosition(prevX, prevY - 100);
+        updateCamera(camera.getCenter().x, camera.getCenter().y - 600);
+
+    }
+    else if (dir == Direction::Down){
+      animatedSprite.setPosition(prevX, prevY + 100);
+      updateCamera(camera.getCenter().x, camera.getCenter().y + 600);
     }
 }
