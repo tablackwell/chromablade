@@ -6,6 +6,7 @@
 
 class Actor {
 public:
+    Actor();
     enum Type { Player, RedMob, BlueMob, YellowMob, Rock };
     Actor(Type type, sf::Vector2f size, sf::Vector2f pos);
     void draw(sf::RenderWindow &window);
