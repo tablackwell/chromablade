@@ -54,6 +54,7 @@ private: //vars and objs
     float m_speed;
     bool m_notReleased;
     bool m_onDoor;
+    bool levelToggled = false;
     GameLogic* m_gameLogic;
     ChromaBlade* m_game;
     TileMap m_map;

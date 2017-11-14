@@ -329,8 +329,11 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_filter.setFillColor(sf::Color(0,0,0,0));
         break;
         case GameState::RedLevel:
-        fprintf(stderr, "loading RedLevel!\n");
-            camera.setCenter(400,300);
+
+            fprintf(stderr, "loading RedLevel!\n");
+            levelToggled = true;
+            animatedSprite.setPosition(32,1520);
+            updateCamera(400,1520);
             m_map.loadFromText("../res/tilesets/dungeon.png",
                     "../res/level/DemoDungeon/dungeon_base.csv",
                     sf::Vector2u(16, 16), 100, 114);
@@ -366,6 +369,7 @@ void PlayerView::useDoor(const EventInterface& event) {
         m_game->queueEvent(loadMapEvent);
     }
 
+    if(levelToggled){
     if (dir == Direction::Left) {
         animatedSprite.setPosition(prevX - 100, prevY);
         updateCamera(camera.getCenter().x - 800, camera.getCenter().y);
@@ -376,11 +380,12 @@ void PlayerView::useDoor(const EventInterface& event) {
     }
     else if (dir == Direction::Up){
         animatedSprite.setPosition(prevX, prevY - 100);
-        updateCamera(camera.getCenter().x, camera.getCenter().y - 600);
+        updateCamera(camera.getCenter().x, camera.getCenter().y - 608);
 
     }
     else if (dir == Direction::Down){
       animatedSprite.setPosition(prevX, prevY + 100);
-      updateCamera(camera.getCenter().x, camera.getCenter().y + 600);
+      updateCamera(camera.getCenter().x, camera.getCenter().y + 608);
     }
+  }
 }
