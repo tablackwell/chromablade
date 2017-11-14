@@ -384,20 +384,20 @@ void PlayerView::useDoor(const EventInterface& event) {
 
     if (dir == Direction::Left) {
         animatedSprite.setPosition(prevX - 100, prevY);
-        updateCamera(camera.getCenter().x - 800, camera.getCenter().y);
+        updateCamera(m_camera.getCenter().x - 800, m_camera.getCenter().y);
     }
     else if (dir == Direction::Right){
         animatedSprite.setPosition(prevX + 100, prevY);
-        updateCamera(camera.getCenter().x + 800, camera.getCenter().y);
+        updateCamera(m_camera.getCenter().x + 800, m_camera.getCenter().y);
     }
     else if (dir == Direction::Up){
         animatedSprite.setPosition(prevX, prevY - 100);
-        updateCamera(camera.getCenter().x, camera.getCenter().y - 608);
+        updateCamera(m_camera.getCenter().x, m_camera.getCenter().y - 608);
 
     }
     else if (dir == Direction::Down){
       animatedSprite.setPosition(prevX, prevY + 100);
-      updateCamera(camera.getCenter().x, camera.getCenter().y + 608);
+      updateCamera(m_camera.getCenter().x, m_camera.getCenter().y + 608);
     }
   }
 }
