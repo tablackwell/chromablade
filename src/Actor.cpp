@@ -23,3 +23,6 @@ void Actor::draw(sf::RenderWindow *window) {
     window->draw(m_rect);
 }
 
+sf::FloatRect Actor::getGlobalBounds() {
+    return m_rect.getGlobalBounds();
+}

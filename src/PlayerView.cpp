@@ -271,6 +271,15 @@ void PlayerView::moveChar(const EventInterface& event) {
         break;
       }
     }
+
+    /* Check collision against rocks. */
+    std::vector<Actor*> m_rocks = m_gameLogic->getRocks();
+    for (int i=0; i<m_rocks.size(); i++) {
+      if (animatedSprite.getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
+        collisionDetected = true;
+        break;
+      }
+    }
     if(collisionDetected){
       animatedSprite.setPosition(prevX, prevY);
       m_gameLogic->setCharPosition(std::make_tuple(prevX, prevY));
