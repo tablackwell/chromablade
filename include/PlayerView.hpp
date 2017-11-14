@@ -55,12 +55,17 @@ private: //vars and objs
     float m_speed;
     bool m_notReleased;
     bool m_onDoor;
+    bool levelToggled = false;
     GameLogic* m_gameLogic;
     ChromaBlade* m_game;
     TileMap m_map;
     TileMap m_overlay;
     TileMap m_collisions;
     TileMap m_doors;
+    TileMap m_map2;
+    TileMap m_overlay2;
+    TileMap m_collisions2;
+    TileMap m_doors2;
     Title m_title;
     sf::Sound m_sound;
     sf::SoundBuffer m_buffer;

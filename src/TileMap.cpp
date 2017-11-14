@@ -254,4 +254,7 @@ void TileMap::clear() {
     m_boxes.clear();
     m_tileNumbers.clear();
     m_vertices.clear();
+    m_width = 0;
+    m_height = 0;
+
 }

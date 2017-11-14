@@ -167,19 +167,21 @@ void PlayerView::draw() {
         case GameState::Title:
             m_title.draw(*m_window);
             break;
-        default:
+        default:{
             m_window->draw(m_map);
             m_window->draw(m_overlay);
             m_window->draw(m_filter);
             m_window->draw(animatedSprite);
             /* Some nice debug stuff */
-            // sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
-            // debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
-            // debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
-            // m_window->draw(debugRectangle);
+            sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
+            debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
+            debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
+            m_window->draw(debugRectangle);
             m_collisions.drawBoxes(m_window);
             m_doors.drawBoxes(m_window);
-            break;
+          break;
+        }
+
     }
     rock.draw(*m_window);
     m_window->display();
@@ -329,20 +331,23 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_filter.setFillColor(sf::Color(0,0,0,0));
         break;
         case GameState::RedLevel:
-        fprintf(stderr, "loading RedLevel!\n");
-            m_map.loadFromText("../res/tilesets/lightworld.png",
-                    "../res/level/dungeon_base.csv",
-                    sf::Vector2u(16, 16), 50, 38);
-            m_overlay.loadFromText("../res/tilesets/lightworld.png",
-                    "../res/level/dungeon_overlay.csv",
-                    sf::Vector2u(16, 16), 50, 38);
-            m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png",
-                    "../res/level/dungeon_collisions.csv",
-                    sf::Vector2u(16, 16), 50, 38);
-            m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
-                    "../res/level/dungeon_doors.csv",
-                    sf::Vector2u(16, 16), 50, 38);
-            m_filter.setFillColor(sf::Color(255,0,0,128));
+
+            fprintf(stderr, "loading RedLevel!\n");
+            levelToggled = true;
+            animatedSprite.setPosition(32,1520);
+            updateCamera(400,1520);
+            m_map.loadFromText("../res/tilesets/dungeon.png",
+                    "../res/level/DemoDungeon/dungeon_base.csv",
+                    sf::Vector2u(16, 16), 100, 114);
+            // m_overlay.loadFromText("../res/tilesets/dungeon.png",
+            //         "../res/level/DemoDungeon/dungeon_overlay.csv",
+            //         sf::Vector2u(16, 16), 100, 114);
+            m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
+                    "../res/level/DemoDungeon/dungeon_collision.csv",
+                    sf::Vector2u(16, 16), 100, 114);
+            m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
+                    "../res/level/DemoDungeon/dungeon_doors.csv",
+                    sf::Vector2u(16, 16), 100, 114);
         break;
     }
 }
@@ -357,7 +362,7 @@ void PlayerView::useDoor(const EventInterface& event) {
     const GameState newState = doorEvent->getGameState();
     const int room = doorEvent->getRoom();
     const Direction dir = doorEvent->getDirection();
-
+    bool dontChangeCamera = false;
     if (newState != curState) {
         fprintf(stderr, "door leads to %d\n", newState);
         ChangeStateEvent* change = new ChangeStateEvent(newState);
@@ -366,6 +371,7 @@ void PlayerView::useDoor(const EventInterface& event) {
         m_game->queueEvent(loadMapEvent);
     }
 
+    if(levelToggled){
     if (room > 0) {
         if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room)
                 == m_clearedRooms.end()) {
@@ -377,8 +383,21 @@ void PlayerView::useDoor(const EventInterface& event) {
     }
 
     if (dir == Direction::Left) {
-        animatedSprite.setPosition(WIDTH - 20, 288);
-    } else {
-        animatedSprite.setPosition(20, 288);
+        animatedSprite.setPosition(prevX - 100, prevY);
+        updateCamera(camera.getCenter().x - 800, camera.getCenter().y);
     }
+    else if (dir == Direction::Right){
+        animatedSprite.setPosition(prevX + 100, prevY);
+        updateCamera(camera.getCenter().x + 800, camera.getCenter().y);
+    }
+    else if (dir == Direction::Up){
+        animatedSprite.setPosition(prevX, prevY - 100);
+        updateCamera(camera.getCenter().x, camera.getCenter().y - 608);
+
+    }
+    else if (dir == Direction::Down){
+      animatedSprite.setPosition(prevX, prevY + 100);
+      updateCamera(camera.getCenter().x, camera.getCenter().y + 608);
+    }
+  }
 }
