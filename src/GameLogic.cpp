@@ -89,6 +89,7 @@ void GameLogic::attack(const EventInterface& event) {
 }
 
 void GameLogic::spawn(const EventInterface& event) {
+    printf("spawn!\n");
     const EventInterface *ptr = &event;
     const SpawnEvent *spawnEvent = dynamic_cast<const SpawnEvent*>(ptr);
     const Actor::Type actorType = spawnEvent->getActorType();
@@ -116,8 +117,9 @@ void GameLogic::spawn(const EventInterface& event) {
         i = r % 3;
         j = r / 3;
 
-        x = rand() % (blockSizeX-128) + i*blockSizeX + minX;
-        y = rand() % (blockSizeY-128) + j*blockSizeY + minY;
+        x = rand() % (blockSizeX-144) + i*blockSizeX + minX;
+        y = rand() % (blockSizeY-144) + j*blockSizeY + minY;
+        printf("%d %d %d %d %d\n", r, i, j, x, y);
         Actor *rock = new Actor(Actor::Rock, sf::Vector2f(32,32), sf::Vector2f(x,y));
         m_rocks.push_back(rock);
 

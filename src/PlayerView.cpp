@@ -167,7 +167,7 @@ void PlayerView::draw() {
         case GameState::Title:
             m_title.draw(*m_window);
             break;
-        default:{
+        default:
             m_window->draw(m_map);
             m_window->draw(m_overlay);
             m_window->draw(m_filter);
@@ -345,8 +345,6 @@ void PlayerView::loadMap(const EventInterface& event) {
 
             fprintf(stderr, "loading RedLevel!\n");
             levelToggled = true;
-            animatedSprite.setPosition(32,1520);
-            updateCamera(400,1520);
             m_map.loadFromText("../res/tilesets/dungeon.png",
                     "../res/level/DemoDungeon/dungeon_base.csv",
                     sf::Vector2u(16, 16), 100, 114);
@@ -371,26 +369,17 @@ void PlayerView::useDoor(const EventInterface& event) {
     const GameState newState = doorEvent->getGameState();
     const int room = doorEvent->getRoom();
     const Direction dir = doorEvent->getDirection();
-    bool dontChangeCamera = false;
     if (newState != curState) {
         fprintf(stderr, "door leads to %d\n", newState);
         ChangeStateEvent* change = new ChangeStateEvent(newState);
         LoadMapEvent* loadMapEvent = new LoadMapEvent(newState);
         m_game->queueEvent(change);
         m_game->queueEvent(loadMapEvent);
+        updateCamera(400,1520);
+        animatedSprite.setPosition(32,1520);
     }
 
     if(levelToggled){
-    if (room > 0) {
-        if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room)
-                == m_clearedRooms.end()) {
-            sf::Vector2f center = m_window->getView().getCenter();
-            sf::Vector2f size = m_window->getView().getSize();
-            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 8, size, center);
-            m_game->queueEvent(spawnEvent);
-        }
-    }
-
     if (dir == Direction::Left) {
         animatedSprite.setPosition(prevX - 100, prevY);
         updateCamera(m_camera.getCenter().x - 800, m_camera.getCenter().y);
@@ -408,5 +397,16 @@ void PlayerView::useDoor(const EventInterface& event) {
       animatedSprite.setPosition(prevX, prevY + 100);
       updateCamera(m_camera.getCenter().x, m_camera.getCenter().y + 608);
     }
-  }
+    }
+
+    if (room > 0) {
+        if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room)
+                == m_clearedRooms.end()) {
+            sf::Vector2f center = m_camera.getCenter();
+            sf::Vector2f size = m_camera.getSize();
+            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 4, size, center);
+            m_game->queueEvent(spawnEvent);
+        }
+    }
+
 }
