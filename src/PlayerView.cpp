@@ -65,15 +65,15 @@ void PlayerView::init(){
 //  m_character.setPosition(START_POS);
       animatedSprite.setScale(0.9f,0.9f);
     setState(Process::RUNNING);
-    camera.setSize(800,600);
+    m_camera.setSize(800,600);
     m_speed = SPEED;
 }
 
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
     m_window = window;
-  sf::View camera = window->getDefaultView();
-  window->setView(camera);
+  sf::View view = window->getDefaultView();
+  window->setView(view);
 }
 
 
@@ -147,8 +147,8 @@ void PlayerView::handleInput(float deltaTime) {
 }
 
 void PlayerView::updateCamera(int newX, int newY){
-  camera.setCenter(newX, newY);
-  m_window->setView(camera);
+  m_camera.setCenter(newX, newY);
+  m_window->setView(m_camera);
 }
 
 

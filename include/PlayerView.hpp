@@ -42,7 +42,7 @@ private: //vars and objs
     Animation walkingUp;
     Animation walkingRight;
     Animation walkingLeft;
-    sf::View camera;
+    sf::View m_camera;
     sf::FloatRect boundaryBox;
     AnimatedSprite animatedSprite;
     sf::RenderWindow* m_window;
