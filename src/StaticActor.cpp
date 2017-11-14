@@ -4,7 +4,7 @@ StaticActor::StaticActor(StaticActor::Type type, sf::Vector2f size, sf::Vector2f
     if (type == StaticActor::Rock) {
         m_rect.setSize(size);
         m_rect.setPosition(pos);
-        m_rect.setFillColor(sf::Color::Red);
+        m_rect.setFillColor(sf::Color(150,75,0));
     }
 //        if(!m_texture.loadFromFile("../res/.png")) {
 //            // ERROR
