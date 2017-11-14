@@ -180,8 +180,8 @@ void PlayerView::draw() {
             // debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
             // debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
             // m_window->draw(debugRectangle);
-            m_collisions.drawBoxes(m_window);
-            m_doors.drawBoxes(m_window);
+            // m_collisions.drawBoxes(m_window);
+            // m_doors.drawBoxes(m_window);
 
             break;
     }
