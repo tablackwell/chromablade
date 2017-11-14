@@ -91,6 +91,10 @@ bool TileMap::loadFromText(const std::string& tileset, std::string textFileName,
         return true;
 }
 
+/*
+Renders a given tilemap (don't call this if you're using a tilemap to store
+collisions or doors)
+*/
 void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         // apply the transform
@@ -101,6 +105,11 @@ void TileMap::draw(sf::RenderTarget& target, sf::RenderStates states) const
         target.draw(m_vertices, states);
 }
 
+/*
+Returns the value associated with a given tile on a tilemap.
+Converts integer player coordinates to tile coordinates.
+Tiles stored in a linearized 2D array.
+*/
 int TileMap::checkCollision(int actorX, int actorY){
   int tileX = actorX / 16;
   int tileY = actorY / 16;
@@ -121,6 +130,7 @@ int TileMap::checkCollision(int actorX, int actorY){
 
 /*
 Debug method for indicating where collisions should be
+by drawing them on the window.
 */
 void TileMap::drawBoxes(sf::RenderWindow* target){
   for(int i = 0; i < m_boxes.size(); i++){
@@ -128,6 +138,14 @@ void TileMap::drawBoxes(sf::RenderWindow* target){
   }
 }
 
+/*
+Loads collision mapping from a .csv file
+
+tileset: the location of the tileset image
+textFileName: the location of the .csv to parse
+tileSize: the size of tiles in terms of pixels (ex: (16,16))
+width and height: the width and height of the tilemap to be produced from the csv
+*/
 bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
   std::ifstream inputFile;
   m_height = height;
@@ -174,7 +192,14 @@ bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string tex
             }
         return true;
 }
+/*
+Loads door locations from a .csv file
 
+tileset: the location of the tileset image
+textFileName: the location of the .csv to parse
+tileSize: the size of tiles in terms of pixels (ex: (16,16))
+width and height: the width and height of the tilemap to be produced from the csv
+*/
 bool TileMap::loadDoorsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height){
     std::ifstream inputFile;
     m_height = height;
@@ -183,10 +208,10 @@ bool TileMap::loadDoorsFromText(const std::string& tileset, std::string textFile
     if (!m_tileset.loadFromFile(tileset)){
       return false;
     }
-  
+
     // load the csv file
     inputFile.open(textFileName, std::ifstream::in);
-  
+
     int number;
     while(inputFile >> number){ //until document ends
        if(inputFile.peek() == ','){ // skip commas
@@ -194,9 +219,9 @@ bool TileMap::loadDoorsFromText(const std::string& tileset, std::string textFile
        }
        m_tileNumbers.push_back(number); //add the number
     }
-  
+
     inputFile.close();
-  
+
     // This is hacky and I probably dont need to do it
     const int *tileArray = &m_tileNumbers[0];
     inputFile.close();
@@ -222,6 +247,9 @@ bool TileMap::loadDoorsFromText(const std::string& tileset, std::string textFile
     return true;
 }
 
+/*
+Clears a tilemap so a new one can be generated
+*/
 void TileMap::clear() {
     m_boxes.clear();
     m_tileNumbers.clear();

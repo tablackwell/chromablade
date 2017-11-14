@@ -49,6 +49,7 @@ private: //vars and objs
     sf::RenderWindow* m_window;
     sf::Sprite m_character;
     sf::Texture m_charTexture;
+    sf::RectangleShape m_filter;
     int prevX;
     int prevY;
     float m_speed;

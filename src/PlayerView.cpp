@@ -67,8 +67,10 @@ void PlayerView::init(){
 //  m_character.setPosition(START_POS);
       animatedSprite.setScale(0.9f,0.9f);
     setState(Process::RUNNING);
-    m_camera.setSize(800,600);
+    camera.setSize(WIDTH,HEIGHT);
     m_speed = SPEED;
+
+    m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
 
 /* Set the window of the view */
@@ -168,6 +170,7 @@ void PlayerView::draw() {
         default:
             m_window->draw(m_map);
             m_window->draw(m_overlay);
+            m_window->draw(m_filter);
             m_window->draw(animatedSprite);
             /* Some nice debug stuff */
             // sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
@@ -323,6 +326,7 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
                     "../res/level/TestLevel/test_doors.csv",
                     sf::Vector2u(16, 16), 100, 38);
+            m_filter.setFillColor(sf::Color(0,0,0,0));
         break;
         case GameState::RedLevel:
         fprintf(stderr, "loading RedLevel!\n");
@@ -338,6 +342,7 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
                     "../res/level/dungeon_doors.csv",
                     sf::Vector2u(16, 16), 50, 38);
+            m_filter.setFillColor(sf::Color(255,0,0,128));
         break;
     }
 }
