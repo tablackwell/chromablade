@@ -9,6 +9,7 @@
 #include "AnimatedSprite.hpp"
 #include "Title.hpp"
 #include "TileMap.hpp"
+#include <vector>
 
 
 class ChromaBlade; // Forward declaration of class ChromaBlade, so that we can declare a pointer to ChromaBlade in PlayerView
@@ -42,7 +43,7 @@ private: //vars and objs
     Animation walkingUp;
     Animation walkingRight;
     Animation walkingLeft;
-    sf::View camera;
+    sf::View m_camera;
     sf::FloatRect boundaryBox;
     AnimatedSprite animatedSprite;
     sf::RenderWindow* m_window;
@@ -64,6 +65,7 @@ private: //vars and objs
     sf::Sound m_sound;
     sf::SoundBuffer m_buffer;
 
+    std::vector<int> m_clearedRooms;
 };
 
 #endif

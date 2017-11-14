@@ -1,6 +1,7 @@
 #include "GameLogic.hpp"
 #include "MoveEvent.hpp"
 #include "AttackEvent.hpp"
+#include "SpawnEvent.hpp"
 #include "ChromaBlade.hpp"
 
 #include <tuple>
@@ -65,13 +66,14 @@ void GameLogic::moveChar(const EventInterface& event) {
 
 /* Adds listeners to eventManager */
 void GameLogic::setListener() {
-    // Create function for listener. Add to event manager.
-//    std::function<void(const EventInterface &event)> move = std::bind(&GameLogic::moveChar, this, std::placeholders::_1);
-//    const EventListener moveListener = EventListener(move, 3);
-//    m_game->registerListener(moveListener, EventType::moveEvent);
     std::function<void(const EventInterface &event)> attack = std::bind(&GameLogic::attack, this, std::placeholders::_1);
-        const EventListener attackListener = EventListener(attack, 4);
+        const EventListener attackListener = EventListener(attack, EventType::attackEvent);
         m_game->registerListener(attackListener, EventType::attackEvent);
+
+        // SpawnEvent
+    std::function<void(const EventInterface &event)> spawn = std::bind(&GameLogic::spawn, this, std::placeholders::_1);
+    const EventListener spawnListener = EventListener(spawn, EventType::spawnEvent);
+    m_game->registerListener(spawnListener, EventType::spawnEvent);
 }
 
 
@@ -84,4 +86,17 @@ void GameLogic::attack(const EventInterface& event) {
         std::cout << "player attack\n";
     }
 
+}
+
+void GameLogic::spawn(const EventInterface& event) {
+    const EventInterface *ptr = &event;
+    const SpawnEvent *spawnEvent = dynamic_cast<const SpawnEvent*>(ptr);
+    const Actor::Type actorType = spawnEvent->getActorType();
+    const int count = spawnEvent->getCount();
+    const sf::Vector2f size = spawnEvent->getSize();
+    const sf::Vector2f center = spawnEvent->getCenter();
+
+    printf("%d %d\n", actorType, count);
+    printf("%f %f\n", size.x, size.y);
+    printf("%f %f\n", center.x, center.y);
 }
