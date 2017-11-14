@@ -60,6 +60,10 @@ private: //vars and objs
     TileMap m_overlay;
     TileMap m_collisions;
     TileMap m_doors;
+    TileMap m_map2;
+    TileMap m_overlay2;
+    TileMap m_collisions2;
+    TileMap m_doors2;
     Title m_title;
     sf::Sound m_sound;
     sf::SoundBuffer m_buffer;

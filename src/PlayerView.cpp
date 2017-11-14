@@ -165,19 +165,21 @@ void PlayerView::draw() {
         case GameState::Title:
             m_title.draw(*m_window);
             break;
-        default:
+        default:{
             m_window->draw(m_map);
             m_window->draw(m_overlay);
             m_window->draw(m_filter);
             m_window->draw(animatedSprite);
             /* Some nice debug stuff */
-            // sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
-            // debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
-            // debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
-            // m_window->draw(debugRectangle);
+            sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
+            debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
+            debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
+            m_window->draw(debugRectangle);
             m_collisions.drawBoxes(m_window);
             m_doors.drawBoxes(m_window);
-            break;
+          break;
+        }
+
     }
     rock.draw(*m_window);
     m_window->display();
@@ -328,19 +330,19 @@ void PlayerView::loadMap(const EventInterface& event) {
         break;
         case GameState::RedLevel:
         fprintf(stderr, "loading RedLevel!\n");
-            m_map.loadFromText("../res/tilesets/lightworld.png",
-                    "../res/level/dungeon_base.csv",
-                    sf::Vector2u(16, 16), 50, 38);
-            m_overlay.loadFromText("../res/tilesets/lightworld.png",
-                    "../res/level/dungeon_overlay.csv",
-                    sf::Vector2u(16, 16), 50, 38);
-            m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png",
-                    "../res/level/dungeon_collisions.csv",
-                    sf::Vector2u(16, 16), 50, 38);
-            m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
-                    "../res/level/dungeon_doors.csv",
-                    sf::Vector2u(16, 16), 50, 38);
-            m_filter.setFillColor(sf::Color(255,0,0,128));
+
+            m_map.loadFromText("../res/tilesets/dungeon.png",
+                    "../res/level/DemoDungeon/dungeon_base.csv",
+                    sf::Vector2u(16, 16), 100, 114);
+            m_overlay.loadFromText("../res/tilesets/dungeon.png",
+                    "../res/level/DemoDungeon/dungeon_overlay.csv",
+                    sf::Vector2u(16, 16), 100, 114);
+            m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
+                    "../res/level/DemoDungeon/dungeon_collision.csv",
+                    sf::Vector2u(16, 16), 100, 114);
+            m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
+                    "../res/level/DemoDungeon/dungeon_doors.csv",
+                    sf::Vector2u(16, 16), 100, 114);
         break;
     }
 }
