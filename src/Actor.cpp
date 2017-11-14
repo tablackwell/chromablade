@@ -1,5 +1,8 @@
 #include "Actor.hpp"
 
+Actor::Actor() {
+}
+
 Actor::Actor(Actor::Type type, sf::Vector2f size, sf::Vector2f pos) {
     if (type == Actor::Rock) {
         m_rect.setSize(size);

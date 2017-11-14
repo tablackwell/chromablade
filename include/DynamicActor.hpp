@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <SFML/Graphics.hpp>
 #include <tuple>
+#include "Actor.hpp"
 
 /* List of all possible colors */
 enum Color{
@@ -14,7 +15,7 @@ enum Color{
 /*
  * Dynamic actor class. All dynamic actors inherit from the dynamic actor class.
  */
-class DynamicActor {
+class DynamicActor : public Actor {
 	public:
 		DynamicActor();
 		DynamicActor(Color activeColor, float health, float damage, std::tuple<float, float> startPos, int speed);
