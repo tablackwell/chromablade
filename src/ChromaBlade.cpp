@@ -3,7 +3,6 @@
 #include "GameLogic.hpp"
 
 #include <cstdio>
-#include <iostream>
 
 
 /* The game application layer */
@@ -20,6 +19,8 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
     m_window.setVerticalSyncEnabled(true);
     m_window.setKeyRepeatEnabled(false);
     registerListeners();
+
+    srand(time(NULL));
 }
 
 
@@ -119,15 +120,15 @@ void ChromaBlade::updateState(const EventInterface &event) {
         m_state = stateEvent->getGameState();
         switch(m_state) {
             case GameState::Title:
-                std::cout<<"Changed state to Title!\n";
+                printf("Changed state to Title!\n");
                 break;
             case GameState::Hub:
                 m_view.setListener();
                 m_gameLogic.setListener();
-                std::cout<<"Changed state to Game!\n";
+                printf("Changed state to Game!\n");
                 break;
             case GameState::RedLevel:
-                std::cout<<"Changed state to RedLevel!\n";
+                printf("Changed state to RedLevel!\n");
                 break;
         }
     }

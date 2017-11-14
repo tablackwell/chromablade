@@ -19,7 +19,7 @@ Actor::Actor(Actor::Type type, sf::Vector2f size, sf::Vector2f pos) {
     m_type = type;
 }
 
-void Actor::draw(sf::RenderWindow &window) {
-    window.draw(m_rect);
+void Actor::draw(sf::RenderWindow *window) {
+    window->draw(m_rect);
 }
 

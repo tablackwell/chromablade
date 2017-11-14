@@ -160,7 +160,7 @@ void PlayerView::updateCamera(int newX, int newY){
 void PlayerView::draw() {
     m_window->clear();
     GameState state = m_game->getState();
-    Actor rock(Actor::Rock, sf::Vector2f(32,32), sf::Vector2f(100,100));
+    std::vector<Actor*> rocks = m_gameLogic->getRocks();
 
     // Render the content depending on the game state
     switch(state) {
@@ -179,9 +179,12 @@ void PlayerView::draw() {
             // m_window->draw(debugRectangle);
             m_collisions.drawBoxes(m_window);
             m_doors.drawBoxes(m_window);
+
+            for (int i=0; i<rocks.size(); i++) {
+                rocks[i]->draw(m_window);
+            }
             break;
     }
-    rock.draw(*m_window);
     m_window->display();
 }
 
@@ -311,6 +314,7 @@ void PlayerView::loadMap(const EventInterface& event) {
     const GameState state = loadMapEvent->getGameState();
 
     clearTileMaps();
+    m_gameLogic->clearRocks();
 
     switch (state) {
         case GameState::Hub:
@@ -371,7 +375,7 @@ void PlayerView::useDoor(const EventInterface& event) {
                 == m_clearedRooms.end()) {
             sf::Vector2f center = m_window->getView().getCenter();
             sf::Vector2f size = m_window->getView().getSize();
-            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 1, size, center);
+            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 8, size, center);
             m_game->queueEvent(spawnEvent);
         }
     }

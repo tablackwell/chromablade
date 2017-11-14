@@ -9,6 +9,7 @@
 #include "EventManager.hpp"
 #include "EventListener.hpp"
 #include "EventType.hpp"
+#include "Actor.hpp"
 #include <tuple>
 #include <functional>
 
@@ -26,6 +27,8 @@ class GameLogic : public Process {
 		void setCharPosition(std::tuple<float, float> position);
 		void setGameApplication(ChromaBlade* game);
         void setListener();
+        std::vector<Actor*> getRocks();
+        void clearRocks();
 
 	private:
 		void moveChar(const EventInterface& event);
@@ -36,6 +39,7 @@ class GameLogic : public Process {
         Level m_level;
         Player m_player;
         ChromaBlade* m_game;
+        std::vector<Actor*> m_rocks;
 };
 
 #endif
