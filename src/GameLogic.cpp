@@ -55,7 +55,7 @@ void GameLogic::setListener() {
     std::function<void(const EventInterface &event)> spawn = std::bind(&GameLogic::spawn, this, std::placeholders::_1);
     const EventListener spawnListener = EventListener(spawn, EventType::spawnEvent);
     m_game->registerListener(spawnListener, EventType::spawnEvent);
-    
+
     // MoveEvent
     std::function<void(const EventInterface &event)> move = std::bind(&GameLogic::moveChar, this, std::placeholders::_1);
     const EventListener moveListener = EventListener(move, EventType::moveEvent);
@@ -75,11 +75,11 @@ void GameLogic::moveChar(const EventInterface& event) {
     float y = std::get<1>(m_player.getPosition());
     bool noKeyPressed = true;
     sf::Vector2f moving;
-    
+
     switch (dir){
         case Up:
             y = y - SPEED * deltaTime;
-            
+
             moving = sf::Vector2f(0.f, -SPEED * deltaTime);
             noKeyPressed = false;
             break;

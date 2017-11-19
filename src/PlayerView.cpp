@@ -42,7 +42,7 @@ void PlayerView::init(){
     walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
     walkingDown.addFrame(sf::IntRect(0, 64, 32, 32));
     walkingDown.addFrame(sf::IntRect(0, 96, 32, 32));
-    
+
     walkingLeft.setSpriteSheet(m_charTexture);
     walkingLeft.addFrame(sf::IntRect(32, 0, 32, 32));
     walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
@@ -221,32 +221,22 @@ void PlayerView::setListener() {
 
 
 void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPressed, float deltaTime) {
-    std::cout<<"Drawing animation";
     Animation *currAnimation;
     switch (dir) {
         case Up: {
-//            currAnimation = &walkingUp;
-            Animation walkingUp;
+            currAnimation = &walkingUp;
             break;
         }
         case Down: {
-            Animation walkingDown;
-            walkingDown.setSpriteSheet(m_charTexture);
-            walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
-            walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
-            walkingDown.addFrame(sf::IntRect(0, 64, 32, 32));
-            walkingDown.addFrame(sf::IntRect(0, 96, 32, 32));
             currAnimation = &walkingDown;
             break;
         }
         case Right: {
-//            currAnimation = &walkingRight;
-            Animation walkingRight;
+            currAnimation = &walkingRight;
             break;
         }
         case Left: {
-//            currAnimation = &walkingLeft;
-            Animation walkingLeft;
+            currAnimation = &walkingLeft;
             break;
         }
     }
@@ -254,7 +244,7 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
 //        prevX = animatedSprite.getPosition().x;
 //        prevY = animatedSprite.getPosition().y;
         animatedSprite.move(moving);
-            
+
         if (noKeyPressed) {
             animatedSprite.stop();
         }
