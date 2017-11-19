@@ -42,7 +42,7 @@ void PlayerView::init(){
     walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
     walkingDown.addFrame(sf::IntRect(0, 64, 32, 32));
     walkingDown.addFrame(sf::IntRect(0, 96, 32, 32));
-
+    
     walkingLeft.setSpriteSheet(m_charTexture);
     walkingLeft.addFrame(sf::IntRect(32, 0, 32, 32));
     walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
@@ -204,9 +204,9 @@ void PlayerView::update(float &deltaTime){
 /* Adds listeners to eventManager */
 void PlayerView::setListener() {
     // Create function for listener. Add to event manager.
-    std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
-    const EventListener listener = EventListener(move, EventType::moveEvent);
-    m_game->registerListener(listener, EventType::moveEvent);
+//    std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
+//    const EventListener listener = EventListener(move, EventType::moveEvent);
+//    m_game->registerListener(listener, EventType::moveEvent);
 
     // DoorEvent
     std::function<void(const EventInterface &event)> door = std::bind(&PlayerView::useDoor, this, std::placeholders::_1);
@@ -218,6 +218,50 @@ void PlayerView::setListener() {
     const EventListener loadMapListener = EventListener(loadMap, EventType::loadMapEvent);
     m_game->registerListener(loadMapListener, EventType::loadMapEvent);
 }
+
+
+void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPressed, float deltaTime) {
+    std::cout<<"Drawing animation";
+    Animation *currAnimation;
+    switch (dir) {
+        case Up: {
+//            currAnimation = &walkingUp;
+            Animation walkingUp;
+            break;
+        }
+        case Down: {
+            Animation walkingDown;
+            walkingDown.setSpriteSheet(m_charTexture);
+            walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
+            walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
+            walkingDown.addFrame(sf::IntRect(0, 64, 32, 32));
+            walkingDown.addFrame(sf::IntRect(0, 96, 32, 32));
+            currAnimation = &walkingDown;
+            break;
+        }
+        case Right: {
+//            currAnimation = &walkingRight;
+            Animation walkingRight;
+            break;
+        }
+        case Left: {
+//            currAnimation = &walkingLeft;
+            Animation walkingLeft;
+            break;
+        }
+    }
+        animatedSprite.play(*currAnimation);
+//        prevX = animatedSprite.getPosition().x;
+//        prevY = animatedSprite.getPosition().y;
+        animatedSprite.move(moving);
+            
+        if (noKeyPressed) {
+            animatedSprite.stop();
+        }
+        noKeyPressed = true;
+        animatedSprite.update(sf::seconds(deltaTime));
+}
+
 
 
 /* Used to build a listener for moveEvent */

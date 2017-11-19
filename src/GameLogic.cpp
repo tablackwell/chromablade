@@ -3,6 +3,7 @@
 #include "AttackEvent.hpp"
 #include "SpawnEvent.hpp"
 #include "ChromaBlade.hpp"
+#include "PlayerView.hpp"
 
 #include <tuple>
 #include <iostream>
@@ -38,29 +39,9 @@ void GameLogic::setCharPosition(std::tuple<float, float> position) {
 }
 
 
-/* Used to build a listener for moveEvent */
-void GameLogic::moveChar(const EventInterface& event) {
-    const EventInterface *ptr = &event;
-    const MoveEvent *moveEvent = dynamic_cast<const MoveEvent*>(ptr);
-    Direction dir = moveEvent->getDirection();
-    float deltaTime = moveEvent->getDeltaTime();
-    float x = std::get<0>(m_player.getPosition());
-    float y = std::get<1>(m_player.getPosition());
-    switch (dir){
-    case Up:
-        y = y - SPEED * deltaTime;
-        break;
-    case Down:
-        y = y + SPEED * deltaTime;
-        break;
-    case Left:
-        x = x - SPEED * deltaTime;
-        break;
-    case Right:
-        x = x + SPEED * deltaTime;
-        break;
-    }
-    setCharPosition(std::make_tuple(x, y));
+/* Links game logic to player view */
+void GameLogic::setView(PlayerView* view) {
+    m_view = view;
 }
 
 
@@ -70,10 +51,56 @@ void GameLogic::setListener() {
         const EventListener attackListener = EventListener(attack, EventType::attackEvent);
         m_game->registerListener(attackListener, EventType::attackEvent);
 
-        // SpawnEvent
+    // SpawnEvent
     std::function<void(const EventInterface &event)> spawn = std::bind(&GameLogic::spawn, this, std::placeholders::_1);
     const EventListener spawnListener = EventListener(spawn, EventType::spawnEvent);
     m_game->registerListener(spawnListener, EventType::spawnEvent);
+    
+    // MoveEvent
+    std::function<void(const EventInterface &event)> move = std::bind(&GameLogic::moveChar, this, std::placeholders::_1);
+    const EventListener moveListener = EventListener(move, EventType::moveEvent);
+    m_game->registerListener(moveListener, EventType::moveEvent);
+}
+
+
+/***************************** Event Triggered Functions ******************************/
+
+/* Used to build a listener for moveEvent */
+void GameLogic::moveChar(const EventInterface& event) {
+    const EventInterface *ptr = &event;
+    const MoveEvent *moveEvent = dynamic_cast<const MoveEvent*>(ptr);
+    Direction dir = moveEvent->getDirection();
+    float deltaTime = moveEvent->getDeltaTime();
+    float x = std::get<0>(m_player.getPosition());
+    float y = std::get<1>(m_player.getPosition());
+    bool noKeyPressed = true;
+    sf::Vector2f moving;
+    
+    switch (dir){
+        case Up:
+            y = y - SPEED * deltaTime;
+            
+            moving = sf::Vector2f(0.f, -SPEED * deltaTime);
+            noKeyPressed = false;
+            break;
+        case Down:
+            y = y + SPEED * deltaTime;
+            moving = sf::Vector2f(0.f, SPEED * deltaTime);
+            noKeyPressed = false;
+            break;
+        case Left:
+            x = x - SPEED * deltaTime;
+            moving = sf::Vector2f(-SPEED * deltaTime, 0.f);
+            noKeyPressed = false;
+            break;
+        case Right:
+            x = x + SPEED * deltaTime;
+            moving = sf::Vector2f(SPEED * deltaTime, 0.f);
+            noKeyPressed = false;
+            break;
+    }
+    m_view->drawAnimation(dir, moving, noKeyPressed, deltaTime);
+    setCharPosition(std::make_tuple(x, y));
 }
 
 
