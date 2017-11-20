@@ -75,7 +75,7 @@ void PlayerView::init(){
 
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
-    m_window = window;
+  m_window = window;
   sf::View view = window->getDefaultView();
   window->setView(view);
 }
@@ -84,6 +84,7 @@ void PlayerView::setContext(sf::RenderWindow* window){
 /* Link the game logic with player view */
 void PlayerView::setGameLogic(GameLogic* gameLogic) {
     m_gameLogic = gameLogic;
+    gameLogic->setAnimatedSprite(&animatedSprite);
 }
 
 
@@ -176,12 +177,12 @@ void PlayerView::draw() {
             m_window->draw(m_filter);
             m_window->draw(animatedSprite);
             /* Some nice debug stuff */
-            // sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
-            // debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
-            // debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
-            // m_window->draw(debugRectangle);
-            // m_collisions.drawBoxes(m_window);
-            // m_doors.drawBoxes(m_window);
+            sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
+            debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
+            debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
+            m_window->draw(debugRectangle);
+            m_collisions.drawBoxes(m_window);
+            m_doors.drawBoxes(m_window);
 
             break;
     }
@@ -349,6 +350,8 @@ void PlayerView::clearTileMaps() {
     m_doors.clear();
 }
 
+
+
 /* Triggered by a LoadMapEvent. */
 void PlayerView::loadMap(const EventInterface& event) {
     fprintf(stderr, "loadMap!\n");
@@ -374,6 +377,7 @@ void PlayerView::loadMap(const EventInterface& event) {
                     "../res/level/TestLevel/test_doors.csv",
                     sf::Vector2u(16, 16), 100, 38);
             m_filter.setFillColor(sf::Color(0,0,0,0));
+            m_gameLogic->setCollisionMapping(m_collisions.m_boxes);
         break;
         case GameState::RedLevel:
 
@@ -389,9 +393,12 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
                     "../res/level/DemoDungeon/dungeon_doors.csv",
                     sf::Vector2u(16, 16), 100, 114);
+            m_gameLogic->setCollisionMapping(m_collisions.m_boxes);
         break;
     }
 }
+
+
 
 /* Triggered by a DoorEvent. */
 void PlayerView::useDoor(const EventInterface& event) {

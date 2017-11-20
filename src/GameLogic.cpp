@@ -30,6 +30,10 @@ void GameLogic::setGameApplication(ChromaBlade* game) {
     m_game = game;
 }
 
+void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> inputVector){
+	m_collisionVector = inputVector;
+}
+
 
 /* Sets the position of character */
 void GameLogic::setCharPosition(std::tuple<float, float> position) {
@@ -42,6 +46,10 @@ void GameLogic::setCharPosition(std::tuple<float, float> position) {
 /* Links game logic to player view */
 void GameLogic::setView(PlayerView* view) {
     m_view = view;
+}
+
+void GameLogic::setAnimatedSprite(AnimatedSprite* sprite){
+	m_sprite = sprite;
 }
 
 
@@ -73,6 +81,8 @@ void GameLogic::moveChar(const EventInterface& event) {
     float deltaTime = moveEvent->getDeltaTime();
     float x = std::get<0>(m_player.getPosition());
     float y = std::get<1>(m_player.getPosition());
+		float prevX = x;
+		float prevY = y;
     bool noKeyPressed = true;
     sf::Vector2f moving;
 
@@ -99,8 +109,20 @@ void GameLogic::moveChar(const EventInterface& event) {
             noKeyPressed = false;
             break;
     }
-    m_view->drawAnimation(dir, moving, noKeyPressed, deltaTime);
     setCharPosition(std::make_tuple(x, y));
+    m_view->drawAnimation(dir, moving, noKeyPressed, deltaTime);
+		bool collisionDetected = false;
+		for(int i = 0; i < m_collisionVector.size(); i++){
+			if (m_sprite->getGlobalBounds().intersects(m_collisionVector[i].getGlobalBounds())){
+				std::cout << "COLLISION! \n";
+				collisionDetected = true;
+				break;
+			}
+		}
+		if(collisionDetected){
+			setCharPosition(std::make_tuple(prevX, prevY));
+			m_sprite->setPosition(prevX, prevY);
+		}
 }
 
 

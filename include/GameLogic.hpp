@@ -8,6 +8,7 @@
 #include "MoveEvent.hpp"
 #include "EventManager.hpp"
 #include "EventListener.hpp"
+#include "AnimatedSprite.hpp"
 #include "EventType.hpp"
 #include "Actor.hpp"
 #include <tuple>
@@ -27,10 +28,12 @@ public:
     Level getLevel();
     void setCharPosition(std::tuple<float, float> position);
     void setGameApplication(ChromaBlade* game);
+    void setAnimatedSprite(AnimatedSprite* sprite);
     void setView(PlayerView* view);
     void setListener();
     std::vector<Actor*> getRocks();
     void clearRocks();
+    void setCollisionMapping(std::vector<sf::RectangleShape>);
 
 private:
     void moveChar(const EventInterface& event);
@@ -39,7 +42,9 @@ private:
 
 private:
     Level m_level;
+    std::vector<sf::RectangleShape> m_collisionVector;
     Player m_player;
+    AnimatedSprite* m_sprite;
     ChromaBlade* m_game;
     PlayerView* m_view;
     std::vector<Actor*> m_rocks;
