@@ -28,6 +28,8 @@ public:
     void setState(GameState state);
     void registerListener(EventListener listener, EventType eventType);
     void queueEvent(EventInterface *event);
+    bool inDebugMode();
+    void setDebug();
 
 private: // functions
     void handleInput(float);
@@ -47,6 +49,7 @@ private: // vars and objs
     ProcessManager m_processManager;
     Audio m_audio;
     GameState m_state;
+    bool inDebug = false;
 };
 
 #endif

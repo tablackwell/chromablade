@@ -38,6 +38,13 @@ void ChromaBlade::init(){
     m_processManager.attachProcess(&m_audio);
 }
 
+bool ChromaBlade::inDebugMode(){
+  return inDebug;
+}
+
+void ChromaBlade::setDebug(){
+  inDebug = true;
+}
 
 /* Main game loop */
 void ChromaBlade::run(){
