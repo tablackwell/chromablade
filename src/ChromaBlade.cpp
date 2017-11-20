@@ -13,6 +13,7 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 
     m_gameLogic.setGameApplication(this);
     m_view.setGameLogic(&m_gameLogic);
+    m_gameLogic.setView(&m_view);
     m_view.setContext(&m_window);
     m_view.setGameApplication(this);
     m_eventManager.setWindow(&m_window);
@@ -37,6 +38,13 @@ void ChromaBlade::init(){
     m_processManager.attachProcess(&m_audio);
 }
 
+bool ChromaBlade::inDebugMode(){
+  return inDebug;
+}
+
+void ChromaBlade::setDebug(){
+  inDebug = true;
+}
 
 /* Main game loop */
 void ChromaBlade::run(){

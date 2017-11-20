@@ -75,7 +75,7 @@ void PlayerView::init(){
 
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
-    m_window = window;
+  m_window = window;
   sf::View view = window->getDefaultView();
   window->setView(view);
 }
@@ -84,6 +84,7 @@ void PlayerView::setContext(sf::RenderWindow* window){
 /* Link the game logic with player view */
 void PlayerView::setGameLogic(GameLogic* gameLogic) {
     m_gameLogic = gameLogic;
+    gameLogic->setAnimatedSprite(&animatedSprite);
 }
 
 
@@ -149,10 +150,23 @@ void PlayerView::handleInput(float deltaTime) {
           break;
     }
 }
-
+// Camera Functions //
 void PlayerView::updateCamera(int newX, int newY){
-  m_camera.setCenter(newX, newY);
+  m_camera.setCenter(m_camera.getCenter().x + newX, m_camera.getCenter().y + newY);
   m_window->setView(m_camera);
+}
+
+void PlayerView::resetCamera(){
+  m_camera.setCenter(0,0);
+  m_window->setView(m_camera);
+}
+
+sf::Vector2f PlayerView::getCameraCenter(){
+  return m_camera.getCenter();
+}
+
+sf::Vector2f PlayerView::getCameraSize(){
+  return m_camera.getSize();
 }
 
 
@@ -175,14 +189,16 @@ void PlayerView::draw() {
             m_window->draw(m_overlay);
             m_window->draw(m_filter);
             m_window->draw(animatedSprite);
-            /* Some nice debug stuff */
-            // sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
-            // debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
-            // debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
-            // m_window->draw(debugRectangle);
-            // m_collisions.drawBoxes(m_window);
-            // m_doors.drawBoxes(m_window);
 
+            /* Debug stuff */
+            if(m_game->inDebugMode()){
+              sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
+              debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
+              debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
+              m_window->draw(debugRectangle);
+              m_collisions.drawBoxes(m_window);
+              m_doors.drawBoxes(m_window);
+            }
             break;
     }
     m_window->display();
@@ -203,21 +219,43 @@ void PlayerView::update(float &deltaTime){
 
 /* Adds listeners to eventManager */
 void PlayerView::setListener() {
-    // Create function for listener. Add to event manager.
-    std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
-    const EventListener listener = EventListener(move, EventType::moveEvent);
-    m_game->registerListener(listener, EventType::moveEvent);
-
-    // DoorEvent
-    std::function<void(const EventInterface &event)> door = std::bind(&PlayerView::useDoor, this, std::placeholders::_1);
-    const EventListener doorListener = EventListener(door, EventType::doorEvent);
-    m_game->registerListener(doorListener, EventType::doorEvent);
-
     // LoadMapEvent
     std::function<void(const EventInterface &event)> loadMap = std::bind(&PlayerView::loadMap, this, std::placeholders::_1);
     const EventListener loadMapListener = EventListener(loadMap, EventType::loadMapEvent);
     m_game->registerListener(loadMapListener, EventType::loadMapEvent);
 }
+
+
+void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPressed, float deltaTime) {
+    Animation *currAnimation;
+    switch (dir) {
+        case Up: {
+            currAnimation = &walkingUp;
+            break;
+        }
+        case Down: {
+            currAnimation = &walkingDown;
+            break;
+        }
+        case Right: {
+            currAnimation = &walkingRight;
+            break;
+        }
+        case Left: {
+            currAnimation = &walkingLeft;
+            break;
+        }
+    }
+        animatedSprite.play(*currAnimation);
+        animatedSprite.move(moving);
+
+        if (noKeyPressed) {
+            animatedSprite.stop();
+        }
+        noKeyPressed = true;
+        animatedSprite.update(sf::seconds(deltaTime));
+}
+
 
 
 /* Used to build a listener for moveEvent */
@@ -230,81 +268,34 @@ void PlayerView::moveChar(const EventInterface& event) {
     sf::Vector2f moving;
     switch (dir){
     case Up:
-//        m_character.move(0.f, -m_speed * deltaTime);
         currAnimation = &walkingUp;
         moving = sf::Vector2f(0.f, -m_speed * deltaTime);
         noKeyPressed = false;
         break;
     case Down:
-//        m_character.move(0.f, m_speed * deltaTime);
         currAnimation = &walkingDown;
         moving = sf::Vector2f(0.f, m_speed * deltaTime);
         noKeyPressed = false;
         break;
     case Left:
-//        m_character.move(-m_speed * deltaTime, 0.f);
         currAnimation = &walkingLeft;
         moving = sf::Vector2f(-m_speed * deltaTime, 0.f);
         noKeyPressed = false;
         break;
     case Right:
-//        m_character.move(m_speed * deltaTime, 0.f);
         currAnimation = &walkingRight;
         moving = sf::Vector2f(m_speed * deltaTime, 0.f);
         noKeyPressed = false;
         break;
     }
     animatedSprite.play(*currAnimation);
-    prevX = animatedSprite.getPosition().x;
-    prevY = animatedSprite.getPosition().y;
     animatedSprite.move(moving);
 
     if (noKeyPressed) {
         animatedSprite.stop();
     }
     noKeyPressed = true;
-    bool collisionDetected = false;
-    for(int i = 0; i < m_collisions.m_boxes.size(); i++){
-      if (animatedSprite.getGlobalBounds().intersects(m_collisions.m_boxes[i].getGlobalBounds())){
-        //std::cout << "COLLISION! \n";
-        collisionDetected = true;
-        break;
-      }
-    }
-
-    /* Check collision against rocks. */
-    std::vector<Actor*> m_rocks = m_gameLogic->getRocks();
-    for (int i=0; i<m_rocks.size(); i++) {
-      if (animatedSprite.getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
-        collisionDetected = true;
-        break;
-      }
-    }
-    if(collisionDetected){
-      animatedSprite.setPosition(prevX, prevY);
-      m_gameLogic->setCharPosition(std::make_tuple(prevX, prevY));
-    }
-    bool doorDetected = false;
-    for(int i = 0; i < m_doors.m_boxes.size(); i++){
-      if (animatedSprite.getGlobalBounds().intersects(m_doors.m_boxes[i].getGlobalBounds())){
-        doorDetected = true;
-        break;
-      }
-    }
-    if (doorDetected && !m_onDoor) {
-        std::cout << "onDoor\n";
-        m_onDoor = true;
-
-        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
-        m_game->queueEvent(doorEvent);
-    } else if (!doorDetected && m_onDoor) {
-        std::cout << "not onDoor\n";
-        m_onDoor = false;
-    }
-    boundaryBox = animatedSprite.getGlobalBounds();
     animatedSprite.update((sf::seconds(deltaTime)));
-    //std::cout << animatedSprite.getPosition().x << "\n";
-    //std::cout << animatedSprite.getPosition().y << "\n";
 }
 
 void PlayerView::clearTileMaps() {
@@ -314,6 +305,8 @@ void PlayerView::clearTileMaps() {
     m_collisions.clear();
     m_doors.clear();
 }
+
+
 
 /* Triggered by a LoadMapEvent. */
 void PlayerView::loadMap(const EventInterface& event) {
@@ -340,11 +333,12 @@ void PlayerView::loadMap(const EventInterface& event) {
                     "../res/level/TestLevel/test_doors.csv",
                     sf::Vector2u(16, 16), 100, 38);
             m_filter.setFillColor(sf::Color(0,0,0,0));
+            m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
         break;
         case GameState::RedLevel:
 
             fprintf(stderr, "loading RedLevel!\n");
-            levelToggled = true;
+            m_gameLogic->toggleLevel();
             m_map.loadFromText("../res/tilesets/dungeon.png",
                     "../res/level/DemoDungeon/dungeon_base.csv",
                     sf::Vector2u(16, 16), 100, 114);
@@ -355,58 +349,7 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
                     "../res/level/DemoDungeon/dungeon_doors.csv",
                     sf::Vector2u(16, 16), 100, 114);
+            m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
         break;
     }
-}
-
-/* Triggered by a DoorEvent. */
-void PlayerView::useDoor(const EventInterface& event) {
-    fprintf(stderr, "useDoor!\n");
-
-    const EventInterface *ptr = &event;
-    const DoorEvent *doorEvent = dynamic_cast<const DoorEvent*>(ptr);
-    GameState curState = m_game->getState();
-    const GameState newState = doorEvent->getGameState();
-    const int room = doorEvent->getRoom();
-    const Direction dir = doorEvent->getDirection();
-    if (newState != curState) {
-        fprintf(stderr, "door leads to %d\n", newState);
-        ChangeStateEvent* change = new ChangeStateEvent(newState);
-        LoadMapEvent* loadMapEvent = new LoadMapEvent(newState);
-        m_game->queueEvent(change);
-        m_game->queueEvent(loadMapEvent);
-        updateCamera(400,1520);
-        animatedSprite.setPosition(32,1520);
-    }
-
-    if(levelToggled){
-    if (dir == Direction::Left) {
-        animatedSprite.setPosition(prevX - 100, prevY);
-        updateCamera(m_camera.getCenter().x - 800, m_camera.getCenter().y);
-    }
-    else if (dir == Direction::Right){
-        animatedSprite.setPosition(prevX + 100, prevY);
-        updateCamera(m_camera.getCenter().x + 800, m_camera.getCenter().y);
-    }
-    else if (dir == Direction::Up){
-        animatedSprite.setPosition(prevX, prevY - 100);
-        updateCamera(m_camera.getCenter().x, m_camera.getCenter().y - 608);
-
-    }
-    else if (dir == Direction::Down){
-      animatedSprite.setPosition(prevX, prevY + 100);
-      updateCamera(m_camera.getCenter().x, m_camera.getCenter().y + 608);
-    }
-    }
-
-    if (room > 0) {
-        if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room)
-                == m_clearedRooms.end()) {
-            sf::Vector2f center = m_camera.getCenter();
-            sf::Vector2f size = m_camera.getSize();
-            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 4, size, center);
-            m_game->queueEvent(spawnEvent);
-        }
-    }
-
 }
