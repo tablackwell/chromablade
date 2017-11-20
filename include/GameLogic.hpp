@@ -34,12 +34,15 @@ public:
     std::vector<Actor*> getRocks();
     void clearRocks();
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
+    void toggleLevel();
 
 private:
     void moveChar(const EventInterface& event);
     void attack(const EventInterface& event);
     void spawn(const EventInterface& event);
+    void useDoor(const EventInterface& event);
     bool m_onDoor;
+    bool levelToggled = false;
 
 private:
     Level m_level;

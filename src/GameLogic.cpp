@@ -1,5 +1,6 @@
 #include "GameLogic.hpp"
 #include "MoveEvent.hpp"
+#include "LoadMapEvent.hpp"
 #include "DoorEvent.hpp"
 #include "AttackEvent.hpp"
 #include "SpawnEvent.hpp"
@@ -24,7 +25,6 @@ void GameLogic::update(float &deltaTime){
 GameLogic::Level GameLogic::getLevel(){
 	return m_level;
 }
-
 
 /* Links game logic to game application */
 void GameLogic::setGameApplication(ChromaBlade* game) {
@@ -54,6 +54,10 @@ void GameLogic::setAnimatedSprite(AnimatedSprite* sprite){
 	m_sprite = sprite;
 }
 
+void GameLogic::toggleLevel(){
+	levelToggled = true;
+}
+
 
 /* Adds listeners to eventManager */
 void GameLogic::setListener() {
@@ -70,6 +74,12 @@ void GameLogic::setListener() {
     std::function<void(const EventInterface &event)> move = std::bind(&GameLogic::moveChar, this, std::placeholders::_1);
     const EventListener moveListener = EventListener(move, EventType::moveEvent);
     m_game->registerListener(moveListener, EventType::moveEvent);
+
+		// DoorEvent
+    std::function<void(const EventInterface &event)> door = std::bind(&GameLogic::useDoor, this, std::placeholders::_1);
+    const EventListener doorListener = EventListener(door, EventType::doorEvent);
+    m_game->registerListener(doorListener, EventType::doorEvent);
+
 }
 
 
@@ -153,6 +163,61 @@ void GameLogic::moveChar(const EventInterface& event) {
 		y = std::get<1>(m_player.getPosition());
 		std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";
 		std::cout << x << "," << y << "\n";
+}
+
+/* Triggered by a DoorEvent. */
+void GameLogic::useDoor(const EventInterface& event) {
+    fprintf(stderr, "useDoor!\n");
+
+    const EventInterface *ptr = &event;
+    const DoorEvent *doorEvent = dynamic_cast<const DoorEvent*>(ptr);
+    GameState curState = m_game->getState();
+    const GameState newState = doorEvent->getGameState();
+    const int room = doorEvent->getRoom();
+    const Direction dir = doorEvent->getDirection();
+    if (newState != curState) {
+        fprintf(stderr, "door leads to %d\n", newState);
+        ChangeStateEvent* change = new ChangeStateEvent(newState);
+        LoadMapEvent* loadMapEvent = new LoadMapEvent(newState);
+        m_game->queueEvent(change);
+        m_game->queueEvent(loadMapEvent);
+				m_view->resetCamera();
+        m_view->updateCamera(400,1520);
+        m_sprite->setPosition(32,1520);
+        setCharPosition(std::make_tuple(32,1520));
+    }
+
+    if(levelToggled){
+    if (dir == Direction::Left) {
+        m_sprite->setPosition(m_sprite->getPosition().x - 100, m_sprite->getPosition().y);
+        m_view->updateCamera(-800,0);
+    }
+    else if (dir == Direction::Right){
+        m_sprite->setPosition(m_sprite->getPosition().x + 100, m_sprite->getPosition().y);
+        m_view->updateCamera(800,0);
+    }
+    else if (dir == Direction::Up){
+        m_sprite->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y - 100);
+        m_view->updateCamera(0, -608);
+
+    }
+    else if (dir == Direction::Down){
+      m_sprite->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y + 100);
+      m_view->updateCamera(0,608);
+    }
+    setCharPosition(std::make_tuple(m_sprite->getPosition().x, m_sprite->getPosition().y));
+    }
+
+    // if (room > 0) {
+    //     if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room)
+    //             == m_clearedRooms.end()) {
+    //         sf::Vector2f center = m_camera.getCenter();
+    //         sf::Vector2f size = m_camera.getSize();
+    //         SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 4, size, center);
+    //         m_game->queueEvent(spawnEvent);
+    //     }
+    // }
+
 }
 
 

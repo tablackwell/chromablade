@@ -34,6 +34,7 @@ public:
     void moveChar(const EventInterface& event);
     void useDoor(const EventInterface& event);
     void updateCamera(int newX, int newY);
+    void resetCamera();
     void loadMap(const EventInterface& event);
     void drawAnimation(Direction dir, sf::Vector2f moving, bool noKeyPressed, float deltaTime);
 
