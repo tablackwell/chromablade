@@ -219,16 +219,6 @@ void PlayerView::update(float &deltaTime){
 
 /* Adds listeners to eventManager */
 void PlayerView::setListener() {
-    // Create function for listener. Add to event manager.
-//    std::function<void(const EventInterface &event)> move = std::bind(&PlayerView::moveChar, this, std::placeholders::_1);
-//    const EventListener listener = EventListener(move, EventType::moveEvent);
-//    m_game->registerListener(listener, EventType::moveEvent);
-
-    // DoorEvent
-    // std::function<void(const EventInterface &event)> door = std::bind(&PlayerView::useDoor, this, std::placeholders::_1);
-    // const EventListener doorListener = EventListener(door, EventType::doorEvent);
-    // m_game->registerListener(doorListener, EventType::doorEvent);
-
     // LoadMapEvent
     std::function<void(const EventInterface &event)> loadMap = std::bind(&PlayerView::loadMap, this, std::placeholders::_1);
     const EventListener loadMapListener = EventListener(loadMap, EventType::loadMapEvent);
@@ -278,25 +268,21 @@ void PlayerView::moveChar(const EventInterface& event) {
     sf::Vector2f moving;
     switch (dir){
     case Up:
-//        m_character.move(0.f, -m_speed * deltaTime);
         currAnimation = &walkingUp;
         moving = sf::Vector2f(0.f, -m_speed * deltaTime);
         noKeyPressed = false;
         break;
     case Down:
-//        m_character.move(0.f, m_speed * deltaTime);
         currAnimation = &walkingDown;
         moving = sf::Vector2f(0.f, m_speed * deltaTime);
         noKeyPressed = false;
         break;
     case Left:
-//        m_character.move(-m_speed * deltaTime, 0.f);
         currAnimation = &walkingLeft;
         moving = sf::Vector2f(-m_speed * deltaTime, 0.f);
         noKeyPressed = false;
         break;
     case Right:
-//        m_character.move(m_speed * deltaTime, 0.f);
         currAnimation = &walkingRight;
         moving = sf::Vector2f(m_speed * deltaTime, 0.f);
         noKeyPressed = false;
@@ -310,8 +296,6 @@ void PlayerView::moveChar(const EventInterface& event) {
     }
     noKeyPressed = true;
     animatedSprite.update((sf::seconds(deltaTime)));
-    //std::cout << animatedSprite.getPosition().x << "\n";
-    //std::cout << animatedSprite.getPosition().y << "\n";
 }
 
 void PlayerView::clearTileMaps() {
