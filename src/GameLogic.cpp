@@ -1,5 +1,6 @@
 #include "GameLogic.hpp"
 #include "MoveEvent.hpp"
+#include "DoorEvent.hpp"
 #include "AttackEvent.hpp"
 #include "SpawnEvent.hpp"
 #include "ChromaBlade.hpp"
@@ -30,8 +31,9 @@ void GameLogic::setGameApplication(ChromaBlade* game) {
     m_game = game;
 }
 
-void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> inputVector){
-	m_collisionVector = inputVector;
+void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> collVector, std::vector<sf::RectangleShape> doorVector){
+	m_collisionVector = collVector;
+	m_doors = doorVector;
 }
 
 
@@ -81,8 +83,8 @@ void GameLogic::moveChar(const EventInterface& event) {
     float deltaTime = moveEvent->getDeltaTime();
     float x = std::get<0>(m_player.getPosition());
     float y = std::get<1>(m_player.getPosition());
-		float prevX = x;
-		float prevY = y;
+		float prevX = std::get<0>(m_player.getPosition());
+		float prevY = std::get<1>(m_player.getPosition());
     bool noKeyPressed = true;
     sf::Vector2f moving;
 
@@ -119,10 +121,38 @@ void GameLogic::moveChar(const EventInterface& event) {
 				break;
 			}
 		}
+		for (int i=0; i<m_rocks.size(); i++) {
+			if (m_sprite->getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
+				collisionDetected = true;
+				break;
+			}
+		}
 		if(collisionDetected){
 			setCharPosition(std::make_tuple(prevX, prevY));
 			m_sprite->setPosition(prevX, prevY);
 		}
+		bool doorDetected = false;
+		for(int i = 0; i < m_doors.size(); i++){
+			if (m_sprite->getGlobalBounds().intersects(m_doors[i].getGlobalBounds())){
+				doorDetected = true;
+				break;
+			}
+		}
+		if (doorDetected && !m_onDoor) {
+				std::cout << "onDoor\n";
+				m_onDoor = true;
+
+				DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
+				m_game->queueEvent(doorEvent);
+		} else if (!doorDetected && m_onDoor) {
+				std::cout << "not onDoor\n";
+				m_onDoor = false;
+		}
+		std::cout <<"Player Position (sprite then logic): \n " ;
+		x = std::get<0>(m_player.getPosition());
+		y = std::get<1>(m_player.getPosition());
+		std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";
+		std::cout << x << "," << y << "\n";
 }
 
 

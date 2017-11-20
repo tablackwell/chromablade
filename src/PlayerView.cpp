@@ -183,7 +183,6 @@ void PlayerView::draw() {
             m_window->draw(debugRectangle);
             m_collisions.drawBoxes(m_window);
             m_doors.drawBoxes(m_window);
-
             break;
     }
     m_window->display();
@@ -290,53 +289,12 @@ void PlayerView::moveChar(const EventInterface& event) {
         break;
     }
     animatedSprite.play(*currAnimation);
-    prevX = animatedSprite.getPosition().x;
-    prevY = animatedSprite.getPosition().y;
     animatedSprite.move(moving);
 
     if (noKeyPressed) {
         animatedSprite.stop();
     }
     noKeyPressed = true;
-    bool collisionDetected = false;
-    for(int i = 0; i < m_collisions.m_boxes.size(); i++){
-      if (animatedSprite.getGlobalBounds().intersects(m_collisions.m_boxes[i].getGlobalBounds())){
-        //std::cout << "COLLISION! \n";
-        collisionDetected = true;
-        break;
-      }
-    }
-
-    /* Check collision against rocks. */
-    std::vector<Actor*> m_rocks = m_gameLogic->getRocks();
-    for (int i=0; i<m_rocks.size(); i++) {
-      if (animatedSprite.getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
-        collisionDetected = true;
-        break;
-      }
-    }
-    if(collisionDetected){
-      animatedSprite.setPosition(prevX, prevY);
-      m_gameLogic->setCharPosition(std::make_tuple(prevX, prevY));
-    }
-    bool doorDetected = false;
-    for(int i = 0; i < m_doors.m_boxes.size(); i++){
-      if (animatedSprite.getGlobalBounds().intersects(m_doors.m_boxes[i].getGlobalBounds())){
-        doorDetected = true;
-        break;
-      }
-    }
-    if (doorDetected && !m_onDoor) {
-        std::cout << "onDoor\n";
-        m_onDoor = true;
-
-        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
-        m_game->queueEvent(doorEvent);
-    } else if (!doorDetected && m_onDoor) {
-        std::cout << "not onDoor\n";
-        m_onDoor = false;
-    }
-    boundaryBox = animatedSprite.getGlobalBounds();
     animatedSprite.update((sf::seconds(deltaTime)));
     //std::cout << animatedSprite.getPosition().x << "\n";
     //std::cout << animatedSprite.getPosition().y << "\n";
@@ -377,7 +335,7 @@ void PlayerView::loadMap(const EventInterface& event) {
                     "../res/level/TestLevel/test_doors.csv",
                     sf::Vector2u(16, 16), 100, 38);
             m_filter.setFillColor(sf::Color(0,0,0,0));
-            m_gameLogic->setCollisionMapping(m_collisions.m_boxes);
+            m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
         break;
         case GameState::RedLevel:
 
@@ -393,7 +351,7 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
                     "../res/level/DemoDungeon/dungeon_doors.csv",
                     sf::Vector2u(16, 16), 100, 114);
-            m_gameLogic->setCollisionMapping(m_collisions.m_boxes);
+            m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
         break;
     }
 }
@@ -418,26 +376,28 @@ void PlayerView::useDoor(const EventInterface& event) {
         m_game->queueEvent(loadMapEvent);
         updateCamera(400,1520);
         animatedSprite.setPosition(32,1520);
+        m_gameLogic->setCharPosition(std::make_tuple(32,1520));
     }
 
     if(levelToggled){
     if (dir == Direction::Left) {
-        animatedSprite.setPosition(prevX - 100, prevY);
+        animatedSprite.setPosition(animatedSprite.getPosition().x - 100, animatedSprite.getPosition().y);
         updateCamera(m_camera.getCenter().x - 800, m_camera.getCenter().y);
     }
     else if (dir == Direction::Right){
-        animatedSprite.setPosition(prevX + 100, prevY);
+        animatedSprite.setPosition(animatedSprite.getPosition().x + 100, animatedSprite.getPosition().y);
         updateCamera(m_camera.getCenter().x + 800, m_camera.getCenter().y);
     }
     else if (dir == Direction::Up){
-        animatedSprite.setPosition(prevX, prevY - 100);
+        animatedSprite.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y - 100);
         updateCamera(m_camera.getCenter().x, m_camera.getCenter().y - 608);
 
     }
     else if (dir == Direction::Down){
-      animatedSprite.setPosition(prevX, prevY + 100);
+      animatedSprite.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y + 100);
       updateCamera(m_camera.getCenter().x, m_camera.getCenter().y + 608);
     }
+    m_gameLogic->setCharPosition(std::make_tuple(animatedSprite.getPosition().x, animatedSprite.getPosition().y));
     }
 
     if (room > 0) {
