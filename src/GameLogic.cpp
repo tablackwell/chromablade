@@ -158,11 +158,13 @@ void GameLogic::moveChar(const EventInterface& event) {
 				std::cout << "not onDoor\n";
 				m_onDoor = false;
 		}
-		std::cout <<"Player Position (sprite then logic): \n " ;
-		x = std::get<0>(m_player.getPosition());
-		y = std::get<1>(m_player.getPosition());
-		std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";
-		std::cout << x << "," << y << "\n";
+		if(m_game->inDebugMode()){
+			std::cout <<"Player Position (sprite then logic): \n " ;
+			x = std::get<0>(m_player.getPosition());
+			y = std::get<1>(m_player.getPosition());
+			std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";
+			std::cout << x << "," << y << "\n";
+		}
 }
 
 /* Triggered by a DoorEvent. */
@@ -183,8 +185,8 @@ void GameLogic::useDoor(const EventInterface& event) {
         m_game->queueEvent(loadMapEvent);
 				m_view->resetCamera();
         m_view->updateCamera(400,1520);
-        m_sprite->setPosition(32,1520);
-        setCharPosition(std::make_tuple(32,1520));
+        m_sprite->setPosition(60,1520);
+        setCharPosition(std::make_tuple(60,1520));
     }
 
     if(levelToggled){
