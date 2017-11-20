@@ -53,6 +53,7 @@ private:
     ChromaBlade* m_game;
     PlayerView* m_view;
     std::vector<Actor*> m_rocks;
+    std::vector<int> m_clearedRooms;
 };
 
 #endif

@@ -33,11 +33,14 @@ public:
     void setListener();
     void moveChar(const EventInterface& event);
     void useDoor(const EventInterface& event);
-    void updateCamera(int newX, int newY);
-    void resetCamera();
     void loadMap(const EventInterface& event);
     void drawAnimation(Direction dir, sf::Vector2f moving, bool noKeyPressed, float deltaTime);
 
+    //Camera
+    void updateCamera(int newX, int newY);
+    void resetCamera();
+    sf::Vector2f getCameraCenter();
+    sf::Vector2f getCameraSize();
 private: //vars and objs
     EventManager *m_eventManager;
     Animation *currAnimation;
@@ -71,8 +74,6 @@ private: //vars and objs
     Title m_title;
     sf::Sound m_sound;
     sf::SoundBuffer m_buffer;
-
-    std::vector<int> m_clearedRooms;
 };
 
 #endif

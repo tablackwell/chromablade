@@ -150,7 +150,7 @@ void PlayerView::handleInput(float deltaTime) {
           break;
     }
 }
-
+// Camera Functions //
 void PlayerView::updateCamera(int newX, int newY){
   m_camera.setCenter(m_camera.getCenter().x + newX, m_camera.getCenter().y + newY);
   m_window->setView(m_camera);
@@ -159,6 +159,14 @@ void PlayerView::updateCamera(int newX, int newY){
 void PlayerView::resetCamera(){
   m_camera.setCenter(0,0);
   m_window->setView(m_camera);
+}
+
+sf::Vector2f PlayerView::getCameraCenter(){
+  return m_camera.getCenter();
+}
+
+sf::Vector2f PlayerView::getCameraSize(){
+  return m_camera.getSize();
 }
 
 

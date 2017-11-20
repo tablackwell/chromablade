@@ -208,15 +208,15 @@ void GameLogic::useDoor(const EventInterface& event) {
     setCharPosition(std::make_tuple(m_sprite->getPosition().x, m_sprite->getPosition().y));
     }
 
-    // if (room > 0) {
-    //     if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room)
-    //             == m_clearedRooms.end()) {
-    //         sf::Vector2f center = m_camera.getCenter();
-    //         sf::Vector2f size = m_camera.getSize();
-    //         SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 4, size, center);
-    //         m_game->queueEvent(spawnEvent);
-    //     }
-    // }
+    if (room > 0) {
+        if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room)
+                == m_clearedRooms.end()) {
+            sf::Vector2f center = m_view->getCameraCenter();
+            sf::Vector2f size = m_view->getCameraSize();
+            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 4, size, center);
+            m_game->queueEvent(spawnEvent);
+        }
+    }
 
 }
 
