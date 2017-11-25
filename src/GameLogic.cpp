@@ -215,7 +215,7 @@ void GameLogic::useDoor(const EventInterface& event) {
                 == m_clearedRooms.end()) {
             sf::Vector2f center = m_view->getCameraCenter();
             sf::Vector2f size = m_view->getCameraSize();
-            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 4, size, center);
+            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 1, size, center);
             m_game->queueEvent(spawnEvent);
         }
     }
@@ -266,8 +266,8 @@ void GameLogic::spawn(const EventInterface& event) {
         x = rand() % (blockSizeX-144) + i*blockSizeX + minX;
         y = rand() % (blockSizeY-144) + j*blockSizeY + minY;
         printf("%d %d %d %d %d\n", r, i, j, x, y);
-        Actor *rock = new Actor(Actor::Rock, sf::Vector2f(32,32), sf::Vector2f(x,y));
-        m_rocks.push_back(rock);
+        Actor *actor = new Actor(actorType, sf::Vector2f(32,32), sf::Vector2f(x,y));
+        m_rocks.push_back(actor);
 
         n++;
     }
