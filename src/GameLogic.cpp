@@ -91,6 +91,7 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     }
     for (int i=0; i<m_rocks.size(); i++) {
         if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
+            std::cout << "ROCK COLLISION! \n";
             return true;
         }
     }
@@ -226,7 +227,7 @@ void GameLogic::useDoor(const EventInterface& event) {
                 == m_clearedRooms.end()) {
             sf::Vector2f center = m_view->getCameraCenter();
             sf::Vector2f size = m_view->getCameraSize();
-            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 1, size, center);
+            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnEvent);
         }
     }
@@ -254,33 +255,28 @@ void GameLogic::spawn(const EventInterface& event) {
     const sf::Vector2f size = spawnEvent->getSize();
     const sf::Vector2f center = spawnEvent->getCenter();
 
-    int x,y,r,i,j;
-    int minX = center.x - size.x / 2 + 48;
-    int minY = center.y - size.y / 2 + 48;
 
-    int numBlocks = 3;
-    int blockSizeX = size.x / numBlocks;
-    int blockSizeY = size.y / numBlocks;
+    int l = center.x - size.x / 2;
+    int t = center.y - size.y / 2;
 
-    int hash[9] = {0};
+    sf::FloatRect tile;
+    int rx, ry, x, y;
 
-    int n=0;
-    while (n < count) {
+    for (int i=0; i<count; i++) {
         do {
-            r = rand() % 9;
-        } while (r == 3 || hash[r]);
+            rx = rand() % (WIDTH  / TILE_DIM);
+            ry = rand() % (HEIGHT / TILE_DIM);
 
-        hash[r]++;
-        i = r % 3;
-        j = r / 3;
+            x = rx * TILE_DIM + l;
+            y = ry * TILE_DIM + t;
 
-        x = rand() % (blockSizeX-144) + i*blockSizeX + minX;
-        y = rand() % (blockSizeY-144) + j*blockSizeY + minY;
-        printf("%d %d %d %d %d\n", r, i, j, x, y);
-        Actor *actor = new Actor(actorType, sf::Vector2f(32,32), sf::Vector2f(x,y));
+            tile.left = x; tile.top = y;
+            tile.width = tile.height = TILE_DIM;
+        } while (checkCollisions(tile) && checkDoors(tile));
+
+        Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM), 
+                                            sf::Vector2f(x,y));
         m_rocks.push_back(actor);
-
-        n++;
     }
 }
 
