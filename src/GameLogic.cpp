@@ -82,24 +82,24 @@ void GameLogic::setListener() {
 
 }
 
-bool GameLogic::checkCollisions() {
+bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     for(int i = 0; i < m_collisionVector.size(); i++){
-        if (m_sprite->getGlobalBounds().intersects(m_collisionVector[i].getGlobalBounds())){
+        if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
             std::cout << "COLLISION! \n";
             return true;
         }
     }
     for (int i=0; i<m_rocks.size(); i++) {
-        if (m_sprite->getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
+        if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
             return true;
         }
     }
     return false;
 }
 
-bool GameLogic::checkDoors() {
+bool GameLogic::checkDoors(const sf::FloatRect& fr) {
     for(int i = 0; i < m_doors.size(); i++){
-        if (m_sprite->getGlobalBounds().intersects(m_doors[i].getGlobalBounds())){
+        if (fr.intersects(m_doors[i].getGlobalBounds())){
             return true;
         }
     }
@@ -148,13 +148,13 @@ void GameLogic::moveChar(const EventInterface& event) {
     m_view->drawAnimation(dir, moving, noKeyPressed, deltaTime);
 
     /* Check collisions. */
-    if(checkCollisions()){
+    if(checkCollisions(m_sprite->getGlobalBounds())){
         setCharPosition(std::make_tuple(prevX, prevY));
         m_sprite->setPosition(prevX, prevY);
     }
 
     /* Check doors. */
-    bool doorDetected = checkDoors();
+    bool doorDetected = checkDoors(m_sprite->getGlobalBounds());
     if (doorDetected && !m_onDoor) {
         std::cout << "onDoor\n";
         m_onDoor = true;

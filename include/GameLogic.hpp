@@ -37,8 +37,8 @@ public:
     void toggleLevel();
 
 private:
-    bool checkCollisions();
-    bool checkDoors();
+    bool checkCollisions(const sf::FloatRect& fr);
+    bool checkDoors(const sf::FloatRect& fr);
     void moveChar(const EventInterface& event);
     void attack(const EventInterface& event);
     void spawn(const EventInterface& event);
