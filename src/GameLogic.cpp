@@ -205,12 +205,12 @@ void GameLogic::useDoor(const EventInterface& event) {
     else if (dir == Direction::Right){
         m_sprite->setPosition(m_sprite->getPosition().x + WIDTH/8,
                               m_sprite->getPosition().y);
-        m_view->updateCamera(-WIDTH,0);
+        m_view->updateCamera(WIDTH,0);
     }
     else if (dir == Direction::Up){
         m_sprite->setPosition(m_sprite->getPosition().x,
                               m_sprite->getPosition().y - HEIGHT/8);
-        m_view->updateCamera(0, -HEIGHT);
+        m_view->updateCamera(0,-HEIGHT);
 
     }
     else if (dir == Direction::Down){
