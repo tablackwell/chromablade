@@ -82,6 +82,29 @@ void GameLogic::setListener() {
 
 }
 
+bool GameLogic::checkCollisions() {
+    for(int i = 0; i < m_collisionVector.size(); i++){
+        if (m_sprite->getGlobalBounds().intersects(m_collisionVector[i].getGlobalBounds())){
+            std::cout << "COLLISION! \n";
+            return true;
+        }
+    }
+    for (int i=0; i<m_rocks.size(); i++) {
+        if (m_sprite->getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool GameLogic::checkDoors() {
+    for(int i = 0; i < m_doors.size(); i++){
+        if (m_sprite->getGlobalBounds().intersects(m_doors[i].getGlobalBounds())){
+            return true;
+        }
+    }
+    return false;
+}
 
 /***************************** Event Triggered Functions ******************************/
 
@@ -123,31 +146,15 @@ void GameLogic::moveChar(const EventInterface& event) {
     }
     setCharPosition(std::make_tuple(x, y));
     m_view->drawAnimation(dir, moving, noKeyPressed, deltaTime);
-    bool collisionDetected = false;
-    for(int i = 0; i < m_collisionVector.size(); i++){
-        if (m_sprite->getGlobalBounds().intersects(m_collisionVector[i].getGlobalBounds())){
-            std::cout << "COLLISION! \n";
-            collisionDetected = true;
-            break;
-        }
-    }
-    for (int i=0; i<m_rocks.size(); i++) {
-        if (m_sprite->getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
-            collisionDetected = true;
-            break;
-        }
-    }
-    if(collisionDetected){
+
+    /* Check collisions. */
+    if(checkCollisions()){
         setCharPosition(std::make_tuple(prevX, prevY));
         m_sprite->setPosition(prevX, prevY);
     }
-    bool doorDetected = false;
-    for(int i = 0; i < m_doors.size(); i++){
-        if (m_sprite->getGlobalBounds().intersects(m_doors[i].getGlobalBounds())){
-            doorDetected = true;
-            break;
-        }
-    }
+
+    /* Check doors. */
+    bool doorDetected = checkDoors();
     if (doorDetected && !m_onDoor) {
         std::cout << "onDoor\n";
         m_onDoor = true;
