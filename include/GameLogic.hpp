@@ -37,6 +37,8 @@ public:
     void toggleLevel();
 
 private:
+    bool checkCollisions();
+    bool checkDoors();
     void moveChar(const EventInterface& event);
     void attack(const EventInterface& event);
     void spawn(const EventInterface& event);
