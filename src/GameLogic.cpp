@@ -83,12 +83,15 @@ void GameLogic::setListener() {
 }
 
 bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
+    /* Check intersections with mini collision tiles. */
     for(int i = 0; i < m_collisionVector.size(); i++){
         if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
             std::cout << "COLLISION! \n";
             return true;
         }
     }
+    
+    /* Check intersections with rock tiles. */
     for (int i=0; i<m_rocks.size(); i++) {
         if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
             std::cout << "ROCK COLLISION! \n";
@@ -98,9 +101,16 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     return false;
 }
 
-bool GameLogic::checkDoors(const sf::FloatRect& fr) {
+bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
+    /* Increase bounds if necessary. */
+    fr.top -= TILE_DIM * extra;
+    fr.left -= TILE_DIM * extra;
+    fr.width += TILE_DIM * 2 * extra;
+    fr.height += TILE_DIM * 2 * extra;
+
+    /* Check intersections with mini door tiles. */
     for(int i = 0; i < m_doors.size(); i++){
-        if (fr.intersects(m_doors[i].getGlobalBounds())){
+        if (fr.intersects(m_doors[i].getGlobalBounds())) {
             return true;
         }
     }
@@ -155,7 +165,7 @@ void GameLogic::moveChar(const EventInterface& event) {
     }
 
     /* Check doors. */
-    bool doorDetected = checkDoors(m_sprite->getGlobalBounds());
+    bool doorDetected = checkDoors(m_sprite->getGlobalBounds(), 0);
     if (doorDetected && !m_onDoor) {
         std::cout << "onDoor\n";
         m_onDoor = true;
@@ -266,6 +276,7 @@ void GameLogic::spawn(const EventInterface& event) {
     int rx, ry, x, y;
 
     for (int i=0; i<count; i++) {
+        /* while not on wall or near door... */
         do {
             rx = rand() % (WIDTH  / TILE_DIM);
             ry = rand() % (HEIGHT / TILE_DIM);
@@ -275,8 +286,9 @@ void GameLogic::spawn(const EventInterface& event) {
 
             tile.left = x; tile.top = y;
             tile.width = tile.height = TILE_DIM;
-        } while (checkCollisions(tile) && checkDoors(tile));
+        } while (checkCollisions(tile) || checkDoors(tile, 3));
 
+        /* have a valid spawn location. */
         Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM), 
                                             sf::Vector2f(x,y));
         m_rocks.push_back(actor);

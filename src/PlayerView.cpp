@@ -183,10 +183,10 @@ void PlayerView::draw() {
             break;
         default:
             m_window->draw(m_map);
+            m_window->draw(m_overlay);
             for (int i=0; i<rocks.size(); i++) {
                 rocks[i]->draw(m_window);
             }
-            m_window->draw(m_overlay);
             m_window->draw(m_filter);
             m_window->draw(animatedSprite);
 

@@ -38,7 +38,7 @@ public:
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);
-    bool checkDoors(const sf::FloatRect& fr);
+    bool checkDoors(sf::FloatRect fr, int extra);
     void moveChar(const EventInterface& event);
     void attack(const EventInterface& event);
     void spawn(const EventInterface& event);
