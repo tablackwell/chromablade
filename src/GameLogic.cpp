@@ -14,22 +14,28 @@
 GameLogic::GameLogic() : Process() {
 }
 
+
 void GameLogic::init(){
 	m_level = red;
     setState(Process::RUNNING);
 }
 
+
 void GameLogic::update(float &deltaTime){
 }
 
+
+/* Returns the current level */
 GameLogic::Level GameLogic::getLevel(){
 	return m_level;
 }
+
 
 /* Links game logic to game application */
 void GameLogic::setGameApplication(ChromaBlade* game) {
     m_game = game;
 }
+
 
 void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> collVector, std::vector<sf::RectangleShape> doorVector){
 	m_collisionVector = collVector;
@@ -40,8 +46,6 @@ void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> collVector, 
 /* Sets the position of character */
 void GameLogic::setCharPosition(std::tuple<float, float> position) {
     m_player.setPosition(position);
-    //std::cout << std::get<0>(position) << "\n";
-    //std::cout << std::get<1>(position) << "\n";
 }
 
 

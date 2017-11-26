@@ -23,6 +23,7 @@
 PlayerView::PlayerView() : Process() {
 }
 
+
 /* Initialize player view by loading files and setting initial positions */
 void PlayerView::init(){
 
@@ -33,10 +34,12 @@ void PlayerView::init(){
     if(!m_charTexture.loadFromFile("../res/spritenew.png")) {
         // ERROR
     }
+
+    // Load sound for sword swing
     m_buffer.loadFromFile("../res/swordSwing.wav");
     m_sound.setBuffer(m_buffer);
-//    m_character.setTextureRect(sf::IntRect(32, 0, 32, 32));
 
+    // Load animations
     walkingDown.setSpriteSheet(m_charTexture);
     walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
     walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
@@ -63,15 +66,13 @@ void PlayerView::init(){
 
     currAnimation = &walkingDown;
     animatedSprite.setPosition(START_POS);
-//    m_character.setTexture(m_charTexture);
-//  m_character.setPosition(START_POS);
-      animatedSprite.setScale(0.9f,0.9f);
+    animatedSprite.setScale(0.9f,0.9f);
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
     m_speed = SPEED;
-
     m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
+
 
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
@@ -102,20 +103,16 @@ void PlayerView::handleInput(float deltaTime) {
         case GameState::Title:
             int rc;
             rc = m_title.update(*m_window);
-            // Moved the cursor
-            if (rc == 0) {}
-            // Selected Play
-            else if (rc == 1) {
-//                m_game->setState(GameState::Hub);
-                ChangeStateEvent* change = new ChangeStateEvent(GameState::Hub);
-                LoadMapEvent* loadMapEvent = new LoadMapEvent(GameState::Hub);
-                m_game->queueEvent(change);
-                m_game->queueEvent(loadMapEvent);
+            if (rc == 0) {} // Moved the cursor
+            else if (rc == 1) { // Selected Play
+                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Hub);
+                LoadMapEvent* loadMap = new LoadMapEvent(GameState::Hub);
+                m_game->queueEvent(changeState);
+                m_game->queueEvent(loadMap);
             }
-            // Selected Exit
-            else m_window->close();
+            else m_window->close(); // Selected Exit
             break;
-        default:
+        default: // in the game
             sf::Event event;
             while(m_window->pollEvent(event)){
                 // Close window
@@ -126,7 +123,6 @@ void PlayerView::handleInput(float deltaTime) {
                     if (event.key.code == ATTACK) {
                         AttackEvent *attack = new AttackEvent();
                         m_game->queueEvent(attack);
-                        std::cout << "attack event \n";
                         m_sound.play();
                     }
                 }
@@ -139,7 +135,7 @@ void PlayerView::handleInput(float deltaTime) {
                 MoveEvent *move = new MoveEvent(Direction::Right);
                 m_game->queueEvent(move);
             }
-            if (sf::Keyboard::isKeyPressed(UP)){
+            else if (sf::Keyboard::isKeyPressed(UP)){
                 MoveEvent *move = new MoveEvent(Direction::Up);
                 m_game->queueEvent(move);
             }
@@ -150,7 +146,9 @@ void PlayerView::handleInput(float deltaTime) {
           break;
     }
 }
-// Camera Functions //
+
+
+/* Camera Functions */
 void PlayerView::updateCamera(int newX, int newY){
   m_camera.setCenter(m_camera.getCenter().x + newX, m_camera.getCenter().y + newY);
   m_window->setView(m_camera);
@@ -226,6 +224,7 @@ void PlayerView::setListener() {
 }
 
 
+
 void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPressed, float deltaTime) {
     Animation *currAnimation;
     switch (dir) {
@@ -255,7 +254,6 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
         noKeyPressed = true;
         animatedSprite.update(sf::seconds(deltaTime));
 }
-
 
 
 /* Used to build a listener for moveEvent */
@@ -298,6 +296,7 @@ void PlayerView::moveChar(const EventInterface& event) {
     animatedSprite.update((sf::seconds(deltaTime)));
 }
 
+
 void PlayerView::clearTileMaps() {
     fprintf(stderr, "clearTileMaps!\n");
     m_map.clear();
@@ -307,8 +306,7 @@ void PlayerView::clearTileMaps() {
 }
 
 
-
-/* Triggered by a LoadMapEvent. */
+/* Load the map of a level. Triggered by a LoadMapEvent. */
 void PlayerView::loadMap(const EventInterface& event) {
     fprintf(stderr, "loadMap!\n");
     const EventInterface *ptr = &event;
@@ -334,9 +332,8 @@ void PlayerView::loadMap(const EventInterface& event) {
                     sf::Vector2u(16, 16), 100, 38);
             m_filter.setFillColor(sf::Color(0,0,0,0));
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
-        break;
+            break;
         case GameState::RedLevel:
-
             fprintf(stderr, "loading RedLevel!\n");
             m_gameLogic->toggleLevel();
             m_map.loadFromText("../res/tilesets/dungeon.png",
