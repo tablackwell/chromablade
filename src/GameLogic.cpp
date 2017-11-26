@@ -123,48 +123,48 @@ void GameLogic::moveChar(const EventInterface& event) {
     }
     setCharPosition(std::make_tuple(x, y));
     m_view->drawAnimation(dir, moving, noKeyPressed, deltaTime);
-		bool collisionDetected = false;
-		for(int i = 0; i < m_collisionVector.size(); i++){
-			if (m_sprite->getGlobalBounds().intersects(m_collisionVector[i].getGlobalBounds())){
-				std::cout << "COLLISION! \n";
-				collisionDetected = true;
-				break;
-			}
-		}
-		for (int i=0; i<m_rocks.size(); i++) {
-			if (m_sprite->getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
-				collisionDetected = true;
-				break;
-			}
-		}
-		if(collisionDetected){
-			setCharPosition(std::make_tuple(prevX, prevY));
-			m_sprite->setPosition(prevX, prevY);
-		}
-		bool doorDetected = false;
-		for(int i = 0; i < m_doors.size(); i++){
-			if (m_sprite->getGlobalBounds().intersects(m_doors[i].getGlobalBounds())){
-				doorDetected = true;
-				break;
-			}
-		}
-		if (doorDetected && !m_onDoor) {
-				std::cout << "onDoor\n";
-				m_onDoor = true;
+    bool collisionDetected = false;
+    for(int i = 0; i < m_collisionVector.size(); i++){
+        if (m_sprite->getGlobalBounds().intersects(m_collisionVector[i].getGlobalBounds())){
+            std::cout << "COLLISION! \n";
+            collisionDetected = true;
+            break;
+        }
+    }
+    for (int i=0; i<m_rocks.size(); i++) {
+        if (m_sprite->getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
+            collisionDetected = true;
+            break;
+        }
+    }
+    if(collisionDetected){
+        setCharPosition(std::make_tuple(prevX, prevY));
+        m_sprite->setPosition(prevX, prevY);
+    }
+    bool doorDetected = false;
+    for(int i = 0; i < m_doors.size(); i++){
+        if (m_sprite->getGlobalBounds().intersects(m_doors[i].getGlobalBounds())){
+            doorDetected = true;
+            break;
+        }
+    }
+    if (doorDetected && !m_onDoor) {
+        std::cout << "onDoor\n";
+        m_onDoor = true;
 
-				DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
-				m_game->queueEvent(doorEvent);
-		} else if (!doorDetected && m_onDoor) {
-				std::cout << "not onDoor\n";
-				m_onDoor = false;
-		}
-		if(m_game->inDebugMode()){
-			std::cout <<"Player Position (sprite then logic): \n " ;
-			x = std::get<0>(m_player.getPosition());
-			y = std::get<1>(m_player.getPosition());
-			std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";
-			std::cout << x << "," << y << "\n";
-		}
+        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
+        m_game->queueEvent(doorEvent);
+    } else if (!doorDetected && m_onDoor) {
+        std::cout << "not onDoor\n";
+        m_onDoor = false;
+    }
+    if(m_game->inDebugMode()){
+        std::cout <<"Player Position (sprite then logic): \n " ;
+        x = std::get<0>(m_player.getPosition());
+        y = std::get<1>(m_player.getPosition());
+        std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";
+        std::cout << x << "," << y << "\n";
+    }
 }
 
 /* Triggered by a DoorEvent. */
