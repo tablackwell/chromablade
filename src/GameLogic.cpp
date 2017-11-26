@@ -191,21 +191,25 @@ void GameLogic::useDoor(const EventInterface& event) {
 
     if(levelToggled){
     if (dir == Direction::Left) {
-        m_sprite->setPosition(m_sprite->getPosition().x - 100, m_sprite->getPosition().y);
-        m_view->updateCamera(-800,0);
+        m_sprite->setPosition(m_sprite->getPosition().x - WIDTH/8,
+                              m_sprite->getPosition().y);
+        m_view->updateCamera(-WIDTH,0);
     }
     else if (dir == Direction::Right){
-        m_sprite->setPosition(m_sprite->getPosition().x + 100, m_sprite->getPosition().y);
-        m_view->updateCamera(800,0);
+        m_sprite->setPosition(m_sprite->getPosition().x + WIDTH/8,
+                              m_sprite->getPosition().y);
+        m_view->updateCamera(-WIDTH,0);
     }
     else if (dir == Direction::Up){
-        m_sprite->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y - 100);
-        m_view->updateCamera(0, -608);
+        m_sprite->setPosition(m_sprite->getPosition().x,
+                              m_sprite->getPosition().y - HEIGHT/8);
+        m_view->updateCamera(0, -HEIGHT);
 
     }
     else if (dir == Direction::Down){
-      m_sprite->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y + 100);
-      m_view->updateCamera(0,608);
+      m_sprite->setPosition(m_sprite->getPosition().x,
+                            m_sprite->getPosition().y + HEIGHT/8);
+      m_view->updateCamera(0,HEIGHT);
     }
     setCharPosition(std::make_tuple(m_sprite->getPosition().x, m_sprite->getPosition().y));
     }
