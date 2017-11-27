@@ -20,27 +20,38 @@ DynamicActor::DynamicActor(Color color, float health, float damage, std::tuple<f
     this->m_speed = speed;
 }
 
-/* Change color. */
+
+/* Changes active color. */
 void DynamicActor::changeColor(Color color) {
     this->m_activeColor = color;
 }
 
-/* Return current health of actor. */
+
+/* Returns current health of actor. */
 float DynamicActor::getHealth() {
     return m_health;
 }
 
-void DynamicActor::attack() {
+
+/* Sets current health of actor. */
+void DynamicActor::setHealth(float health) {
+    m_health = health;
 }
 
+
+/* Sets the actor position */
 void DynamicActor::setPosition(std::tuple<float, float> position) {
     this->m_position = position;
 }
 
+
+/* Returns the actor position */
 std::tuple<float, float> DynamicActor::getPosition() {
     return m_position;
 }
 
+
+/* Returns the actor's attack damage */
 float DynamicActor::getDamage() {
     return m_damage;
 }

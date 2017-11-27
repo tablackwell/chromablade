@@ -2,9 +2,11 @@
 #define DYNAMICACTOR_HPP
 
 #include <stdio.h>
-#include <SFML/Graphics.hpp>
 #include <tuple>
+#include <SFML/Graphics.hpp>
+
 #include "Actor.hpp"
+
 
 /* List of all possible colors */
 enum Color{
@@ -20,10 +22,10 @@ class DynamicActor : public Actor {
 		DynamicActor();
 		DynamicActor(Color activeColor, float health, float damage, std::tuple<float, float> startPos, int speed);
 		float getHealth();
-		virtual void attack();
+		virtual void attack(DynamicActor enemy) {};
 		void changeColor(Color color);
 		void setHealth(float health);
-		void setPosition(std::tuple<float, float>);
+		void setPosition(std::tuple<float, float> pos);
 		std::tuple<float, float> getPosition();
 		float getDamage();
 

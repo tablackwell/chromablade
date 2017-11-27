@@ -43,8 +43,8 @@ private:
     void attack(const EventInterface& event);
     void spawn(const EventInterface& event);
     void useDoor(const EventInterface& event);
-    bool m_onDoor;
-    bool levelToggled = false;
+    void playerAttack();
+    void enemyAttack();
 
 private:
     Level m_level;
@@ -55,7 +55,10 @@ private:
     ChromaBlade* m_game;
     PlayerView* m_view;
     std::vector<Actor*> m_rocks;
+    std::vector<DynamicActor*> m_enemies;
     std::vector<int> m_clearedRooms;
+    bool m_onDoor;
+    bool levelToggled = false;
 };
 
 #endif

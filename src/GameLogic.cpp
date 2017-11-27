@@ -14,22 +14,28 @@
 GameLogic::GameLogic() : Process() {
 }
 
+
 void GameLogic::init(){
 	m_level = red;
     setState(Process::RUNNING);
 }
 
+
 void GameLogic::update(float &deltaTime){
 }
 
+
+/* Returns the current level */
 GameLogic::Level GameLogic::getLevel(){
 	return m_level;
 }
+
 
 /* Links game logic to game application */
 void GameLogic::setGameApplication(ChromaBlade* game) {
     m_game = game;
 }
+
 
 void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> collVector, std::vector<sf::RectangleShape> doorVector){
 	m_collisionVector = collVector;
@@ -40,8 +46,6 @@ void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> collVector, 
 /* Sets the position of character */
 void GameLogic::setCharPosition(std::tuple<float, float> position) {
     m_player.setPosition(position);
-    //std::cout << std::get<0>(position) << "\n";
-    //std::cout << std::get<1>(position) << "\n";
 }
 
 
@@ -61,9 +65,11 @@ void GameLogic::toggleLevel(){
 
 /* Adds listeners to eventManager */
 void GameLogic::setListener() {
+
+    // AttackEvent
     std::function<void(const EventInterface &event)> attack = std::bind(&GameLogic::attack, this, std::placeholders::_1);
-        const EventListener attackListener = EventListener(attack, EventType::attackEvent);
-        m_game->registerListener(attackListener, EventType::attackEvent);
+    const EventListener attackListener = EventListener(attack, EventType::attackEvent);
+    m_game->registerListener(attackListener, EventType::attackEvent);
 
     // SpawnEvent
     std::function<void(const EventInterface &event)> spawn = std::bind(&GameLogic::spawn, this, std::placeholders::_1);
@@ -127,8 +133,8 @@ void GameLogic::moveChar(const EventInterface& event) {
     float deltaTime = moveEvent->getDeltaTime();
     float x = std::get<0>(m_player.getPosition());
     float y = std::get<1>(m_player.getPosition());
-		float prevX = std::get<0>(m_player.getPosition());
-		float prevY = std::get<1>(m_player.getPosition());
+    float prevX = std::get<0>(m_player.getPosition());
+    float prevY = std::get<1>(m_player.getPosition());
     bool noKeyPressed = true;
     sf::Vector2f moving;
 
@@ -251,13 +257,33 @@ void GameLogic::useDoor(const EventInterface& event) {
 void GameLogic::attack(const EventInterface& event) {
     const EventInterface *ptr = &event;
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
-    if (attackEvent->getInitiator() == NULL) { // player attack
-        // TODO: look for enemies nearby
-        m_player.attack();
-        std::cout << "player attack\n";
+    if (attackEvent->isFromPlayer() == true) { // player attack
+        playerAttack();
     }
+    else { // enemy attack
+        enemyAttack();
+    }
+}
+
+
+void GameLogic::playerAttack() {
+    std::vector<DynamicActor>::iterator it;  // declare an iterator to a vector of DynamicActor
+
+    // TODO: iterates over the enemies and attack the ones that are close enough
+//    for(it = m_enemies.begin(); it != m_enemies.end(); it++) {
+//        if (true) { // if the enemy is close enough
+//            m_player.attack(*it);
+//        }
+//        std::cout << "one enemy attacked";
+//    }
+//    std::cout << "finish attack";
+}
+
+
+void GameLogic::enemyAttack() {
 
 }
+
 
 void GameLogic::spawn(const EventInterface& event) {
     printf("spawn!\n");

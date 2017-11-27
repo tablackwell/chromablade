@@ -1,7 +1,6 @@
 #include <ChromaBlade.hpp>
 
 int main(int argc, char** argv){
-
 	if(argc==1){
 		printf("Launching ChromaBlade in default mode\n");
 		ChromaBlade game;

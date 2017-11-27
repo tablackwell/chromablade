@@ -1,15 +1,16 @@
 #ifndef PLAYERVIEW_HPP
 #define PLAYERVIEW_HPP
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 #include "EventInterface.hpp"
 #include "Process.hpp"
 #include "GameLogic.hpp"
 #include "AnimatedSprite.hpp"
 #include "Title.hpp"
 #include "TileMap.hpp"
+
 #include <vector>
+#include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 #define TILE_DIM 32
 
@@ -42,6 +43,7 @@ public:
     void resetCamera();
     sf::Vector2f getCameraCenter();
     sf::Vector2f getCameraSize();
+
 private: //vars and objs
     EventManager *m_eventManager;
     Animation *currAnimation;
