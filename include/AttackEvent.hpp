@@ -11,17 +11,14 @@
  */
 class AttackEvent : public EventInterface {
     public:
-        AttackEvent(DynamicActor* initiator, float damage) { m_damage = damage; m_initiator = initiator; m_type = attackEvent; }
-        AttackEvent() { m_damage = 10; m_initiator = NULL; m_type = attackEvent; }
-        DynamicActor* getInitiator() const { return m_initiator; }
-        float getDamage() const { return m_damage; }
+        AttackEvent(bool isFromPlayer) { m_isFromPlayer = isFromPlayer; m_type = attackEvent; }
+        bool isFromPlayer() const { return m_isFromPlayer; }
         const EventType& getEventType(void) const { return m_type; }
 
     private:
 
     private: // event data
-        DynamicActor* m_initiator;
-        float m_damage;
+        bool m_isFromPlayer;
         EventType m_type;
 };
 

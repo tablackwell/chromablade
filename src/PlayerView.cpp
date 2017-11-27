@@ -67,6 +67,7 @@ void PlayerView::init(){
     currAnimation = &walkingDown;
     animatedSprite.setPosition(START_POS);
     animatedSprite.setScale(0.9f,0.9f);
+    animatedSprite.play(*currAnimation);
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
     m_speed = SPEED;
@@ -121,9 +122,18 @@ void PlayerView::handleInput(float deltaTime) {
                 }
                 else if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == ATTACK) {
-                        AttackEvent *attack = new AttackEvent();
+                        AttackEvent *attack = new AttackEvent(true);
                         m_game->queueEvent(attack);
                         m_sound.play();
+                    }
+                    if (event.key.code == RED) {
+                        // TODO: switchSwordEvent
+                    }
+                    if (event.key.code == BLUE) {
+                        // TODO: switchSwordEvent
+                    }
+                    if (event.key.code == YELLOW) {
+                        // TODO: switchSwordEvent
                     }
                 }
             }

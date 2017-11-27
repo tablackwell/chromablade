@@ -8,11 +8,9 @@
  * Implementation of Player class, instance of DynamicActor class used for player's
  * character.
  */
-Player::Player() {
+Player::Player() : DynamicActor(Color::RED, 100, 20, std::make_tuple(196, 255), 200.f) {
     // Initialize hash map. Start with red by default.
     m_colorsAvail[Color::RED] = true;
-    changeColor(Color::RED);
-    setPosition(std::make_tuple(196, 255)); // Initialize player position as a tuple
 }
 
 
@@ -22,12 +20,14 @@ void Player::changeSwordColor(Color color) {
 }
 
 
-/* Unlock color. */
+/* Unlock a new color. */
 void Player::unlockColor(Color color) {
 	 m_colorsAvail[color] = true;
 }
 
 
-void Player::attack() {
-
+/* Causes damage to the enemy */
+void Player::attack(DynamicActor enemy) {
+    float health = enemy.getHealth();
+    health -= getDamage();
 }
