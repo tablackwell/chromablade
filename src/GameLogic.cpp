@@ -88,6 +88,40 @@ void GameLogic::setListener() {
 
 }
 
+bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
+    /* Check intersections with mini collision tiles. */
+    for(int i = 0; i < m_collisionVector.size(); i++){
+        if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
+            std::cout << "COLLISION! \n";
+            return true;
+        }
+    }
+    
+    /* Check intersections with rock tiles. */
+    for (int i=0; i<m_rocks.size(); i++) {
+        if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
+            std::cout << "ROCK COLLISION! \n";
+            return true;
+        }
+    }
+    return false;
+}
+
+bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
+    /* Increase bounds if necessary. */
+    fr.top -= TILE_DIM * extra;
+    fr.left -= TILE_DIM * extra;
+    fr.width += TILE_DIM * 2 * extra;
+    fr.height += TILE_DIM * 2 * extra;
+
+    /* Check intersections with mini door tiles. */
+    for(int i = 0; i < m_doors.size(); i++){
+        if (fr.intersects(m_doors[i].getGlobalBounds())) {
+            return true;
+        }
+    }
+    return false;
+}
 
 /***************************** Event Triggered Functions ******************************/
 
@@ -129,48 +163,32 @@ void GameLogic::moveChar(const EventInterface& event) {
     }
     setCharPosition(std::make_tuple(x, y));
     m_view->drawAnimation(dir, moving, noKeyPressed, deltaTime);
-		bool collisionDetected = false;
-		for(int i = 0; i < m_collisionVector.size(); i++){
-			if (m_sprite->getGlobalBounds().intersects(m_collisionVector[i].getGlobalBounds())){
-				std::cout << "COLLISION! \n";
-				collisionDetected = true;
-				break;
-			}
-		}
-		for (int i=0; i<m_rocks.size(); i++) {
-			if (m_sprite->getGlobalBounds().intersects(m_rocks[i]->getGlobalBounds())) {
-				collisionDetected = true;
-				break;
-			}
-		}
-		if(collisionDetected){
-			setCharPosition(std::make_tuple(prevX, prevY));
-			m_sprite->setPosition(prevX, prevY);
-		}
-		bool doorDetected = false;
-		for(int i = 0; i < m_doors.size(); i++){
-			if (m_sprite->getGlobalBounds().intersects(m_doors[i].getGlobalBounds())){
-				doorDetected = true;
-				break;
-			}
-		}
-		if (doorDetected && !m_onDoor) {
-				std::cout << "onDoor\n";
-				m_onDoor = true;
 
-				DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
-				m_game->queueEvent(doorEvent);
-		} else if (!doorDetected && m_onDoor) {
-				std::cout << "not onDoor\n";
-				m_onDoor = false;
-		}
-		if(m_game->inDebugMode()){
-			std::cout <<"Player Position (sprite then logic): \n " ;
-			x = std::get<0>(m_player.getPosition());
-			y = std::get<1>(m_player.getPosition());
-			std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";
-			std::cout << x << "," << y << "\n";
-		}
+    /* Check collisions. */
+    if(checkCollisions(m_sprite->getGlobalBounds())){
+        setCharPosition(std::make_tuple(prevX, prevY));
+        m_sprite->setPosition(prevX, prevY);
+    }
+
+    /* Check doors. */
+    bool doorDetected = checkDoors(m_sprite->getGlobalBounds(), 0);
+    if (doorDetected && !m_onDoor) {
+        std::cout << "onDoor\n";
+        m_onDoor = true;
+
+        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
+        m_game->queueEvent(doorEvent);
+    } else if (!doorDetected && m_onDoor) {
+        std::cout << "not onDoor\n";
+        m_onDoor = false;
+    }
+    if(m_game->inDebugMode()){
+        std::cout <<"Player Position (sprite then logic): \n " ;
+        x = std::get<0>(m_player.getPosition());
+        y = std::get<1>(m_player.getPosition());
+        std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";
+        std::cout << x << "," << y << "\n";
+    }
 }
 
 /* Triggered by a DoorEvent. */
@@ -197,23 +215,30 @@ void GameLogic::useDoor(const EventInterface& event) {
 
     if(levelToggled){
     if (dir == Direction::Left) {
-        m_sprite->setPosition(m_sprite->getPosition().x - 100, m_sprite->getPosition().y);
-        m_view->updateCamera(-800,0);
+        m_sprite->setPosition(
+                ((int) m_sprite->getPosition().x / (int) WIDTH) * WIDTH - 2 * TILE_DIM,
+                       m_sprite->getPosition().y);
+        m_view->updateCamera(-WIDTH,0);
     }
     else if (dir == Direction::Right){
-        m_sprite->setPosition(m_sprite->getPosition().x + 100, m_sprite->getPosition().y);
-        m_view->updateCamera(800,0);
+        m_sprite->setPosition(
+                ((int) m_sprite->getPosition().x / (int) WIDTH + 1) * WIDTH + TILE_DIM,
+                       m_sprite->getPosition().y);
+        m_view->updateCamera(WIDTH,0);
     }
     else if (dir == Direction::Up){
-        m_sprite->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y - 100);
-        m_view->updateCamera(0, -608);
+        m_sprite->setPosition(m_sprite->getPosition().x,
+              ((int) m_sprite->getPosition().y / (int) HEIGHT) * HEIGHT - 2 * TILE_DIM);
+        m_view->updateCamera(0,-HEIGHT);
 
     }
     else if (dir == Direction::Down){
-      m_sprite->setPosition(m_sprite->getPosition().x, m_sprite->getPosition().y + 100);
-      m_view->updateCamera(0,608);
+      m_sprite->setPosition(m_sprite->getPosition().x,
+              ((int) m_sprite->getPosition().y / (int) HEIGHT + 1) * HEIGHT + TILE_DIM);
+      m_view->updateCamera(0,HEIGHT);
     }
     setCharPosition(std::make_tuple(m_sprite->getPosition().x, m_sprite->getPosition().y));
+    m_onDoor = false;
     }
 
     if (room > 0) {
@@ -221,7 +246,7 @@ void GameLogic::useDoor(const EventInterface& event) {
                 == m_clearedRooms.end()) {
             sf::Vector2f center = m_view->getCameraCenter();
             sf::Vector2f size = m_view->getCameraSize();
-            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 4, size, center);
+            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnEvent);
         }
     }
@@ -269,33 +294,30 @@ void GameLogic::spawn(const EventInterface& event) {
     const sf::Vector2f size = spawnEvent->getSize();
     const sf::Vector2f center = spawnEvent->getCenter();
 
-    int x,y,r,i,j;
-    int minX = center.x - size.x / 2 + 48;
-    int minY = center.y - size.y / 2 + 48;
 
-    int numBlocks = 3;
-    int blockSizeX = size.x / numBlocks;
-    int blockSizeY = size.y / numBlocks;
+    int l = center.x - size.x / 2;
+    int t = center.y - size.y / 2;
 
-    int hash[9] = {0};
+    sf::FloatRect tile;
+    int rx, ry, x, y;
 
-    int n=0;
-    while (n < count) {
+    for (int i=0; i<count; i++) {
+        /* while not on wall or near door... */
         do {
-            r = rand() % 9;
-        } while (r == 3 || hash[r]);
+            rx = rand() % (WIDTH  / TILE_DIM);
+            ry = rand() % (HEIGHT / TILE_DIM);
 
-        hash[r]++;
-        i = r % 3;
-        j = r / 3;
+            x = rx * TILE_DIM + l;
+            y = ry * TILE_DIM + t;
 
-        x = rand() % (blockSizeX-144) + i*blockSizeX + minX;
-        y = rand() % (blockSizeY-144) + j*blockSizeY + minY;
-        printf("%d %d %d %d %d\n", r, i, j, x, y);
-        Actor *rock = new Actor(Actor::Rock, sf::Vector2f(32,32), sf::Vector2f(x,y));
-        m_rocks.push_back(rock);
+            tile.left = x; tile.top = y;
+            tile.width = tile.height = TILE_DIM;
+        } while (checkCollisions(tile) || checkDoors(tile, 3));
 
-        n++;
+        /* have a valid spawn location. */
+        Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM), 
+                                            sf::Vector2f(x,y));
+        m_rocks.push_back(actor);
     }
 }
 
