@@ -187,7 +187,7 @@ void PlayerView::draw() {
             for (int i=0; i<rocks.size(); i++) {
                 rocks[i]->draw(m_window);
             }
-            m_window->draw(m_filter);
+            // m_window->draw(m_filter);
             m_window->draw(animatedSprite);
 
             /* Debug stuff */
@@ -351,5 +351,21 @@ void PlayerView::loadMap(const EventInterface& event) {
                     sf::Vector2u(16, 16), 100, 114);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
         break;
+        case GameState::BlueLevel:
+
+            fprintf(stderr, "loadingBlueLevel!\n");
+            m_gameLogic->toggleLevel();
+            m_map.loadFromText("../res/tilesets/dungeon.png",
+                    "../res/level/BlueDungeon/bluedungeon_base.csv",
+                    sf::Vector2u(16, 16), 200, 76);
+            m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/BlueDungeon/bluedungeon_overlay.csv", sf::Vector2u(16, 16),200, 76);
+            m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
+                    "../res/level/BlueDungeon/bluedungeon_collision.csv",
+                    sf::Vector2u(16, 16), 200, 76);
+            m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
+                    "../res/level/DemoDungeon/bluedungeon_doors.csv",
+                    sf::Vector2u(16, 16), 200, 76);
+            m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
+      break;
     }
 }
