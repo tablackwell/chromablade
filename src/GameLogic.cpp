@@ -16,8 +16,13 @@ GameLogic::GameLogic() : Process() {
 
 void GameLogic::init(){
 	m_level = red;
-    m_levelToggled = false;
-    setState(Process::RUNNING);
+  m_levelToggled = false;
+  setState(Process::RUNNING);
+
+		/* Temporary Hard-coding values of portals */
+	sf::RectangleShape bluePortal(sf::Vector2f(32,32));
+	bluePortal.setPosition(384,32);
+	m_portals.push_back(bluePortal);
 }
 
 
@@ -124,6 +129,14 @@ bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
     return false;
 }
 
+bool GameLogic::checkPortals(const sf::FloatRect& fr){
+	for (int i=0; i<m_portals.size(); i++) {
+			if (fr.intersects(m_portals[i].getGlobalBounds())) {
+					std::cout << "PORTAL COLLISION \n";
+					return true;
+			}
+	}
+}
 /***************************** Event Triggered Functions ******************************/
 
 /* Used to build a listener for moveEvent */
@@ -180,7 +193,13 @@ void GameLogic::moveChar(const EventInterface& event) {
         std::cout << "not onDoor\n";
         m_onDoor = false;
     }
+
+		if(m_game->getState() == GameState::Hub){
+			bool portalDetected = checkPortals(m_sprite->getGlobalBounds());
+		}
+
     if(m_game->inDebugMode()){
+			//todo: consider changing to drawing text on screen...
         std::cout <<"Player Position (sprite then logic): \n " ;
         pos = m_player.getPosition();
         std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";

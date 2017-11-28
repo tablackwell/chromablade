@@ -19,6 +19,7 @@
 
 #define SPEED 200.f
 
+
 PlayerView::PlayerView() : Process() {
 }
 
@@ -235,6 +236,13 @@ void PlayerView::draw() {
               m_window->draw(debugRectangle);
               m_collisions.drawBoxes(m_window);
               m_doors.drawBoxes(m_window);
+
+
+              /*temporary ugly portal stuff*/
+              sf::RectangleShape bluePortal(sf::Vector2f(32,32));
+              bluePortal.setPosition(384,32);
+              bluePortal.setFillColor(sf::Color(0, 0, 255, 100));
+              m_window->draw(bluePortal);
             }
             break;
     }

@@ -38,6 +38,8 @@ public:
 private:
     bool checkCollisions(const sf::FloatRect& fr);
     bool checkDoors(sf::FloatRect fr, int extra);
+    bool checkPortals(const sf::FloatRect& fr);
+
     void moveChar(const EventInterface& event);
     void attack(const EventInterface& event);
     void spawn(const EventInterface& event);
@@ -56,6 +58,7 @@ private:
     std::vector<Actor*> m_rocks;
     std::vector<DynamicActor*> m_enemies;
     std::vector<int> m_clearedRooms;
+    std::vector<sf::RectangleShape> m_portals;
     bool m_onDoor;
     bool m_levelToggled;
 };
