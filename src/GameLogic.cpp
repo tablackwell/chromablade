@@ -111,7 +111,7 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
             return true;
         }
     }
-    
+
     /* Check intersections with mobs. */
     for (int i=0; i<m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
@@ -195,7 +195,6 @@ void GameLogic::moveChar(const EventInterface& event) {
     if (doorDetected && !m_onDoor) {
         std::cout << "onDoor\n";
         m_onDoor = true;
-
         DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
         m_game->queueEvent(doorEvent);
     } else if (!doorDetected && m_onDoor) {
@@ -205,6 +204,10 @@ void GameLogic::moveChar(const EventInterface& event) {
 
 		if(m_game->getState() == GameState::Hub){
 			bool portalDetected = checkPortals(m_sprite->getGlobalBounds());
+			if(portalDetected){
+				DoorEvent *doorEvent = new DoorEvent(GameState::BlueLevel, 1, dir);
+				m_game->queueEvent(doorEvent);
+			}
 		}
 
     if(m_game->inDebugMode()){
@@ -226,6 +229,7 @@ void GameLogic::useDoor(const EventInterface& event) {
     const GameState newState = doorEvent->getGameState();
     const int room = doorEvent->getRoom();
     const Direction dir = doorEvent->getDirection();
+
     if (newState != curState) {
         fprintf(stderr, "door leads to %d\n", newState);
         ChangeStateEvent* change = new ChangeStateEvent(newState);
@@ -236,10 +240,14 @@ void GameLogic::useDoor(const EventInterface& event) {
         if (newState == GameState::Hub) {
             setCharPosition(HUB_POS);
 						m_view->updateCamera(HUB_CAM);
-        } else if (newState == GameState::RedLevel) {
+        }
+				else if (newState == GameState::RedLevel) {
             m_view->updateCamera(RED_CAM);
             setCharPosition(RED_POS);
-        } else {
+        }
+				else if (newState == GameState::BlueLevel){
+						m_view->updateCamera(BLUE_CAM);
+						setCharPosition(BLUE_POS);
         }
     }
 
@@ -353,8 +361,8 @@ void GameLogic::spawn(const EventInterface& event) {
         } while (checkCollisions(tile) || checkDoors(tile, 3));
 
         /* have a valid spawn location. */
-        if (actorType == Actor::Rock) { 
-            Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM), 
+        if (actorType == Actor::Rock) {
+            Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM),
                                                 sf::Vector2f(x,y));
             m_rocks.push_back(actor);
         } else if (actorType == Actor::Mob) {

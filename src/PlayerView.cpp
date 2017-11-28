@@ -148,7 +148,7 @@ void PlayerView::handleInput(float deltaTime) {
             } else if (sf::Keyboard::isKeyPressed(KEY_DOWN)){
                 v.y += SPEED;
             }
-            
+
             if (v.x != 0.f && v.y != 0.f) {
                 v.x /= sqrt(2.f);
                 v.y /= sqrt(2.f);
@@ -220,14 +220,12 @@ void PlayerView::draw() {
 
             /* Debug stuff */
             if(m_game->inDebugMode()){
-              sf::RectangleShape debugRectangle(sf::Vector2f(m_boundaryBox.width, m_boundaryBox.height));
-              debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
+              sf::RectangleShape debugRectangle(sf::Vector2f(m_animatedSprite.getGlobalBounds().width, m_animatedSprite.getGlobalBounds().height));
+              debugRectangle.setFillColor(sf::Color(250, 150, 100, 150));
               debugRectangle.setPosition(m_animatedSprite.getPosition().x, m_animatedSprite.getPosition().y);
               m_window->draw(debugRectangle);
               m_collisions.drawBoxes(m_window);
               m_doors.drawBoxes(m_window);
-
-
               /*temporary ugly portal stuff*/
               sf::RectangleShape bluePortal(sf::Vector2f(32,32));
               bluePortal.setPosition(384,32);
@@ -369,6 +367,21 @@ void PlayerView::loadMap(const EventInterface& event) {
                     sf::Vector2u(16, 16), 100, 38);
             //m_filter.setFillColor(sf::Color(0,0,0,0));
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
+
+            /* Temporary Hub stuff for Portal testing */
+            // m_map.loadFromText("../res/tilesets/lightworld.png",
+            //         "../res/level/Hub/Hub_base.csv",
+            //         sf::Vector2u(16, 16), 150, 38);
+            // m_overlay.loadFromText("../res/tilesets/lightworld.png",
+            //         "../res/level/Hub/Hub_overlay.csv",
+            //         sf::Vector2u(16, 16),150, 38);
+            // m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png",
+            //         "../res/level/Hub/Hub_collision.csv",
+            //         sf::Vector2u(16, 16), 150, 38);
+            // m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
+            //         "../res/level/Hub/Hub_doors.csv",
+            //         sf::Vector2u(16, 16), 150, 38);
+            // m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
             break;
         case GameState::RedLevel:
             fprintf(stderr, "loading RedLevel!\n");
@@ -387,7 +400,6 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
         break;
         case GameState::BlueLevel:
-
             fprintf(stderr, "loadingBlueLevel!\n");
             m_gameLogic->toggleLevel();
             m_map.loadFromText("../res/tilesets/dungeon.png",
@@ -398,7 +410,7 @@ void PlayerView::loadMap(const EventInterface& event) {
                     "../res/level/BlueDungeon/bluedungeon_collision.csv",
                     sf::Vector2u(16, 16), 200, 76);
             m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
-                    "../res/level/DemoDungeon/bluedungeon_doors.csv",
+                    "../res/level/BlueDungeon/bluedungeon_doors.csv",
                     sf::Vector2u(16, 16), 200, 76);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
       break;
