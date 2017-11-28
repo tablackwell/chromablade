@@ -17,9 +17,9 @@ public:
 
 protected:
     sf::RectangleShape m_rect;
+    Type m_type;
 
 private:
-    Type m_type;
     sf::Texture m_texture;
 };
 

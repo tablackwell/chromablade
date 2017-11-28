@@ -199,6 +199,7 @@ void PlayerView::draw() {
     m_window->clear();
     GameState state = m_game->getState();
     std::vector<Actor*> rocks = m_gameLogic->getRocks();
+    std::vector<Actor*> mobs = m_gameLogic->getMobs();
 
     // Render the content depending on the game state
     switch(state) {
@@ -210,6 +211,9 @@ void PlayerView::draw() {
             m_window->draw(m_overlay);
             for (int i=0; i<rocks.size(); i++) {
                 rocks[i]->draw(m_window);
+            }
+            for (int i=0; i<mobs.size(); i++) {
+                mobs[i]->draw(m_window);
             }
             // m_window->draw(m_filter);
             m_window->draw(m_animatedSprite);

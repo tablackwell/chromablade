@@ -6,6 +6,7 @@
 #include "SpawnEvent.hpp"
 #include "ChromaBlade.hpp"
 #include "PlayerView.hpp"
+#include "Mob.hpp"
 
 #include <iostream>
 
@@ -101,6 +102,14 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     for (int i=0; i<m_rocks.size(); i++) {
         if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
             std::cout << "ROCK COLLISION! \n";
+            return true;
+        }
+    }
+    
+    /* Check intersections with mobs. */
+    for (int i=0; i<m_mobs.size(); i++) {
+        if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
+            std::cout << "MOB COLLISION! \n";
             return true;
         }
     }
@@ -239,8 +248,10 @@ void GameLogic::useDoor(const EventInterface& event) {
                 == m_clearedRooms.end()) {
             sf::Vector2f center = m_view->getCameraCenter();
             sf::Vector2f size = m_view->getCameraSize();
-            SpawnEvent *spawnEvent = new SpawnEvent(Actor::Rock, 10, size, center);
-            m_game->queueEvent(spawnEvent);
+            SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
+            m_game->queueEvent(spawnRocksEvent);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
+            m_game->queueEvent(spawnMobsEvent);
         }
     }
 
@@ -308,14 +319,23 @@ void GameLogic::spawn(const EventInterface& event) {
         } while (checkCollisions(tile) || checkDoors(tile, 3));
 
         /* have a valid spawn location. */
-        Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM), 
-                                            sf::Vector2f(x,y));
-        m_rocks.push_back(actor);
+        if (actorType == Actor::Rock) { 
+            Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM), 
+                                                sf::Vector2f(x,y));
+            m_rocks.push_back(actor);
+        } else if (actorType == Actor::Mob) {
+            Actor *actor = new Mob(Purple, 100, 20, sf::Vector2f(x,y), 200.f);
+            m_mobs.push_back(actor);
+        }
     }
 }
 
 std::vector<Actor*> GameLogic::getRocks() {
     return m_rocks;
+}
+
+std::vector<Actor*> GameLogic::getMobs() {
+    return m_mobs;
 }
 
 void GameLogic::clearRocks() {
