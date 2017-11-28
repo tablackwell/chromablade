@@ -166,7 +166,8 @@ void PlayerView::handleInput(float deltaTime) {
 //                m_game->queueEvent(move);
             }
             if (v.x != 0.f && v.y != 0.f) {
-                v /= sqrt(2.f);
+                v.x /= sqrt(2.f);
+                v.y /= sqrt(2.f);
             }
             if (v.x > 0) {
                 MoveEvent *move = new MoveEvent(Direction::Right, v.x);
