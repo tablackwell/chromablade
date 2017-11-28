@@ -205,35 +205,32 @@ void GameLogic::useDoor(const EventInterface& event) {
         m_game->queueEvent(loadMapEvent);
 				m_view->resetCamera();
         m_view->updateCamera(400,1520);
-        m_sprite->setPosition(60,1520);
         setCharPosition(sf::Vector2f(60,1520));
     }
 
     if(levelToggled){
+        sf::Vector2f pos;
     if (dir == Direction::Left) {
-        m_sprite->setPosition(
-                ((int) m_sprite->getPosition().x / (int) WIDTH) * WIDTH - 2 * TILE_DIM,
-                       m_sprite->getPosition().y);
+        pos.x = ((int) m_player.getPosition().x / (int) WIDTH) * WIDTH - 2 * TILE_DIM;
+        pos.y = m_player.getPosition().y;
         m_view->updateCamera(-WIDTH,0);
     }
     else if (dir == Direction::Right){
-        m_sprite->setPosition(
-                ((int) m_sprite->getPosition().x / (int) WIDTH + 1) * WIDTH + TILE_DIM,
-                       m_sprite->getPosition().y);
+        pos.x = ((int) m_player.getPosition().x / (int) WIDTH + 1) * WIDTH + TILE_DIM;
+        pos.y = m_player.getPosition().y;
         m_view->updateCamera(WIDTH,0);
     }
     else if (dir == Direction::Up){
-        m_sprite->setPosition(m_sprite->getPosition().x,
-              ((int) m_sprite->getPosition().y / (int) HEIGHT) * HEIGHT - 2 * TILE_DIM);
+        pos.x = m_player.getPosition().x;
+        pos.y = ((int) m_player.getPosition().y / (int) HEIGHT) * HEIGHT - 2 * TILE_DIM;
         m_view->updateCamera(0,-HEIGHT);
-
     }
     else if (dir == Direction::Down){
-      m_sprite->setPosition(m_sprite->getPosition().x,
-              ((int) m_sprite->getPosition().y / (int) HEIGHT + 1) * HEIGHT + TILE_DIM);
+        pos.x = m_player.getPosition().x;
+        pos.y = ((int) m_player.getPosition().y / (int) HEIGHT + 1) * HEIGHT + TILE_DIM;
       m_view->updateCamera(0,HEIGHT);
     }
-    setCharPosition(m_sprite->getPosition());
+    setCharPosition(pos);
     m_onDoor = false;
     }
 
