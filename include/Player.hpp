@@ -7,20 +7,20 @@
 #define PLAYER_HPP
 
 #include <stdio.h>
-#include <map>
+#include <vector>
 
 #include "DynamicActor.hpp"
 
 class Player: public DynamicActor{
     public:
         Player();
-        void changeSwordColor(Color color);
-        void unlockColor(Color color);
+        void changeSwordColor(sf::Color color);
+        void unlockColor(sf::Color color);
         void attack(DynamicActor enemy);
     private:
 
     private:
-        std::map<Color, bool> m_colorsAvail; // Hash map of available colors.
+        std::vector<sf::Color> m_colorsAvail; // Hash map of available colors.
 };
 
 #endif

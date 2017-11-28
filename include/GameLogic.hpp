@@ -31,6 +31,7 @@ public:
     void setView(PlayerView* view);
     void setListener();
     std::vector<Actor*> getRocks();
+    std::vector<Actor*> getMobs();
     void clearRocks();
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
     void toggleLevel();
@@ -56,6 +57,7 @@ private:
     ChromaBlade* m_game;
     PlayerView* m_view;
     std::vector<Actor*> m_rocks;
+    std::vector<Actor*> m_mobs;
     std::vector<DynamicActor*> m_enemies;
     std::vector<int> m_clearedRooms;
     std::vector<sf::RectangleShape> m_portals;
