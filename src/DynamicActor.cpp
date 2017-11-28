@@ -11,7 +11,7 @@ DynamicActor::DynamicActor() {
 }
 
 
-DynamicActor::DynamicActor(Color color, float health, float damage, sf::Vector2f startPos, int speed) {
+DynamicActor::DynamicActor(sf::Color color, float health, float damage, sf::Vector2f startPos, int speed) {
     this->m_activeColor = color;
     this->m_health = health;
     this->m_damage = damage;
@@ -22,7 +22,7 @@ DynamicActor::DynamicActor(Color color, float health, float damage, sf::Vector2f
 
 
 /* Changes active color. */
-void DynamicActor::changeColor(Color color) {
+void DynamicActor::changeColor(sf::Color color) {
     this->m_activeColor = color;
 }
 

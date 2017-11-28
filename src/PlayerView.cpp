@@ -120,18 +120,18 @@ void PlayerView::handleInput(float deltaTime) {
                     m_window->close();
                 }
                 else if (event.type == sf::Event::KeyPressed) {
-                    if (event.key.code == ATTACK) {
+                    if (event.key.code == KEY_ATTACK) {
                         AttackEvent *attack = new AttackEvent(true);
                         m_game->queueEvent(attack);
                         m_sound.play();
                     }
-                    if (event.key.code == RED) {
+                    if (event.key.code == KEY_RED) {
                         // TODO: switchSwordEvent
                     }
-                    if (event.key.code == BLUE) {
+                    if (event.key.code == KEY_BLUE) {
                         // TODO: switchSwordEvent
                     }
-                    if (event.key.code == YELLOW) {
+                    if (event.key.code == KEY_YELLOW) {
                         // TODO: switchSwordEvent
                     }
                 }
@@ -139,47 +139,33 @@ void PlayerView::handleInput(float deltaTime) {
             sf::Vector2f v;
             Direction dir;
 
-            if (sf::Keyboard::isKeyPressed(LEFT)){
+            if (sf::Keyboard::isKeyPressed(KEY_LEFT)){
                 v.x -= SPEED;
-//                dir = Direction::Left;
-//                MoveEvent *move = new MoveEvent(Direction::Left);
-//                m_game->queueEvent(move);
-            }
-            else if (sf::Keyboard::isKeyPressed(RIGHT)){
+            } else if (sf::Keyboard::isKeyPressed(KEY_RIGHT)){
                 v.x += SPEED;
-//                dir = Direction::Right;
-//                MoveEvent *move = new MoveEvent(Direction::Right);
-//                m_game->queueEvent(move);
-            }
-            if (sf::Keyboard::isKeyPressed(UP)){
+            } if (sf::Keyboard::isKeyPressed(KEY_UP)){
                 v.y -= SPEED;
-//                dir = Direction::Up;
-//                MoveEvent *move = new MoveEvent(Direction::Up);
-//                m_game->queueEvent(move);
-            }
-            else if (sf::Keyboard::isKeyPressed(DOWN)){
+            } else if (sf::Keyboard::isKeyPressed(KEY_DOWN)){
                 v.y += SPEED;
-//                dir = Direction::Down;
-//                MoveEvent *move = new MoveEvent(Direction::Down);
-//                m_game->queueEvent(move);
             }
+            
             if (v.x != 0.f && v.y != 0.f) {
                 v.x /= sqrt(2.f);
                 v.y /= sqrt(2.f);
             }
+
             if (v.x > 0) {
                 MoveEvent *move = new MoveEvent(Direction::Right, v.x);
                 m_game->queueEvent(move);
-            }
-            else if (v.x < 0) {
+            } else if (v.x < 0) {
                 MoveEvent *move = new MoveEvent(Direction::Left, v.x);
                 m_game->queueEvent(move);
             }
+
             if (v.y > 0) {
                 MoveEvent *move = new MoveEvent(Direction::Down, v.y);
                 m_game->queueEvent(move);
-            }
-            else if (v.y < 0) {
+            } else if (v.y < 0) {
                 MoveEvent *move = new MoveEvent(Direction::Up, v.y);
                 m_game->queueEvent(move);
             }
@@ -213,6 +199,7 @@ void PlayerView::draw() {
     m_window->clear();
     GameState state = m_game->getState();
     std::vector<Actor*> rocks = m_gameLogic->getRocks();
+    std::vector<Actor*> mobs = m_gameLogic->getMobs();
 
     // Render the content depending on the game state
     switch(state) {
@@ -224,6 +211,9 @@ void PlayerView::draw() {
             m_window->draw(m_overlay);
             for (int i=0; i<rocks.size(); i++) {
                 rocks[i]->draw(m_window);
+            }
+            for (int i=0; i<mobs.size(); i++) {
+                mobs[i]->draw(m_window);
             }
             // m_window->draw(m_filter);
             m_window->draw(m_animatedSprite);
