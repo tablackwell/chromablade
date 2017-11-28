@@ -30,12 +30,12 @@ void ChromaBlade::init(){
     m_view.init();
 
     /* Play music on start. */
-    m_audio.init();
+    //m_audio.init();
 
     /* Attach PlayerView, GameLogic, and Audio to ProcessManager. */
     m_processManager.attachProcess(&m_view);
     m_processManager.attachProcess(&m_gameLogic);
-    m_processManager.attachProcess(&m_audio);
+    //m_processManager.attachProcess(&m_audio);
 }
 
 bool ChromaBlade::inDebugMode(){
