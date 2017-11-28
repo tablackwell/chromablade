@@ -2,7 +2,6 @@
 #define DYNAMICACTOR_HPP
 
 #include <stdio.h>
-#include <tuple>
 #include <SFML/Graphics.hpp>
 
 #include "Actor.hpp"
@@ -20,13 +19,13 @@ enum Color{
 class DynamicActor : public Actor {
 	public:
 		DynamicActor();
-		DynamicActor(Color activeColor, float health, float damage, std::tuple<float, float> startPos, int speed);
+		DynamicActor(Color activeColor, float health, float damage, sf::Vector2f startPos, int speed);
 		float getHealth();
 		virtual void attack(DynamicActor enemy) {};
 		void changeColor(Color color);
 		void setHealth(float health);
-		void setPosition(std::tuple<float, float> pos);
-		std::tuple<float, float> getPosition();
+		void setPosition(sf::Vector2f pos);
+		sf::Vector2f getPosition();
 		float getDamage();
 
 	private:
@@ -35,7 +34,7 @@ class DynamicActor : public Actor {
 		Color m_activeColor;
 		float m_health;
 		float m_damage; // Attack damage
-		std::tuple<float, float> m_position;
+		sf::Vector2f m_position;
 		int m_speed;
 };
 

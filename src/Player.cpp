@@ -8,7 +8,7 @@
  * Implementation of Player class, instance of DynamicActor class used for player's
  * character.
  */
-Player::Player() : DynamicActor(Color::RED, 100, 20, std::make_tuple(196, 255), 200.f) {
+Player::Player() : DynamicActor(Color::RED, 100, 20, sf::Vector2f(196, 255), 200.f) {
     // Initialize hash map. Start with red by default.
     m_colorsAvail[Color::RED] = true;
 }
