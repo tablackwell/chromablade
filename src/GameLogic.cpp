@@ -59,7 +59,7 @@ void GameLogic::setAnimatedSprite(AnimatedSprite* sprite){
 }
 
 void GameLogic::toggleLevel(){
-	levelToggled = true;
+	m_levelToggled = true;
 }
 
 
@@ -208,29 +208,30 @@ void GameLogic::useDoor(const EventInterface& event) {
         setCharPosition(sf::Vector2f(60,1520));
     }
 
-    if(levelToggled){
-        sf::Vector2f pos;
+    if(m_levelToggled){
+        sf::Vector2f pos = m_player.getPosition();
+        sf::Vector2f new_pos;
     if (dir == Direction::Left) {
-        pos.x = ((int) m_player.getPosition().x / (int) WIDTH) * WIDTH - 2 * TILE_DIM;
-        pos.y = m_player.getPosition().y;
+        new_pos.x = ((int) m_player.getPosition().x / (int) WIDTH) * WIDTH - 2 * TILE_DIM;
+        new_pos.y = m_player.getPosition().y;
         m_view->updateCamera(-WIDTH,0);
     }
     else if (dir == Direction::Right){
-        pos.x = ((int) m_player.getPosition().x / (int) WIDTH + 1) * WIDTH + TILE_DIM;
-        pos.y = m_player.getPosition().y;
+        new_pos.x = ((int) m_player.getPosition().x / (int) WIDTH + 1) * WIDTH + TILE_DIM;
+        new_pos.y = m_player.getPosition().y;
         m_view->updateCamera(WIDTH,0);
     }
     else if (dir == Direction::Up){
-        pos.x = m_player.getPosition().x;
-        pos.y = ((int) m_player.getPosition().y / (int) HEIGHT) * HEIGHT - 2 * TILE_DIM;
+        new_pos.x = m_player.getPosition().x;
+        new_pos.y = ((int) m_player.getPosition().y / (int) HEIGHT) * HEIGHT - 2 * TILE_DIM;
         m_view->updateCamera(0,-HEIGHT);
     }
     else if (dir == Direction::Down){
-        pos.x = m_player.getPosition().x;
-        pos.y = ((int) m_player.getPosition().y / (int) HEIGHT + 1) * HEIGHT + TILE_DIM;
+        new_pos.x = m_player.getPosition().x;
+        new_pos.y = ((int) m_player.getPosition().y / (int) HEIGHT + 1) * HEIGHT + TILE_DIM;
       m_view->updateCamera(0,HEIGHT);
     }
-    setCharPosition(pos);
+    setCharPosition(new_pos);
     m_onDoor = false;
     }
 
