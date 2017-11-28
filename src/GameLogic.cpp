@@ -45,7 +45,7 @@ void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> collVector, 
 /* Sets the position of character */
 void GameLogic::setCharPosition(sf::Vector2f position) {
     m_player.setPosition(position);
-    m_sprite->setPosition(position.x, position.y);
+    m_sprite->setPosition(position);
 }
 
 
@@ -165,7 +165,6 @@ void GameLogic::moveChar(const EventInterface& event) {
     /* Check collisions. */
     if(checkCollisions(m_sprite->getGlobalBounds())){
         setCharPosition(prev);
-        m_sprite->setPosition(prev.x, prev.y);
     }
 
     /* Check doors. */
