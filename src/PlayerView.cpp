@@ -41,38 +41,37 @@ void PlayerView::init(){
     m_sound.setBuffer(m_buffer);
 
     // Load animations
-    walkingDown.setSpriteSheet(m_charTexture);
-    walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
-    walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
-    walkingDown.addFrame(sf::IntRect(0, 64, 32, 32));
-    walkingDown.addFrame(sf::IntRect(0, 96, 32, 32));
+    m_walkingDown.setSpriteSheet(m_charTexture);
+    m_walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
+    m_walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
+    m_walkingDown.addFrame(sf::IntRect(0, 64, 32, 32));
+    m_walkingDown.addFrame(sf::IntRect(0, 96, 32, 32));
 
-    walkingLeft.setSpriteSheet(m_charTexture);
-    walkingLeft.addFrame(sf::IntRect(32, 0, 32, 32));
-    walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
-    walkingLeft.addFrame(sf::IntRect(32, 64, 32, 32));
-    walkingLeft.addFrame(sf::IntRect(32, 96, 32, 32));
+    m_walkingLeft.setSpriteSheet(m_charTexture);
+    m_walkingLeft.addFrame(sf::IntRect(32, 0, 32, 32));
+    m_walkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
+    m_walkingLeft.addFrame(sf::IntRect(32, 64, 32, 32));
+    m_walkingLeft.addFrame(sf::IntRect(32, 96, 32, 32));
 
-    walkingRight.setSpriteSheet(m_charTexture);
-    walkingRight.addFrame(sf::IntRect(96, 0, 32, 32));
-    walkingRight.addFrame(sf::IntRect(96, 32, 32, 32));
-    walkingRight.addFrame(sf::IntRect(96, 64, 32, 32));
-    walkingRight.addFrame(sf::IntRect(96, 96, 32, 32));
+    m_walkingRight.setSpriteSheet(m_charTexture);
+    m_walkingRight.addFrame(sf::IntRect(96, 0, 32, 32));
+    m_walkingRight.addFrame(sf::IntRect(96, 32, 32, 32));
+    m_walkingRight.addFrame(sf::IntRect(96, 64, 32, 32));
+    m_walkingRight.addFrame(sf::IntRect(96, 96, 32, 32));
 
-    walkingUp.setSpriteSheet(m_charTexture);
-    walkingUp.addFrame(sf::IntRect(64, 0, 32, 32));
-    walkingUp.addFrame(sf::IntRect(64, 32, 32, 32));
-    walkingUp.addFrame(sf::IntRect(64, 64, 32, 32));
-    walkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
+    m_walkingUp.setSpriteSheet(m_charTexture);
+    m_walkingUp.addFrame(sf::IntRect(64, 0, 32, 32));
+    m_walkingUp.addFrame(sf::IntRect(64, 32, 32, 32));
+    m_walkingUp.addFrame(sf::IntRect(64, 64, 32, 32));
+    m_walkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
 
-    currAnimation = &walkingDown;
-    animatedSprite.setPosition(START_POS);
-    animatedSprite.setScale(0.9f,0.9f);
-    animatedSprite.play(*currAnimation);
+    m_currAnimation = &m_walkingDown;
+    m_animatedSprite.setPosition(START_POS);
+    m_animatedSprite.setScale(0.9f,0.9f);
+    m_animatedSprite.play(*m_currAnimation);
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
-    m_speed = SPEED;
-    m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
+    //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
 
 
@@ -87,7 +86,7 @@ void PlayerView::setContext(sf::RenderWindow* window){
 /* Link the game logic with player view */
 void PlayerView::setGameLogic(GameLogic* gameLogic) {
     m_gameLogic = gameLogic;
-    gameLogic->setAnimatedSprite(&animatedSprite);
+    gameLogic->setAnimatedSprite(&m_animatedSprite);
 }
 
 
@@ -228,13 +227,13 @@ void PlayerView::draw() {
                 rocks[i]->draw(m_window);
             }
             // m_window->draw(m_filter);
-            m_window->draw(animatedSprite);
+            m_window->draw(m_animatedSprite);
 
             /* Debug stuff */
             if(m_game->inDebugMode()){
-              sf::RectangleShape debugRectangle(sf::Vector2f(boundaryBox.width, boundaryBox.height));
+              sf::RectangleShape debugRectangle(sf::Vector2f(m_boundaryBox.width, m_boundaryBox.height));
               debugRectangle.setFillColor(sf::Color(250, 150, 100, 100));
-              debugRectangle.setPosition(animatedSprite.getPosition().x, animatedSprite.getPosition().y);
+              debugRectangle.setPosition(m_animatedSprite.getPosition().x, m_animatedSprite.getPosition().y);
               m_window->draw(debugRectangle);
               m_collisions.drawBoxes(m_window);
               m_doors.drawBoxes(m_window);
@@ -268,33 +267,33 @@ void PlayerView::setListener() {
 
 
 void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPressed, float deltaTime) {
-    Animation *currAnimation;
+    Animation *m_currAnimation;
     switch (dir) {
         case Up: {
-            currAnimation = &walkingUp;
+            m_currAnimation = &m_walkingUp;
             break;
         }
         case Down: {
-            currAnimation = &walkingDown;
+            m_currAnimation = &m_walkingDown;
             break;
         }
         case Right: {
-            currAnimation = &walkingRight;
+            m_currAnimation = &m_walkingRight;
             break;
         }
         case Left: {
-            currAnimation = &walkingLeft;
+            m_currAnimation = &m_walkingLeft;
             break;
         }
     }
-        animatedSprite.play(*currAnimation);
-        animatedSprite.move(moving);
+        m_animatedSprite.play(*m_currAnimation);
+        m_animatedSprite.move(moving);
 
         if (noKeyPressed) {
-            animatedSprite.stop();
+            m_animatedSprite.stop();
         }
         noKeyPressed = true;
-        animatedSprite.update(sf::seconds(deltaTime));
+        m_animatedSprite.update(sf::seconds(deltaTime));
 }
 
 
@@ -308,34 +307,34 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
 //    sf::Vector2f moving;
 //    switch (dir){
 //    case Up:
-//        currAnimation = &walkingUp;
+//        m_currAnimation = &m_walkingUp;
 //        moving = sf::Vector2f(0.f, -m_speed * deltaTime);
 //        noKeyPressed = false;
 //        break;
 //    case Down:
-//        currAnimation = &walkingDown;
+//        m_currAnimation = &m_walkingDown;
 //        moving = sf::Vector2f(0.f, m_speed * deltaTime);
 //        noKeyPressed = false;
 //        break;
 //    case Left:
-//        currAnimation = &walkingLeft;
+//        m_currAnimation = &m_walkingLeft;
 //        moving = sf::Vector2f(-m_speed * deltaTime, 0.f);
 //        noKeyPressed = false;
 //        break;
 //    case Right:
-//        currAnimation = &walkingRight;
+//        m_currAnimation = &m_walkingRight;
 //        moving = sf::Vector2f(m_speed * deltaTime, 0.f);
 //        noKeyPressed = false;
 //        break;
 //    }
-//    animatedSprite.play(*currAnimation);
-//    animatedSprite.move(moving);
+//    m_animatedSprite.play(*m_currAnimation);
+//    m_animatedSprite.move(moving);
 //
 //    if (noKeyPressed) {
-//        animatedSprite.stop();
+//        m_animatedSprite.stop();
 //    }
 //    noKeyPressed = true;
-//    animatedSprite.update((sf::seconds(deltaTime)));
+//    m_animatedSprite.update((sf::seconds(deltaTime)));
 //}
 
 
@@ -372,7 +371,7 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
                     "../res/level/TestLevel/test_doors.csv",
                     sf::Vector2u(16, 16), 100, 38);
-            m_filter.setFillColor(sf::Color(0,0,0,0));
+            //m_filter.setFillColor(sf::Color(0,0,0,0));
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
             break;
         case GameState::RedLevel:
