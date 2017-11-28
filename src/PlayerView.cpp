@@ -31,12 +31,12 @@ void PlayerView::init(){
     m_title.init();
 
     // Load texture for character
-    if(!m_charTexture.loadFromFile("../res/spritenew.png")) {
+    if(!m_charTexture.loadFromFile("../res/sprite/spritenew.png")) {
         // ERROR
     }
 
     // Load sound for sword swing
-    m_buffer.loadFromFile("../res/swordSwing.wav");
+    m_buffer.loadFromFile("../res/sfx/swordSwing.wav");
     m_sound.setBuffer(m_buffer);
 
     // Load animations
@@ -377,14 +377,15 @@ void PlayerView::loadMap(const EventInterface& event) {
             fprintf(stderr, "loading RedLevel!\n");
             m_gameLogic->toggleLevel();
             m_map.loadFromText("../res/tilesets/dungeon.png",
-                    "../res/level/DemoDungeon/dungeon_base.csv",
+                    "../res/level/RedDungeon/dungeon_base.csv",
                     sf::Vector2u(16, 16), 100, 114);
-            m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/DemoDungeon/dungeon_overlay.csv", sf::Vector2u(16, 16), 100, 114);
+            m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/RedDungeon/dungeon_overlay.csv",
+                    sf::Vector2u(16, 16), 100, 114);
             m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
-                    "../res/level/DemoDungeon/dungeon_collision.csv",
+                    "../res/level/RedDungeon/dungeon_collision.csv",
                     sf::Vector2u(16, 16), 100, 114);
             m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
-                    "../res/level/DemoDungeon/dungeon_doors.csv",
+                    "../res/level/RedDungeon/dungeon_doors.csv",
                     sf::Vector2u(16, 16), 100, 114);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
         break;
