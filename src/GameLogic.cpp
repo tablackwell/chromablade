@@ -97,7 +97,7 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
             return true;
         }
     }
-    
+
     /* Check intersections with rock tiles. */
     for (int i=0; i<m_rocks.size(); i++) {
         if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
@@ -207,6 +207,7 @@ void GameLogic::useDoor(const EventInterface& event) {
         m_view->resetCamera();
         if (newState == GameState::Hub) {
             setCharPosition(HUB_POS);
+						m_view->updateCamera(HUB_CAM);
         } else if (newState == GameState::RedLevel) {
             m_view->updateCamera(RED_CAM);
             setCharPosition(RED_POS);
@@ -322,7 +323,7 @@ void GameLogic::spawn(const EventInterface& event) {
         } while (checkCollisions(tile) || checkDoors(tile, 3));
 
         /* have a valid spawn location. */
-        Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM), 
+        Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM),
                                             sf::Vector2f(x,y));
         m_rocks.push_back(actor);
     }
