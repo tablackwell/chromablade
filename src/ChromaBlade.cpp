@@ -138,6 +138,9 @@ void ChromaBlade::updateState(const EventInterface &event) {
             case GameState::RedLevel:
                 printf("Changed state to RedLevel!\n");
                 break;
+            case GameState::BlueLevel:
+                printf("Changed state to BlueLevel!\n");
+                break;
         }
     }
 }

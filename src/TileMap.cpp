@@ -90,6 +90,14 @@ bool TileMap::loadFromText(const std::string& tileset, std::string textFileName,
         fprintf(stderr, "loadFromText!\n");
         return true;
 }
+int TileMap::getHeight(){
+  return m_height;
+}
+
+int TileMap::getWidth(){
+  return m_width;
+}
+
 
 /*
 Renders a given tilemap (don't call this if you're using a tilemap to store

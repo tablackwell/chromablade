@@ -18,6 +18,8 @@ public:
     bool loadDoorsFromText(const std::string& tileset, std::string textFileName, sf::Vector2u tileSize, unsigned int width, unsigned int height);
     void drawBoxes(sf::RenderWindow* target);
     int checkCollision(int actorX, int actorY);
+    int getHeight();
+    int getWidth();
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void clear();
 
