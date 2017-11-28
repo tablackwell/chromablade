@@ -71,8 +71,7 @@ void PlayerView::init(){
     m_animatedSprite.play(*m_currAnimation);
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
-    m_speed = SPEED;
-    m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
+    //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
 
 
@@ -372,7 +371,7 @@ void PlayerView::loadMap(const EventInterface& event) {
             m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
                     "../res/level/TestLevel/test_doors.csv",
                     sf::Vector2u(16, 16), 100, 38);
-            m_filter.setFillColor(sf::Color(0,0,0,0));
+            //m_filter.setFillColor(sf::Color(0,0,0,0));
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
             break;
         case GameState::RedLevel:
