@@ -130,6 +130,7 @@ void GameLogic::moveChar(const EventInterface& event) {
     const EventInterface *ptr = &event;
     const MoveEvent *moveEvent = dynamic_cast<const MoveEvent*>(ptr);
     Direction dir = moveEvent->getDirection();
+    float speed = moveEvent->getSpeed();
     float deltaTime = moveEvent->getDeltaTime();
     float x = std::get<0>(m_player.getPosition());
     float y = std::get<1>(m_player.getPosition());
@@ -140,24 +141,23 @@ void GameLogic::moveChar(const EventInterface& event) {
 
     switch (dir){
         case Up:
-            y = y - SPEED * deltaTime;
-
-            moving = sf::Vector2f(0.f, -SPEED * deltaTime);
+            y = y + speed * deltaTime;
+            moving = sf::Vector2f(0.f, speed * deltaTime);
             noKeyPressed = false;
             break;
         case Down:
-            y = y + SPEED * deltaTime;
-            moving = sf::Vector2f(0.f, SPEED * deltaTime);
+            y = y + speed * deltaTime;
+            moving = sf::Vector2f(0.f, speed * deltaTime);
             noKeyPressed = false;
             break;
         case Left:
-            x = x - SPEED * deltaTime;
-            moving = sf::Vector2f(-SPEED * deltaTime, 0.f);
+            x = x + speed * deltaTime;
+            moving = sf::Vector2f(speed * deltaTime, 0.f);
             noKeyPressed = false;
             break;
         case Right:
-            x = x + SPEED * deltaTime;
-            moving = sf::Vector2f(SPEED * deltaTime, 0.f);
+            x = x + speed * deltaTime;
+            moving = sf::Vector2f(speed * deltaTime, 0.f);
             noKeyPressed = false;
             break;
     }

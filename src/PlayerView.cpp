@@ -16,6 +16,7 @@
 #include <cstdio>
 #include <tuple>
 #include <iostream>
+#include <math.h>
 
 #define START_POS sf::Vector2f(196, 255)
 #define SPEED 200.f
@@ -137,23 +138,53 @@ void PlayerView::handleInput(float deltaTime) {
                     }
                 }
             }
+            sf::Vector2f v;
+            Direction dir;
+
             if (sf::Keyboard::isKeyPressed(LEFT)){
-                MoveEvent *move = new MoveEvent(Direction::Left);
-                m_game->queueEvent(move);
+                v.x -= SPEED;
+//                dir = Direction::Left;
+//                MoveEvent *move = new MoveEvent(Direction::Left);
+//                m_game->queueEvent(move);
             }
             else if (sf::Keyboard::isKeyPressed(RIGHT)){
-                MoveEvent *move = new MoveEvent(Direction::Right);
-                m_game->queueEvent(move);
+                v.x += SPEED;
+//                dir = Direction::Right;
+//                MoveEvent *move = new MoveEvent(Direction::Right);
+//                m_game->queueEvent(move);
             }
-            else if (sf::Keyboard::isKeyPressed(UP)){
-                MoveEvent *move = new MoveEvent(Direction::Up);
-                m_game->queueEvent(move);
+            if (sf::Keyboard::isKeyPressed(UP)){
+                v.y -= SPEED;
+//                dir = Direction::Up;
+//                MoveEvent *move = new MoveEvent(Direction::Up);
+//                m_game->queueEvent(move);
             }
             else if (sf::Keyboard::isKeyPressed(DOWN)){
-                MoveEvent *move = new MoveEvent(Direction::Down);
+                v.y += SPEED;
+//                dir = Direction::Down;
+//                MoveEvent *move = new MoveEvent(Direction::Down);
+//                m_game->queueEvent(move);
+            }
+            if (v.x != 0.f && v.y != 0.f) {
+                v /= sqrt(2.f);
+            }
+            if (v.x > 0) {
+                MoveEvent *move = new MoveEvent(Direction::Right, v.x);
                 m_game->queueEvent(move);
             }
-          break;
+            else if (v.x < 0) {
+                MoveEvent *move = new MoveEvent(Direction::Left, v.x);
+                m_game->queueEvent(move);
+            }
+            if (v.y > 0) {
+                MoveEvent *move = new MoveEvent(Direction::Down, v.y);
+                m_game->queueEvent(move);
+            }
+            else if (v.y < 0) {
+                MoveEvent *move = new MoveEvent(Direction::Up, v.y);
+                m_game->queueEvent(move);
+            }
+            break;
     }
 }
 
@@ -267,44 +298,44 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
 
 
 /* Used to build a listener for moveEvent */
-void PlayerView::moveChar(const EventInterface& event) {
-    const EventInterface *ptr = &event;
-    const MoveEvent *moveEvent = dynamic_cast<const MoveEvent*>(ptr);
-    Direction dir = moveEvent->getDirection();
-    float deltaTime = moveEvent->getDeltaTime();
-    bool noKeyPressed = true;
-    sf::Vector2f moving;
-    switch (dir){
-    case Up:
-        currAnimation = &walkingUp;
-        moving = sf::Vector2f(0.f, -m_speed * deltaTime);
-        noKeyPressed = false;
-        break;
-    case Down:
-        currAnimation = &walkingDown;
-        moving = sf::Vector2f(0.f, m_speed * deltaTime);
-        noKeyPressed = false;
-        break;
-    case Left:
-        currAnimation = &walkingLeft;
-        moving = sf::Vector2f(-m_speed * deltaTime, 0.f);
-        noKeyPressed = false;
-        break;
-    case Right:
-        currAnimation = &walkingRight;
-        moving = sf::Vector2f(m_speed * deltaTime, 0.f);
-        noKeyPressed = false;
-        break;
-    }
-    animatedSprite.play(*currAnimation);
-    animatedSprite.move(moving);
-
-    if (noKeyPressed) {
-        animatedSprite.stop();
-    }
-    noKeyPressed = true;
-    animatedSprite.update((sf::seconds(deltaTime)));
-}
+//void PlayerView::moveChar(const EventInterface& event) {
+//    const EventInterface *ptr = &event;
+//    const MoveEvent *moveEvent = dynamic_cast<const MoveEvent*>(ptr);
+//    Direction dir = moveEvent->getDirection();
+//    float deltaTime = moveEvent->getDeltaTime();
+//    bool noKeyPressed = true;
+//    sf::Vector2f moving;
+//    switch (dir){
+//    case Up:
+//        currAnimation = &walkingUp;
+//        moving = sf::Vector2f(0.f, -m_speed * deltaTime);
+//        noKeyPressed = false;
+//        break;
+//    case Down:
+//        currAnimation = &walkingDown;
+//        moving = sf::Vector2f(0.f, m_speed * deltaTime);
+//        noKeyPressed = false;
+//        break;
+//    case Left:
+//        currAnimation = &walkingLeft;
+//        moving = sf::Vector2f(-m_speed * deltaTime, 0.f);
+//        noKeyPressed = false;
+//        break;
+//    case Right:
+//        currAnimation = &walkingRight;
+//        moving = sf::Vector2f(m_speed * deltaTime, 0.f);
+//        noKeyPressed = false;
+//        break;
+//    }
+//    animatedSprite.play(*currAnimation);
+//    animatedSprite.move(moving);
+//
+//    if (noKeyPressed) {
+//        animatedSprite.stop();
+//    }
+//    noKeyPressed = true;
+//    animatedSprite.update((sf::seconds(deltaTime)));
+//}
 
 
 void PlayerView::clearTileMaps() {
