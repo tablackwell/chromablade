@@ -14,9 +14,12 @@ public:
     Actor(Type type, sf::Vector2f size, sf::Vector2f pos);
     void draw(sf::RenderWindow *window);
     sf::FloatRect getGlobalBounds();
+
+protected:
+    sf::RectangleShape m_rect;
+
 private:
     Type m_type;
-    sf::RectangleShape m_rect;
     sf::Texture m_texture;
 };
 
