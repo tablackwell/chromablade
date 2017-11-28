@@ -17,7 +17,6 @@
 #include <iostream>
 #include <math.h>
 
-#define START_POS sf::Vector2f(196, 255)
 #define SPEED 200.f
 
 PlayerView::PlayerView() : Process() {
@@ -65,7 +64,7 @@ void PlayerView::init(){
     m_walkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
 
     m_currAnimation = &m_walkingDown;
-    m_animatedSprite.setPosition(START_POS);
+    m_animatedSprite.setPosition(HUB_POS);
     m_animatedSprite.setScale(0.9f,0.9f);
     m_animatedSprite.play(*m_currAnimation);
     setState(Process::RUNNING);

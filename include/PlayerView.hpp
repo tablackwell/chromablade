@@ -13,6 +13,9 @@
 #include <SFML/Audio.hpp>
 
 #define TILE_DIM 32
+#define HUB_POS sf::Vector2f(196,255)
+#define RED_POS sf::Vector2f(60,1520)
+#define RED_CAM 400,1520
 
 class ChromaBlade; // Forward declaration of class ChromaBlade, so that we can declare a pointer to ChromaBlade in PlayerView
 

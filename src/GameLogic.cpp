@@ -16,6 +16,7 @@ GameLogic::GameLogic() : Process() {
 
 void GameLogic::init(){
 	m_level = red;
+    m_levelToggled = false;
     setState(Process::RUNNING);
 }
 
@@ -59,7 +60,7 @@ void GameLogic::setAnimatedSprite(AnimatedSprite* sprite){
 }
 
 void GameLogic::toggleLevel(){
-	m_levelToggled = true;
+	m_levelToggled = !m_levelToggled;
 }
 
 
@@ -203,9 +204,14 @@ void GameLogic::useDoor(const EventInterface& event) {
         LoadMapEvent* loadMapEvent = new LoadMapEvent(newState);
         m_game->queueEvent(change);
         m_game->queueEvent(loadMapEvent);
-				m_view->resetCamera();
-        m_view->updateCamera(400,1520);
-        setCharPosition(sf::Vector2f(60,1520));
+        m_view->resetCamera();
+        if (newState == GameState::Hub) {
+            setCharPosition(HUB_POS);
+        } else if (newState == GameState::RedLevel) {
+            m_view->updateCamera(RED_CAM);
+            setCharPosition(RED_POS);
+        } else {
+        }
     }
 
     if(m_levelToggled){
@@ -231,8 +237,15 @@ void GameLogic::useDoor(const EventInterface& event) {
         new_pos.y = ((int) m_player.getPosition().y / (int) HEIGHT + 1) * HEIGHT + TILE_DIM;
       m_view->updateCamera(0,HEIGHT);
     }
-    setCharPosition(new_pos);
-    m_onDoor = false;
+
+    if (new_pos.x < 0 || new_pos.y < 0) {
+        DoorEvent *doorEvent = new DoorEvent(GameState::Hub, 0, dir);
+        m_game->queueEvent(doorEvent);
+        toggleLevel();
+    } else {
+        setCharPosition(new_pos);
+        m_onDoor = false;
+    }
     }
 
     if (room > 0) {

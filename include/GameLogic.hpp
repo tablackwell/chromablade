@@ -57,7 +57,7 @@ private:
     std::vector<DynamicActor*> m_enemies;
     std::vector<int> m_clearedRooms;
     bool m_onDoor;
-    bool levelToggled = false;
+    bool m_levelToggled;
 };
 
 #endif
