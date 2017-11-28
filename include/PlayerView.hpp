@@ -46,24 +46,21 @@ public:
 
 private: //vars and objs
     EventManager *m_eventManager;
-    Animation *currAnimation;
-    Animation walkingDown;
-    Animation walkingUp;
-    Animation walkingRight;
-    Animation walkingLeft;
+    Animation *m_currAnimation;
+    Animation m_walkingDown;
+    Animation m_walkingUp;
+    Animation m_walkingRight;
+    Animation m_walkingLeft;
     sf::View m_camera;
-    sf::FloatRect boundaryBox;
-    AnimatedSprite animatedSprite;
+    sf::FloatRect m_boundaryBox;
+    AnimatedSprite m_animatedSprite;
     sf::RenderWindow* m_window;
     sf::Sprite m_character;
     sf::Texture m_charTexture;
     sf::RectangleShape m_filter;
-    int prevX;
-    int prevY;
     float m_speed;
     bool m_notReleased;
     bool m_onDoor;
-    bool levelToggled = false;
     GameLogic* m_gameLogic;
     ChromaBlade* m_game;
     TileMap m_map;
