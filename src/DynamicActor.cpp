@@ -4,7 +4,6 @@
 
 #include "DynamicActor.hpp"
 #include <iostream>
-#include <tuple>
 
 
 DynamicActor::DynamicActor() {
@@ -12,11 +11,12 @@ DynamicActor::DynamicActor() {
 }
 
 
-DynamicActor::DynamicActor(Color color, float health, float damage, std::tuple<float, float> startPos, int speed) {
+DynamicActor::DynamicActor(Color color, float health, float damage, sf::Vector2f startPos, int speed) {
     this->m_activeColor = color;
     this->m_health = health;
     this->m_damage = damage;
-    this->m_position = startPos;
+    this->m_position.x = startPos.x;
+    this->m_position.y = startPos.y;
     this->m_speed = speed;
 }
 
@@ -40,13 +40,13 @@ void DynamicActor::setHealth(float health) {
 
 
 /* Sets the actor position */
-void DynamicActor::setPosition(std::tuple<float, float> position) {
+void DynamicActor::setPosition(sf::Vector2f position) {
     this->m_position = position;
 }
 
 
 /* Returns the actor position */
-std::tuple<float, float> DynamicActor::getPosition() {
+sf::Vector2f DynamicActor::getPosition() {
     return m_position;
 }
 

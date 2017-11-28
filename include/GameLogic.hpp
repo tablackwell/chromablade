@@ -11,7 +11,6 @@
 #include "AnimatedSprite.hpp"
 #include "EventType.hpp"
 #include "Actor.hpp"
-#include <tuple>
 #include <functional>
 
 #define SPEED 200.f
@@ -26,7 +25,7 @@ public:
     void init();
     void update(float &deltaTime);
     Level getLevel();
-    void setCharPosition(std::tuple<float, float> position);
+    void setCharPosition(sf::Vector2f position);
     void setGameApplication(ChromaBlade* game);
     void setAnimatedSprite(AnimatedSprite* sprite);
     void setView(PlayerView* view);

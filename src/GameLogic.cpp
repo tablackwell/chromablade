@@ -7,7 +7,6 @@
 #include "ChromaBlade.hpp"
 #include "PlayerView.hpp"
 
-#include <tuple>
 #include <iostream>
 
 
@@ -44,8 +43,9 @@ void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> collVector, 
 
 
 /* Sets the position of character */
-void GameLogic::setCharPosition(std::tuple<float, float> position) {
+void GameLogic::setCharPosition(sf::Vector2f position) {
     m_player.setPosition(position);
+    m_sprite->setPosition(position);
 }
 
 
@@ -132,42 +132,39 @@ void GameLogic::moveChar(const EventInterface& event) {
     Direction dir = moveEvent->getDirection();
     float speed = moveEvent->getSpeed();
     float deltaTime = moveEvent->getDeltaTime();
-    float x = std::get<0>(m_player.getPosition());
-    float y = std::get<1>(m_player.getPosition());
-    float prevX = std::get<0>(m_player.getPosition());
-    float prevY = std::get<1>(m_player.getPosition());
+    sf::Vector2f pos = m_player.getPosition();
+    sf::Vector2f prev = m_player.getPosition();
     bool noKeyPressed = true;
     sf::Vector2f moving;
 
     switch (dir){
         case Up:
-            y = y + speed * deltaTime;
+            pos.y = pos.y + speed * deltaTime;
             moving = sf::Vector2f(0.f, speed * deltaTime);
             noKeyPressed = false;
             break;
         case Down:
-            y = y + speed * deltaTime;
+            pos.y = pos.y + speed * deltaTime;
             moving = sf::Vector2f(0.f, speed * deltaTime);
             noKeyPressed = false;
             break;
         case Left:
-            x = x + speed * deltaTime;
+            pos.x = pos.x + speed * deltaTime;
             moving = sf::Vector2f(speed * deltaTime, 0.f);
             noKeyPressed = false;
             break;
         case Right:
-            x = x + speed * deltaTime;
+            pos.x = pos.x + speed * deltaTime;
             moving = sf::Vector2f(speed * deltaTime, 0.f);
             noKeyPressed = false;
             break;
     }
-    setCharPosition(std::make_tuple(x, y));
+    setCharPosition(pos);
     m_view->drawAnimation(dir, moving, noKeyPressed, deltaTime);
 
     /* Check collisions. */
     if(checkCollisions(m_sprite->getGlobalBounds())){
-        setCharPosition(std::make_tuple(prevX, prevY));
-        m_sprite->setPosition(prevX, prevY);
+        setCharPosition(prev);
     }
 
     /* Check doors. */
@@ -184,10 +181,9 @@ void GameLogic::moveChar(const EventInterface& event) {
     }
     if(m_game->inDebugMode()){
         std::cout <<"Player Position (sprite then logic): \n " ;
-        x = std::get<0>(m_player.getPosition());
-        y = std::get<1>(m_player.getPosition());
+        pos = m_player.getPosition();
         std::cout << m_sprite->getPosition().x << "," << m_sprite->getPosition().y << "\n";
-        std::cout << x << "," << y << "\n";
+        std::cout << pos.x << "," << pos.y << "\n";
     }
 }
 
@@ -210,7 +206,7 @@ void GameLogic::useDoor(const EventInterface& event) {
 				m_view->resetCamera();
         m_view->updateCamera(400,1520);
         m_sprite->setPosition(60,1520);
-        setCharPosition(std::make_tuple(60,1520));
+        setCharPosition(sf::Vector2f(60,1520));
     }
 
     if(levelToggled){
@@ -237,7 +233,7 @@ void GameLogic::useDoor(const EventInterface& event) {
               ((int) m_sprite->getPosition().y / (int) HEIGHT + 1) * HEIGHT + TILE_DIM);
       m_view->updateCamera(0,HEIGHT);
     }
-    setCharPosition(std::make_tuple(m_sprite->getPosition().x, m_sprite->getPosition().y));
+    setCharPosition(m_sprite->getPosition());
     m_onDoor = false;
     }
 

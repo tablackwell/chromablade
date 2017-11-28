@@ -14,7 +14,6 @@
 #include <SFML/Audio.hpp>
 #include <SFML/Window.hpp>
 #include <cstdio>
-#include <tuple>
 #include <iostream>
 #include <math.h>
 
