@@ -11,15 +11,17 @@
  */
 class AttackEvent : public EventInterface {
     public:
-        AttackEvent(bool isFromPlayer) { m_isFromPlayer = isFromPlayer; m_type = attackEvent; }
+        AttackEvent(bool isFromPlayer, Direction dir) { m_dir = dir; m_isFromPlayer = isFromPlayer; m_type = attackEvent; }
         bool isFromPlayer() const { return m_isFromPlayer; }
         const EventType& getEventType(void) const { return m_type; }
+        Direction getDirection() const { return m_dir; }
 
     private:
 
     private: // event data
         bool m_isFromPlayer;
         EventType m_type;
+        Direction m_dir;
 };
 
 #endif

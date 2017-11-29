@@ -121,7 +121,20 @@ void PlayerView::handleInput(float deltaTime) {
                 }
                 else if (event.type == sf::Event::KeyPressed) {
                     if (event.key.code == KEY_ATTACK) {
-                        AttackEvent *attack = new AttackEvent(true);
+                        Direction dir;
+                        if (m_currAnimation == &m_walkingUp) {
+                            dir = Up;
+                        }
+                        else if (m_currAnimation == &m_walkingDown) {
+                            dir = Down;
+                        }
+                        else if (m_currAnimation == &m_walkingLeft) {
+                            dir = Left;
+                        }
+                        else if (m_currAnimation == &m_walkingRight) {
+                            dir = Right;
+                        }
+                        AttackEvent *attack = new AttackEvent(true, dir);
                         m_game->queueEvent(attack);
                         m_sound.play();
                     }
@@ -199,7 +212,7 @@ void PlayerView::draw() {
     m_window->clear();
     GameState state = m_game->getState();
     std::vector<Actor*> rocks = m_gameLogic->getRocks();
-    std::vector<Actor*> mobs = m_gameLogic->getMobs();
+    std::vector<DynamicActor*> mobs = m_gameLogic->getMobs();
 
     // Render the content depending on the game state
     switch(state) {
@@ -263,7 +276,6 @@ void PlayerView::setListener() {
 
 
 void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPressed, float deltaTime) {
-    Animation *m_currAnimation;
     switch (dir) {
         case Up: {
             m_currAnimation = &m_walkingUp;
@@ -282,14 +294,14 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
             break;
         }
     }
-        m_animatedSprite.play(*m_currAnimation);
-        m_animatedSprite.move(moving);
+    m_animatedSprite.play(*m_currAnimation);
+    m_animatedSprite.move(moving);
 
-        if (noKeyPressed) {
-            m_animatedSprite.stop();
-        }
-        noKeyPressed = true;
-        m_animatedSprite.update(sf::seconds(deltaTime));
+    if (noKeyPressed) {
+        m_animatedSprite.stop();
+    }
+    noKeyPressed = true;
+    m_animatedSprite.update(sf::seconds(deltaTime));
 }
 
 
