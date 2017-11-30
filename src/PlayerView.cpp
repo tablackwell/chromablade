@@ -9,6 +9,7 @@
 #include "AttackEvent.hpp"
 #include "SpawnEvent.hpp"
 #include "LoadMapEvent.hpp"
+#include "SwitchColorEvent.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -76,10 +77,6 @@ void PlayerView::init(){
     m_animatedSprite.setPosition(HUB_POS); // (196,255)
     setSwordOrientation();
     m_animatedSprite.setScale(0.9f,0.9f);
-    std::cout << m_sword.getGlobalBounds().top << "\n";
-    std::cout << m_sword.getGlobalBounds().left << "\n";
-    std::cout << m_sword.getGlobalBounds().width << "\n"; // 21
-    std::cout << m_sword.getGlobalBounds().height << "\n"; // 28.5
     m_animatedSprite.play(*m_currAnimation);
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
@@ -154,13 +151,19 @@ void PlayerView::handleInput(float deltaTime) {
                         isAttacking = true;
                     }
                     if (event.key.code == KEY_RED) {
-                        // TODO: switchSwordEvent
+                        SwitchColorEvent *switchColor = new SwitchColorEvent(sf::Color::Red);
+                        m_game->queueEvent(switchColor);
+                        m_sword.setColor(sf::Color(255, 0, 0));
                     }
                     if (event.key.code == KEY_BLUE) {
-                        // TODO: switchSwordEvent
+                        SwitchColorEvent *switchColor = new SwitchColorEvent(sf::Color::Blue);
+                        m_game->queueEvent(switchColor);
+                        m_sword.setColor(sf::Color(0, 0, 255));
                     }
                     if (event.key.code == KEY_YELLOW) {
-                        // TODO: switchSwordEvent
+                        SwitchColorEvent *switchColor = new SwitchColorEvent(sf::Color::Yellow);
+                        m_game->queueEvent(switchColor);
+                        m_sword.setColor(sf::Color(255, 255, 0));
                     }
                 }
             }

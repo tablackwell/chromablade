@@ -4,6 +4,7 @@
 #include "DoorEvent.hpp"
 #include "AttackEvent.hpp"
 #include "SpawnEvent.hpp"
+#include "SwitchColorEvent.hpp"
 #include "ChromaBlade.hpp"
 #include "PlayerView.hpp"
 #include "Mob.hpp"
@@ -93,6 +94,10 @@ void GameLogic::setListener() {
     const EventListener doorListener = EventListener(door, EventType::doorEvent);
     m_game->registerListener(doorListener, EventType::doorEvent);
 
+    // SwitchColorEvent
+    std::function<void(const EventInterface &event)> switchCol = std::bind(&GameLogic::switchColor, this, std::placeholders::_1);
+    const EventListener switchListener = EventListener(switchCol, EventType::switchColorEvent);
+    m_game->registerListener(switchListener, EventType::switchColorEvent);
 }
 
 
@@ -407,4 +412,14 @@ void GameLogic::spawn(const EventInterface& event) {
             m_mobs.push_back(actor);
         }
     }
+}
+
+
+/* Triggered by a SwitchColorEvent */
+void GameLogic::switchColor(const EventInterface& event) {
+    printf("switch color!\n");
+    const EventInterface *ptr = &event;
+    const SwitchColorEvent *switchColorEvent = dynamic_cast<const SwitchColorEvent*>(ptr);
+    sf::Color color = switchColorEvent->getColor();
+    m_player.changeSwordColor(color);
 }
