@@ -312,25 +312,21 @@ void PlayerView::swingSword(float deltaTime) {
 /* Set sword orientation according to the direction that the character is facing; called when drawing animation */
 void PlayerView::setSwordOrientation() {
     if (m_currAnimation == &m_walkingUp) {
-        m_sword.setRotation(0);
         m_sword.setOrigin(42, 57);
         m_sword.setTextureRect(sf::IntRect(21, 4, 42, 57));
         m_sword.setPosition(m_animatedSprite.getPosition().x + 6, m_animatedSprite.getPosition().y + 23.5);
     }
     else if (m_currAnimation == &m_walkingDown) {
-        m_sword.setRotation(0);
         m_sword.setOrigin(42, 0);
         m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
         m_sword.setPosition(m_animatedSprite.getPosition().x + 6, m_animatedSprite.getPosition().y + 25);
     }
     else if (m_currAnimation == &m_walkingLeft) {
-        m_sword.setRotation(0);
         m_sword.setOrigin(57, 21);
         m_sword.setTextureRect(sf::IntRect(3, 64, 57, 42));
         m_sword.setPosition(m_animatedSprite.getPosition().x + 13.5, m_animatedSprite.getPosition().y + 25.5);
     }
     else if (m_currAnimation == &m_walkingRight) {
-        m_sword.setRotation(0);
         m_sword.setOrigin(0, 21);
         m_sword.setTextureRect(sf::IntRect(122, 64, 57, 42));
         m_sword.setPosition(m_animatedSprite.getPosition().x + 10, m_animatedSprite.getPosition().y + 25.5);
