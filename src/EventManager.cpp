@@ -99,6 +99,6 @@ void EventManager::update(float deltaTime) {
         EventInterface *event = m_processQueue->m_eventList.front();
         m_processQueue->m_eventList.pop_front(); // No return value
         triggerEvent(*event, deltaTime);
-
+        delete event;
     }
 }

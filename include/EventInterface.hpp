@@ -9,15 +9,16 @@
  * Event interface used for event management.
  */
 class EventInterface {
-    public:
-        virtual const EventType& getEventType(void) const = 0;;
-        const float getDeltaTime(void) const { return m_deltaTime; }
-        void setDeltaTime(float deltaTime) {this->m_deltaTime = deltaTime; }
+public:
+    virtual ~EventInterface() {}
+    virtual const EventType& getEventType(void) const = 0;;
+    const float getDeltaTime(void) const { return m_deltaTime; }
+    void setDeltaTime(float deltaTime) {this->m_deltaTime = deltaTime; }
 
-    private:
+private:
 
-    private:
-        float m_deltaTime;
+private:
+    float m_deltaTime;
 };
 
 #endif
