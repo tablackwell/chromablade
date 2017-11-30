@@ -254,7 +254,7 @@ void GameLogic::moveChar(const EventInterface& event) {
     if (doorDetected && !m_onDoor) {
         std::cout << "onDoor\n";
         m_onDoor = true;
-        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
+        DoorEvent *doorEvent = new DoorEvent(m_game->getState(), 1, dir);
         m_game->queueEvent(doorEvent);
     }
     else if (!doorDetected && m_onDoor) {
@@ -290,6 +290,7 @@ void GameLogic::useDoor(const EventInterface& event) {
     const GameState newState = doorEvent->getGameState();
     const int room = doorEvent->getRoom();
     const Direction dir = doorEvent->getDirection();
+    bool mapChange = false;
 
     if (newState != curState) {
         fprintf(stderr, "door leads to %d\n", newState);
@@ -301,18 +302,21 @@ void GameLogic::useDoor(const EventInterface& event) {
         if (newState == GameState::Hub) {
             setCharPosition(HUB_POS);
 						m_view->updateCamera(HUB_CAM);
+            mapChange = true;
         }
 				else if (newState == GameState::RedLevel) {
             m_view->updateCamera(RED_CAM);
             setCharPosition(RED_POS);
+            mapChange = true;
         }
 				else if (newState == GameState::BlueLevel){
 						m_view->updateCamera(BLUE_CAM);
 						setCharPosition(BLUE_POS);
+            mapChange = true;
         }
     }
 
-    if(m_levelToggled){
+    if(!mapChange){
         sf::Vector2f pos = m_player.getPosition();
         sf::Vector2f new_pos;
         if (dir == Direction::Left) {
@@ -346,7 +350,7 @@ void GameLogic::useDoor(const EventInterface& event) {
         }
     }
 
-    if (room > 0) {
+    if ((room > 0) && (m_game->getState() != GameState::Hub)) {
         if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room) == m_clearedRooms.end()) {
             sf::Vector2f center = m_view->getCameraCenter();
             sf::Vector2f size = m_view->getCameraSize();
