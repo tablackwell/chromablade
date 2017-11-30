@@ -13,7 +13,8 @@ enum EventType {
     changeStateEvent,
     doorEvent,
     loadMapEvent,
-    spawnEvent
+    spawnEvent,
+    switchColorEvent,
 };
 
 #endif

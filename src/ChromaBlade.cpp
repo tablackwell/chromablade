@@ -70,7 +70,7 @@ void ChromaBlade::update(float &deltaTime) {
     switch (m_state) {
         case GameState::Title:
             break;
-        case GameState::Hub:
+        default:
             m_processManager.update(deltaTime);
             break;
     }

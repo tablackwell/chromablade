@@ -9,6 +9,7 @@
 #include "AttackEvent.hpp"
 #include "SpawnEvent.hpp"
 #include "LoadMapEvent.hpp"
+#include "SwitchColorEvent.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
@@ -76,10 +77,6 @@ void PlayerView::init(){
     m_animatedSprite.setPosition(HUB_POS); // (196,255)
     setSwordOrientation();
     m_animatedSprite.setScale(0.9f,0.9f);
-    std::cout << m_sword.getGlobalBounds().top << "\n";
-    std::cout << m_sword.getGlobalBounds().left << "\n";
-    std::cout << m_sword.getGlobalBounds().width << "\n"; // 21
-    std::cout << m_sword.getGlobalBounds().height << "\n"; // 28.5
     m_animatedSprite.play(*m_currAnimation);
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
@@ -156,13 +153,19 @@ void PlayerView::handleInput(float deltaTime) {
                         isAttacking = true;
                     }
                     if (event.key.code == KEY_RED) {
-                        // TODO: switchSwordEvent
+                        SwitchColorEvent *switchColor = new SwitchColorEvent(sf::Color::Red);
+                        m_game->queueEvent(switchColor);
+                        m_sword.setColor(sf::Color(255, 0, 0));
                     }
                     if (event.key.code == KEY_BLUE) {
-                        // TODO: switchSwordEvent
+                        SwitchColorEvent *switchColor = new SwitchColorEvent(sf::Color::Blue);
+                        m_game->queueEvent(switchColor);
+                        m_sword.setColor(sf::Color(0, 0, 255));
                     }
                     if (event.key.code == KEY_YELLOW) {
-                        // TODO: switchSwordEvent
+                        SwitchColorEvent *switchColor = new SwitchColorEvent(sf::Color::Yellow);
+                        m_game->queueEvent(switchColor);
+                        m_sword.setColor(sf::Color(255, 255, 0));
                     }
                 }
             }
@@ -313,25 +316,21 @@ void PlayerView::swingSword(float deltaTime) {
 /* Set sword orientation according to the direction that the character is facing; called when drawing animation */
 void PlayerView::setSwordOrientation() {
     if (m_currAnimation == &m_walkingUp) {
-        m_sword.setRotation(0);
         m_sword.setOrigin(42, 57);
         m_sword.setTextureRect(sf::IntRect(21, 4, 42, 57));
         m_sword.setPosition(m_animatedSprite.getPosition().x + 6, m_animatedSprite.getPosition().y + 23.5);
     }
     else if (m_currAnimation == &m_walkingDown) {
-        m_sword.setRotation(0);
         m_sword.setOrigin(42, 0);
         m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
         m_sword.setPosition(m_animatedSprite.getPosition().x + 6, m_animatedSprite.getPosition().y + 25);
     }
     else if (m_currAnimation == &m_walkingLeft) {
-        m_sword.setRotation(0);
         m_sword.setOrigin(57, 21);
         m_sword.setTextureRect(sf::IntRect(3, 64, 57, 42));
         m_sword.setPosition(m_animatedSprite.getPosition().x + 13.5, m_animatedSprite.getPosition().y + 25.5);
     }
     else if (m_currAnimation == &m_walkingRight) {
-        m_sword.setRotation(0);
         m_sword.setOrigin(0, 21);
         m_sword.setTextureRect(sf::IntRect(122, 64, 57, 42));
         m_sword.setPosition(m_animatedSprite.getPosition().x + 10, m_animatedSprite.getPosition().y + 25.5);

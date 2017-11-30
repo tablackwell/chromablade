@@ -48,6 +48,7 @@ private:
     void attack(const EventInterface& event);
     void spawn(const EventInterface& event);
     void useDoor(const EventInterface& event);
+    void switchColor(const EventInterface& event);
 
 
 private:
