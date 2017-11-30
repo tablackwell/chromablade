@@ -49,6 +49,9 @@ public:
     sf::Vector2f getCameraSize();
 
 private: //vars and objs
+    void setSwordOrientation();
+    void swingSword(float deltaTime);
+    bool isAttacking;
     EventManager *m_eventManager;
     Animation *m_currAnimation;
     Animation m_walkingDown;
@@ -60,6 +63,8 @@ private: //vars and objs
     AnimatedSprite m_animatedSprite;
     sf::RenderWindow* m_window;
     sf::Texture m_charTexture;
+    sf::Texture m_swordTexture;
+    sf::Sprite m_sword;
     //sf::RectangleShape m_filter;
     GameLogic* m_gameLogic;
     ChromaBlade* m_game;

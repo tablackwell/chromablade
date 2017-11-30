@@ -39,6 +39,14 @@ void PlayerView::init(){
     m_buffer.loadFromFile("../res/sfx/swordSwing.wav");
     m_sound.setBuffer(m_buffer);
 
+    // Load texture for sword
+    if(!m_swordTexture.loadFromFile("../res/sprite/sword.png")) {
+         // ERROR
+    }
+    m_sword.setTexture(m_swordTexture);
+    m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
+    m_sword.setScale(0.5,0.5);
+
     // Load animations
     m_walkingDown.setSpriteSheet(m_charTexture);
     m_walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
@@ -65,11 +73,17 @@ void PlayerView::init(){
     m_walkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
 
     m_currAnimation = &m_walkingDown;
-    m_animatedSprite.setPosition(HUB_POS);
+    m_animatedSprite.setPosition(HUB_POS); // (196,255)
+    setSwordOrientation();
     m_animatedSprite.setScale(0.9f,0.9f);
+    std::cout << m_sword.getGlobalBounds().top << "\n";
+    std::cout << m_sword.getGlobalBounds().left << "\n";
+    std::cout << m_sword.getGlobalBounds().width << "\n"; // 21
+    std::cout << m_sword.getGlobalBounds().height << "\n"; // 28.5
     m_animatedSprite.play(*m_currAnimation);
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
+    isAttacking = false;
     //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
 
@@ -120,7 +134,7 @@ void PlayerView::handleInput(float deltaTime) {
                     m_window->close();
                 }
                 else if (event.type == sf::Event::KeyPressed) {
-                    if (event.key.code == KEY_ATTACK) {
+                    if (event.key.code == KEY_ATTACK && !isAttacking) {
                         Direction dir;
                         if (m_currAnimation == &m_walkingUp) {
                             dir = Up;
@@ -137,6 +151,7 @@ void PlayerView::handleInput(float deltaTime) {
                         AttackEvent *attack = new AttackEvent(true, dir);
                         m_game->queueEvent(attack);
                         m_sound.play();
+                        isAttacking = true;
                     }
                     if (event.key.code == KEY_RED) {
                         // TODO: switchSwordEvent
@@ -229,6 +244,8 @@ void PlayerView::draw() {
                 mobs[i]->draw(m_window);
             }
             // m_window->draw(m_filter);
+
+            m_window->draw(m_sword);
             m_window->draw(m_animatedSprite);
 
             /* Debug stuff */
@@ -261,7 +278,63 @@ bool PlayerView::isOpen(){
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
+    if (isAttacking) {
+        if (m_sword.getRotation() < 70 || m_sword.getRotation() > 290) {
+            swingSword(deltaTime);
+        }
+        else {
+            isAttacking = false;
+        }
+    }
+    else {
+        m_sword.setRotation(0);
+    }
+}
 
+
+/* Play sword animation */
+void PlayerView::swingSword(float deltaTime) {
+    if (m_currAnimation == &m_walkingUp) { // works
+        m_sword.rotate(deltaTime * 600);
+    }
+    else if (m_currAnimation == &m_walkingDown) {
+        m_sword.rotate(deltaTime * -600);
+    }
+    else if (m_currAnimation == &m_walkingLeft) { // works
+        m_sword.rotate(deltaTime * 600);
+    }
+    else if (m_currAnimation == &m_walkingRight) {
+        m_sword.rotate(deltaTime * -600);
+    }
+}
+
+
+/* Set sword orientation according to the direction that the character is facing; called when drawing animation */
+void PlayerView::setSwordOrientation() {
+    if (m_currAnimation == &m_walkingUp) {
+        m_sword.setRotation(0);
+        m_sword.setOrigin(42, 57);
+        m_sword.setTextureRect(sf::IntRect(21, 4, 42, 57));
+        m_sword.setPosition(m_animatedSprite.getPosition().x + 6, m_animatedSprite.getPosition().y + 23.5);
+    }
+    else if (m_currAnimation == &m_walkingDown) {
+        m_sword.setRotation(0);
+        m_sword.setOrigin(42, 0);
+        m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
+        m_sword.setPosition(m_animatedSprite.getPosition().x + 6, m_animatedSprite.getPosition().y + 25);
+    }
+    else if (m_currAnimation == &m_walkingLeft) {
+        m_sword.setRotation(0);
+        m_sword.setOrigin(57, 21);
+        m_sword.setTextureRect(sf::IntRect(3, 64, 57, 42));
+        m_sword.setPosition(m_animatedSprite.getPosition().x + 13.5, m_animatedSprite.getPosition().y + 25.5);
+    }
+    else if (m_currAnimation == &m_walkingRight) {
+        m_sword.setRotation(0);
+        m_sword.setOrigin(0, 21);
+        m_sword.setTextureRect(sf::IntRect(122, 64, 57, 42));
+        m_sword.setPosition(m_animatedSprite.getPosition().x + 10, m_animatedSprite.getPosition().y + 25.5);
+    }
 }
 
 
@@ -294,8 +367,10 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
             break;
         }
     }
+    setSwordOrientation();
     m_animatedSprite.play(*m_currAnimation);
     m_animatedSprite.move(moving);
+
 
     if (noKeyPressed) {
         m_animatedSprite.stop();
@@ -303,47 +378,6 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
     noKeyPressed = true;
     m_animatedSprite.update(sf::seconds(deltaTime));
 }
-
-
-/* Used to build a listener for moveEvent */
-//void PlayerView::moveChar(const EventInterface& event) {
-//    const EventInterface *ptr = &event;
-//    const MoveEvent *moveEvent = dynamic_cast<const MoveEvent*>(ptr);
-//    Direction dir = moveEvent->getDirection();
-//    float deltaTime = moveEvent->getDeltaTime();
-//    bool noKeyPressed = true;
-//    sf::Vector2f moving;
-//    switch (dir){
-//    case Up:
-//        m_currAnimation = &m_walkingUp;
-//        moving = sf::Vector2f(0.f, -m_speed * deltaTime);
-//        noKeyPressed = false;
-//        break;
-//    case Down:
-//        m_currAnimation = &m_walkingDown;
-//        moving = sf::Vector2f(0.f, m_speed * deltaTime);
-//        noKeyPressed = false;
-//        break;
-//    case Left:
-//        m_currAnimation = &m_walkingLeft;
-//        moving = sf::Vector2f(-m_speed * deltaTime, 0.f);
-//        noKeyPressed = false;
-//        break;
-//    case Right:
-//        m_currAnimation = &m_walkingRight;
-//        moving = sf::Vector2f(m_speed * deltaTime, 0.f);
-//        noKeyPressed = false;
-//        break;
-//    }
-//    m_animatedSprite.play(*m_currAnimation);
-//    m_animatedSprite.move(moving);
-//
-//    if (noKeyPressed) {
-//        m_animatedSprite.stop();
-//    }
-//    noKeyPressed = true;
-//    m_animatedSprite.update((sf::seconds(deltaTime)));
-//}
 
 
 void PlayerView::clearTileMaps() {
