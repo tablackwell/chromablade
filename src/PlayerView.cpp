@@ -211,7 +211,6 @@ void PlayerView::handleInput(float deltaTime) {
 void PlayerView::updateCamera(int newX, int newY){
   m_camera.setCenter(m_camera.getCenter().x + newX, m_camera.getCenter().y + newY);
   m_window->setView(m_camera);
-  fprintf(stderr, "UPDATE CAMERA TO: ", (m_camera.getCenter().x + newX), (m_camera.getCenter().y + newY));
 }
 
 void PlayerView::resetCamera(){
@@ -406,25 +405,10 @@ void PlayerView::loadMap(const EventInterface& event) {
 
     clearTileMaps();
     m_gameLogic->clearRocks();
+    //clear enemies
 
     switch (state) {
         case GameState::Hub:
-            // m_map.loadFromText("../res/tilesets/lightworld.png",
-            //         "../res/level/TestLevel/test_base.csv",
-            //         sf::Vector2u(16, 16), 100, 38);
-            // m_overlay.loadFromText("../res/tilesets/lightworld.png",
-            //         "../res/level/TestLevel/test_overlay.csv",
-            //         sf::Vector2u(16, 16),100, 38);
-            // m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png",
-            //         "../res/level/TestLevel/test_collisions.csv",
-            //         sf::Vector2u(16, 16), 100, 38);
-            // m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
-            //         "../res/level/TestLevel/test_doors.csv",
-            //         sf::Vector2u(16, 16), 100, 38);
-            // //m_filter.setFillColor(sf::Color(0,0,0,0));
-            // m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
-
-            /* Temporary Hub stuff for Portal testing */
             m_map.loadFromText("../res/tilesets/lightworld.png",
                     "../res/level/Hub/Hub_base.csv",
                     sf::Vector2u(16, 16), 150, 38);

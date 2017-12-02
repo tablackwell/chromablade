@@ -33,6 +33,7 @@ public:
     std::vector<Actor*> getRocks();
     std::vector<DynamicActor*> getMobs();
     void clearRocks();
+    void clearEnemies();
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
     void toggleLevel();
 
@@ -64,6 +65,11 @@ private:
     sf::RectangleShape m_redPortal;
     sf::RectangleShape m_bluePortal;
     sf::RectangleShape m_yellowPortal;
+
+
+    sf::Vector2f dungeonReturnPosition;
+    sf::Vector2f dungeonReturnCamera;
+    bool inDungeon;
 
     Player m_player;
     AnimatedSprite* m_sprite;

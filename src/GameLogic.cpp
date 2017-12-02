@@ -22,18 +22,13 @@ void GameLogic::init(){
     m_levelToggled = false;
     setState(Process::RUNNING);
 
-    /* Temporary Hard-coding values of portals */
+    /* Init portals */
     m_bluePortal.setSize((sf::Vector2f(32,32)));
     m_bluePortal.setPosition(384,32);
-    // m_portals.push_back(m_bluePortal);
-
     m_redPortal.setSize(sf::Vector2f(32,32));
     m_redPortal.setPosition(1184,32);
-    // m_portals.push_back(m_redPortal);
-
     m_yellowPortal.setSize(sf::Vector2f(32,32));
     m_yellowPortal.setPosition(1984,32);
-    // m_portals.push_back(m_yellowPortal);
 }
 
 
@@ -162,18 +157,21 @@ bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
 
 /* Checks collision with portal */
 bool GameLogic::checkPortals(const sf::FloatRect& fr){
+
     if(fr.intersects(m_redPortal.getGlobalBounds())){
       std::cout << "RED PORTAL TRIGGERED \n";
       DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, Direction::Up);
       m_game->queueEvent(doorEvent);
       return true;
     }
+
     else if(fr.intersects(m_bluePortal.getGlobalBounds())){
       std::cout << "BLUE PORTAL TRIGGERED \n";
       DoorEvent *doorEvent = new DoorEvent(GameState::BlueLevel, 1, Direction::Up);
       m_game->queueEvent(doorEvent);
       return true;
     }
+
     else if(fr.intersects(m_yellowPortal.getGlobalBounds())){
       std::cout << "YELLOW PORTAL TRIGGERED \n";
       std::cout << "YELLOW DUNGEON NOT YET IMPLEMENTED \n";
@@ -181,6 +179,8 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
       // m_game->queueEvent(doorEvent);
       return true;
     }
+
+    return false; //no portal collisions
 }
 
 
@@ -200,6 +200,9 @@ void GameLogic::clearRocks() {
     m_rocks.clear();
 }
 
+void GameLogic::clearEnemies(){
+    m_enemies.clear();
+}
 
 /* Called after a player-initiated attackEvent */
 void GameLogic::playerAttack(Direction dir) {
@@ -292,8 +295,13 @@ void GameLogic::moveChar(const EventInterface& event) {
         m_onDoor = false;
     }
 
-		checkPortals(m_sprite->getGlobalBounds());
-
+    if(m_game->getState() == GameState::Hub){
+      bool portalDetected = checkPortals(m_sprite->getGlobalBounds());
+      if(portalDetected){
+        dungeonReturnPosition = prev;
+        dungeonReturnCamera = m_view->getCameraCenter();
+      }
+    }
 
     // Debug stuff
     if(m_game->inDebugMode()){
@@ -312,10 +320,10 @@ void GameLogic::useDoor(const EventInterface& event) {
     const EventInterface *ptr = &event;
     const DoorEvent *doorEvent = dynamic_cast<const DoorEvent*>(ptr);
     GameState curState = m_game->getState();
+
     const GameState newState = doorEvent->getGameState();
     const int room = doorEvent->getRoom();
     const Direction dir = doorEvent->getDirection();
-    bool mapChange = false;
 
     if (newState != curState) {
         fprintf(stderr, "door leads to %d\n", newState);
@@ -324,24 +332,22 @@ void GameLogic::useDoor(const EventInterface& event) {
         m_game->queueEvent(changeState);
         m_game->queueEvent(loadMapEvent);
         m_view->resetCamera();
+
         if (newState == GameState::Hub) {
-            setCharPosition(HUB_POS);
-						m_view->updateCamera(HUB_CAM);
-            mapChange = true;
+            setCharPosition(dungeonReturnPosition);
+						m_view->updateCamera(dungeonReturnCamera.x, dungeonReturnCamera.y);
         }
 				else if (newState == GameState::RedLevel) {
             m_view->updateCamera(RED_CAM);
             setCharPosition(RED_POS);
-            mapChange = true;
         }
 				else if (newState == GameState::BlueLevel){
 						m_view->updateCamera(BLUE_CAM);
 						setCharPosition(BLUE_POS);
-            mapChange = true;
         }
     }
 
-    if(!mapChange){
+    else{
         sf::Vector2f pos = m_player.getPosition();
         sf::Vector2f new_pos;
         if (dir == Direction::Left) {
@@ -369,12 +375,14 @@ void GameLogic::useDoor(const EventInterface& event) {
             DoorEvent *doorEvent = new DoorEvent(GameState::Hub, 0, dir);
             m_game->queueEvent(doorEvent);
             toggleLevel();
-        } else {
+        }
+        else {
             setCharPosition(new_pos);
             m_onDoor = false;
         }
     }
 
+    /* Upon entering a new room, spawn enemies / rocks */
     if ((room > 0) && (m_game->getState() != GameState::Hub)) {
         if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room) == m_clearedRooms.end()) {
             sf::Vector2f center = m_view->getCameraCenter();
