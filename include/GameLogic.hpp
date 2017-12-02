@@ -11,6 +11,7 @@
 #include "AnimatedSprite.hpp"
 #include "EventType.hpp"
 #include "Actor.hpp"
+#include "GameState.hpp"
 #include <functional>
 
 #define SPEED 200.f
@@ -38,6 +39,7 @@ public:
     void setBoundaries(int xBound, int yBound);
     void toggleLevel();
     bool hasColor(sf::Color col);
+    int getLevelsCleared();
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);
@@ -52,16 +54,16 @@ private:
     void spawn(const EventInterface& event);
     void useDoor(const EventInterface& event);
     void switchColor(const EventInterface& event);
+    void unlockColor(GameState state);
 
 
 private:
-    Level m_level;
     std::vector<sf::RectangleShape> m_collisionVector;
     std::vector<sf::RectangleShape> m_doors;
     std::vector<Actor*> m_rocks;
     std::vector<DynamicActor*> m_mobs;
-    std::vector<DynamicActor*> m_enemies;
     std::vector<int> m_clearedRooms;
+    bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;
 
     sf::RectangleShape m_redPortal;

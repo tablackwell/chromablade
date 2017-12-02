@@ -193,6 +193,8 @@ void PlayerView::handleInput(float deltaTime) {
                         m_window->setView(m_pauseCamera);
                         ChangeStateEvent *changeState = new ChangeStateEvent(GameState::Pause);
                         m_game->queueEvent(changeState);
+                        int levelCleared_int = m_gameLogic->getLevelsCleared();
+                        m_pause.setLevelsCleared(levelCleared_int);
                     }
                 }
             }

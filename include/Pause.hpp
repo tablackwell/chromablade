@@ -13,6 +13,7 @@ public:
     void init();
     void draw(sf::RenderWindow &window);
 	int update(sf::RenderWindow &window);
+	void setLevelsCleared(int levelCleared);
     
 private:
     void centerText(sf::Text &text);
@@ -31,6 +32,7 @@ private:
     sf::Text m_play;
     sf::Text m_exit;
     sf::Text m_cursor;
+    int m_levelsCleared;
 };
 
 #endif

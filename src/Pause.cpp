@@ -18,7 +18,7 @@ void Pause::init() {
     m_background.setPosition(sf::Vector2f(WIDTH / 3, 100));
 
     // Load font
-    if (!m_font.loadFromFile("../res/PressStart2P.ttf")) {
+    if (!m_font.loadFromFile("../res/OpenSans.ttf")) {
         fprintf(stderr, "%s:%d: cannot load font\n",
                 __FILE__, __LINE__);
         return;
@@ -94,12 +94,23 @@ void Pause::init() {
 
 /* Draws the title page */
 void Pause::draw(sf::RenderWindow &window) {
+    switch (m_levelsCleared) {
+    case 0:
+        window.draw(m_red);
+        break;
+    case 1:
+        window.draw(m_red);
+        window.draw(m_blue);
+        break;
+    case 2:
+        window.draw(m_red);
+        window.draw(m_blue);
+        window.draw(m_yellow);
+        break;
+    }
     window.draw(m_background);
     window.draw(m_pause);
     window.draw(m_colors);
-    window.draw(m_red);
-    window.draw(m_blue);
-    window.draw(m_yellow);
     window.draw(m_play);
     window.draw(m_exit);
     window.draw(m_cursor);
@@ -148,4 +159,9 @@ int Pause::update(sf::RenderWindow &window) {
         }
     }
     return 0;
+}
+
+
+void Pause::setLevelsCleared(int levelCleared) {
+    m_levelsCleared = levelCleared - 1;
 }
