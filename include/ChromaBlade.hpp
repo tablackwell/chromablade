@@ -25,6 +25,7 @@ public:
     void run();
     void pause();
     GameState getState();
+    GameState getPrevState();
     void setState(GameState state);
     void registerListener(EventListener listener, EventType eventType);
     void queueEvent(EventInterface *event);
@@ -49,6 +50,7 @@ private: // vars and objs
     ProcessManager m_processManager;
     Audio m_audio;
     GameState m_state;
+    GameState m_prevState;
     bool inDebug = false;
 };
 

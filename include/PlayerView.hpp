@@ -7,6 +7,7 @@
 #include "AnimatedSprite.hpp"
 #include "Title.hpp"
 #include "TileMap.hpp"
+#include "Pause.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -60,6 +61,7 @@ private: //vars and objs
     Animation m_walkingRight;
     Animation m_walkingLeft;
     sf::View m_camera;
+    sf::View m_pauseCamera;
     sf::FloatRect m_boundaryBox;
     AnimatedSprite m_animatedSprite;
     sf::RenderWindow* m_window;
@@ -74,6 +76,7 @@ private: //vars and objs
     TileMap m_collisions;
     TileMap m_doors;
     Title m_title;
+    Pause m_pause;
     sf::Sound m_sound;
     sf::SoundBuffer m_buffer;
 };

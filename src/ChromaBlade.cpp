@@ -70,6 +70,8 @@ void ChromaBlade::update(float &deltaTime) {
     switch (m_state) {
         case GameState::Title:
             break;
+        case GameState::Pause:
+            break;
         default:
             m_processManager.update(deltaTime);
             break;
@@ -95,9 +97,15 @@ void ChromaBlade::setState(GameState state) {
 }
 
 
- /* Gets the game state */
+/* Gets the game state */
 GameState ChromaBlade::getState() {
     return m_state;
+}
+
+
+/* Return previous game state */
+GameState ChromaBlade::getPrevState() {
+    return m_prevState;
 }
 
 
@@ -125,10 +133,14 @@ void ChromaBlade::registerListeners() {
 void ChromaBlade::updateState(const EventInterface &event) {
     const EventInterface *ptr = &event;
     if (const ChangeStateEvent *stateEvent = dynamic_cast<const ChangeStateEvent*>(ptr)){
+        m_prevState = m_state;
         m_state = stateEvent->getGameState();
         switch(m_state) {
             case GameState::Title:
                 printf("Changed state to Title!\n");
+                break;
+            case GameState::Pause:
+                printf("Changed state to Pause!\n");
                 break;
             case GameState::Hub:
                 m_view.setListener();
