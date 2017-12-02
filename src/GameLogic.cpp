@@ -342,15 +342,16 @@ void GameLogic::useDoor(const EventInterface& event) {
 
         if (newState == GameState::Hub) {
             setCharPosition(dungeonReturnPosition);
-						m_view->updateCamera(dungeonReturnCamera.x, dungeonReturnCamera.y);
+            m_view->updateCamera(dungeonReturnCamera.x, dungeonReturnCamera.y);
+            unlockMobColor(curState);
         }
-				else if (newState == GameState::RedLevel) {
+        else if (newState == GameState::RedLevel) {
             m_view->updateCamera(RED_CAM);
             setCharPosition(RED_POS);
         }
-				else if (newState == GameState::BlueLevel){
-						m_view->updateCamera(BLUE_CAM);
-						setCharPosition(BLUE_POS);
+        else if (newState == GameState::BlueLevel){
+            m_view->updateCamera(BLUE_CAM);
+            setCharPosition(BLUE_POS);
         }
         else if (newState == GameState::YellowLevel){
           // m_view->updateCamera(YELLOW_CAM);
@@ -490,4 +491,15 @@ void GameLogic::switchColor(const EventInterface& event) {
     const SwitchColorEvent *switchColorEvent = dynamic_cast<const SwitchColorEvent*>(ptr);
     sf::Color color = switchColorEvent->getColor();
     m_player.changeSwordColor(color);
+}
+
+
+/* Unlocks a color that a spawned mob can have.*/
+void GameLogic::unlockMobColor(GameState state) {
+    if (state == GameState::RedLevel) {
+        m_possibleMobColors[1] = true;
+    }
+    else if (state == GameState::BlueLevel) {
+        m_possibleMobColors[2] = true;
+    }
 }
