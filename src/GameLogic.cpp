@@ -343,7 +343,7 @@ void GameLogic::useDoor(const EventInterface& event) {
         if (newState == GameState::Hub) {
             setCharPosition(dungeonReturnPosition);
             m_view->updateCamera(dungeonReturnCamera.x, dungeonReturnCamera.y);
-            unlockMobColor(curState);
+            unlockColor(curState);
         }
         else if (newState == GameState::RedLevel) {
             m_view->updateCamera(RED_CAM);
@@ -495,11 +495,13 @@ void GameLogic::switchColor(const EventInterface& event) {
 
 
 /* Unlocks a color that a spawned mob can have.*/
-void GameLogic::unlockMobColor(GameState state) {
+void GameLogic::unlockColor(GameState state) {
     if (state == GameState::RedLevel) {
         m_possibleMobColors[1] = true;
+        m_player.unlockColor(sf::Color::Blue);
     }
     else if (state == GameState::BlueLevel) {
         m_possibleMobColors[2] = true;
+        m_player.unlockColor(sf::Color::Yellow);
     }
 }
