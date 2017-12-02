@@ -11,7 +11,6 @@ public:
     const GameState getGameState(void) const;
 private:
     GameState m_state;
-    EventType m_type;
 };
 
 #endif

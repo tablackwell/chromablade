@@ -21,7 +21,6 @@ class MoveEvent : public EventInterface {
     
     private: // event data
         Direction m_dir;
-        EventType m_type;
         float m_speed;
 };
 

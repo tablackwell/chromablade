@@ -16,6 +16,5 @@ private:
     GameState m_state;
     Direction m_dir;
     int m_room;
-    EventType m_type;
 };
 #endif

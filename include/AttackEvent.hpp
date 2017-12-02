@@ -19,7 +19,6 @@ class AttackEvent : public EventInterface {
 
     private: // event data
         bool m_isFromPlayer;
-        EventType m_type;
         Direction m_dir;
 };
 
