@@ -32,4 +32,5 @@ void Player::unlockColor(sf::Color color) {
 void Player::attack(DynamicActor enemy) {
     float health = enemy.getHealth();
     health -= getDamage();
+    enemy.setHealth(health);
 }

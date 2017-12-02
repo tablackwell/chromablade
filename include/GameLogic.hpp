@@ -41,7 +41,7 @@ private:
     bool checkDoors(sf::FloatRect fr, int extra);
     bool checkPortals(const sf::FloatRect& fr);
     void playerAttack(Direction dir);
-    void enemyAttack();
+    void enemyAttack(DynamicActor* attacker);
 
     // Event triggered methods
     void moveChar(const EventInterface& event);

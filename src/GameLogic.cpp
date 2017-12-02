@@ -200,14 +200,15 @@ void GameLogic::playerAttack(Direction dir) {
     /* Check attack's intersection with mobs. */
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
-            m_mobs[i]->setHealth(m_mobs[i]->getHealth() - m_player.getDamage());
+            m_player.attack(*m_mobs[i]);
         }
     }
 }
 
 
-void GameLogic::enemyAttack() {
-
+/* Called after a enemy-initiated attackEvent */
+void GameLogic::enemyAttack(DynamicActor* attacker) {
+    attacker->attack(m_player);
 }
 
 /***************************** Event Triggered Functions ******************************/
@@ -362,12 +363,13 @@ void GameLogic::useDoor(const EventInterface& event) {
 void GameLogic::attack(const EventInterface& event) {
     const EventInterface *ptr = &event;
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
-    Direction dir = attackEvent->getDirection();
     if (attackEvent->isFromPlayer() == true) { // player attack
+        Direction dir = attackEvent->getDirection();
         playerAttack(dir);
     }
     else { // enemy attack
-        enemyAttack();
+        DynamicActor* attacker = attackEvent->getAttacker();
+        enemyAttack(attacker);
     }
 }
 
