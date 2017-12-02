@@ -33,7 +33,9 @@ public:
     std::vector<Actor*> getRocks();
     std::vector<DynamicActor*> getMobs();
     void clearRocks();
+    void clearEnemies();
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
+    void setBoundaries(int xBound, int yBound);
     void toggleLevel();
     bool hasColor(sf::Color col);
 
@@ -60,6 +62,17 @@ private:
     std::vector<int> m_clearedRooms;
     bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;
+
+    sf::RectangleShape m_redPortal;
+    sf::RectangleShape m_bluePortal;
+    sf::RectangleShape m_yellowPortal;
+    int m_xBound;
+    int m_yBound;
+    sf::Vector2f dungeonReturnPosition;
+    sf::Vector2f dungeonReturnCamera;
+    bool inDungeon;
+
+
     Player m_player;
     AnimatedSprite* m_sprite;
     ChromaBlade* m_game;

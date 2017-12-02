@@ -1,13 +1,18 @@
-#ifndef DOOR
-#define DOOR
+#ifndef PORTAL
+#define PORTAL
 
 #include <vector>
-#include <SFML/Graphics/Rect.hpp>
-#include <SFML/Graphics/Texture.hpp>
+#include <string>
+#include "Actor.hpp"
+#include <SFML/Graphics.hpp>
 
-class Door{
-public:
-  Door();
-private:
+class Portal : public Actor {
+  public:
+    Portal();
+    sf::RectangleShape getRectangle();
+    std::string getName();
+  private:
+    std::string m_name = "undefined portal";
+    sf::RectangleShape m_rectangle;
 };
 #endif
