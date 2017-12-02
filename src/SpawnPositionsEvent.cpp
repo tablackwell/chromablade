@@ -1,20 +1,17 @@
-#include "SpawnPosiionsEvent.hpp"
+#include "SpawnPositionsEvent.hpp"
 
-SpawnPositionsEvent::SpawnPositionsEvent(const std::vector& rocks, const std::vector &mobs) {
+SpawnPositionsEvent::SpawnPositionsEvent(const std::vector<Actor*>& rocks,
+                                         const std::vector<DynamicActor*> &mobs) {
     m_type = spawnPositionsEvent;
     m_rocks = rocks;
     m_mobs = mobs;
 }
 
-const EventType& SpawnPositionsEvent::getEventType(void) const {
-    return m_type;
-}
-    
-const std::vector SpawnPositionsEvent::getRocks() {
+const std::vector<Actor*> SpawnPositionsEvent::getRocks() {
     return m_rocks;
 }
 
-const std::vector SpawnPositionsEvent::getMobs() {
+const std::vector<DynamicActor*> SpawnPositionsEvent::getMobs() {
     return m_mobs;
 }
 

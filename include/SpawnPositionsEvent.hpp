@@ -3,17 +3,19 @@
 
 #include "EventInterface.hpp"
 #include "EventType.hpp"
+#include "Actor.hpp"
+#include "DynamicActor.hpp"
+#include <vector>
 
 class SpawnPositionsEvent : public EventInterface {
 public:
-    SpawnPositionsEvent(const std::vector& rocks, const std::vector &mobs);
-    const EventType& getEventType(void) const;
-    const std::vector getRocks();
-    const std::vector getMobs();
+    SpawnPositionsEvent(const std::vector<Actor*>& rocks,
+                        const std::vector<DynamicActor*> &mobs);
+    const std::vector<Actor*> getRocks();
+    const std::vector<DynamicActor*> getMobs();
 private:
-    EventType m_type;
-    const std::vector m_rocks;
-    const std::vector m_mobs;
+    std::vector<Actor*> m_rocks;
+    std::vector<DynamicActor*> m_mobs;
 };
 
 #endif

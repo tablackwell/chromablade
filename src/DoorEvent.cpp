@@ -7,10 +7,6 @@ DoorEvent::DoorEvent(GameState state, int room, Direction dir) {
     m_dir = dir;
 }
 
-const EventType& DoorEvent::getEventType() const {
-    return m_type;
-}
-
 const GameState DoorEvent::getGameState() const {
     return m_state;
 }

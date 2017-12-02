@@ -12,7 +12,6 @@
 class ChangeStateEvent : public EventInterface{
 public:
     ChangeStateEvent(GameState state);
-    virtual const EventType& getEventType(void) const;
     const GameState getGameState(void) const;
 private:
     GameState m_newState;

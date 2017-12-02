@@ -9,7 +9,6 @@
 class DoorEvent : public EventInterface {
 public:
     DoorEvent(GameState state, int room, Direction dir);
-    const EventType& getEventType(void) const;
     const int getRoom() const;
     const Direction getDirection() const;
     const GameState getGameState() const;

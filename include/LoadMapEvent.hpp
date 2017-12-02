@@ -8,7 +8,6 @@
 class LoadMapEvent : public EventInterface {
 public:
     LoadMapEvent(GameState state);
-    const EventType& getEventType(void) const;
     const GameState getGameState(void) const;
 private:
     GameState m_state;

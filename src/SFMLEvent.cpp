@@ -14,8 +14,3 @@ const sf::Event SFMLEvent::getSFMLEvent() const {
 	return m_event;
 }
 
-
-/* Return event type. */
-const EventType& SFMLEvent::getEventType() const {
-  return m_type;
-}
