@@ -15,11 +15,13 @@
 
 #define TILE_DIM 32
 #define HUB_POS sf::Vector2f(196,255)
+#define YELLOW_POS sf::Vector2f(60,255)
 #define RED_POS sf::Vector2f(60,1520)
 #define BLUE_POS sf::Vector2f(60,900)
 #define RED_CAM 400,1520
 #define HUB_CAM 400,300
 #define BLUE_CAM 400,912
+#define YELLOW_CAM 400,300
 class ChromaBlade; // Forward declaration of class ChromaBlade, so that we can declare a pointer to ChromaBlade in PlayerView
 
 

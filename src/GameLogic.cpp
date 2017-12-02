@@ -184,9 +184,8 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
 
     else if(fr.intersects(m_yellowPortal.getGlobalBounds())){
       std::cout << "YELLOW PORTAL TRIGGERED \n";
-      std::cout << "YELLOW DUNGEON NOT YET IMPLEMENTED \n";
-      // DoorEvent *doorEvent = new DoorEvent(GameState::YellowLevel, 1, Direction::Up);
-      // m_game->queueEvent(doorEvent);
+      DoorEvent *doorEvent = new DoorEvent(GameState::YellowLevel, 1, Direction::Up);
+      m_game->queueEvent(doorEvent);
       return true;
     }
     return false; //no portal collisions
@@ -360,8 +359,8 @@ void GameLogic::useDoor(const EventInterface& event) {
 						setCharPosition(BLUE_POS);
         }
         else if (newState == GameState::YellowLevel){
-          // m_view->updateCamera(YELLOW_CAM);
-          // setCharPosition(YELLO_CAM);
+            m_view->updateCamera(YELLOW_CAM);
+            setCharPosition(YELLOW_POS);
         }
     }
 
