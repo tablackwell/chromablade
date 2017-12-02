@@ -60,6 +60,11 @@ private:
     std::vector<DynamicActor*> m_enemies;
     std::vector<int> m_clearedRooms;
     std::vector<sf::RectangleShape> m_portals;
+
+    sf::RectangleShape m_redPortal;
+    sf::RectangleShape m_bluePortal;
+    sf::RectangleShape m_yellowPortal;
+
     Player m_player;
     AnimatedSprite* m_sprite;
     ChromaBlade* m_game;

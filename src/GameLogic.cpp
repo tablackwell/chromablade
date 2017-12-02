@@ -23,17 +23,17 @@ void GameLogic::init(){
     setState(Process::RUNNING);
 
     /* Temporary Hard-coding values of portals */
-    sf::RectangleShape bluePortal(sf::Vector2f(32,32));
-    bluePortal.setPosition(384,32);
-    m_portals.push_back(bluePortal);
+    m_bluePortal.setSize((sf::Vector2f(32,32)));
+    m_bluePortal.setPosition(384,32);
+    // m_portals.push_back(m_bluePortal);
 
-    sf::RectangleShape redPortal(sf::Vector2f(32,32));
-    redPortal.setPosition(1184,32);
-    m_portals.push_back(redPortal);
+    m_redPortal.setSize(sf::Vector2f(32,32));
+    m_redPortal.setPosition(1184,32);
+    // m_portals.push_back(m_redPortal);
 
-    sf::RectangleShape yellowPortal(sf::Vector2f(32,32));
-    yellowPortal.setPosition(1984,32);
-    m_portals.push_back(yellowPortal);
+    m_yellowPortal.setSize(sf::Vector2f(32,32));
+    m_yellowPortal.setPosition(1984,32);
+    // m_portals.push_back(m_yellowPortal);
 }
 
 
@@ -107,6 +107,9 @@ void GameLogic::setListener() {
     std::function<void(const EventInterface &event)> switchCol = std::bind(&GameLogic::switchColor, this, std::placeholders::_1);
     const EventListener switchListener = EventListener(switchCol, EventType::switchColorEvent);
     m_game->registerListener(switchListener, EventType::switchColorEvent);
+
+    //PortalEVent
+
 }
 
 
@@ -159,11 +162,24 @@ bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
 
 /* Checks collision with portal */
 bool GameLogic::checkPortals(const sf::FloatRect& fr){
-    for (int i=0; i<m_portals.size(); i++) {
-	    if (fr.intersects(m_portals[i].getGlobalBounds())) {
-	        std::cout << "PORTAL COLLISION \n";
-	        return true;
-	    }
+    if(fr.intersects(m_redPortal.getGlobalBounds())){
+      std::cout << "RED PORTAL TRIGGERED \n";
+      DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, Direction::Up);
+      m_game->queueEvent(doorEvent);
+      return true;
+    }
+    else if(fr.intersects(m_bluePortal.getGlobalBounds())){
+      std::cout << "BLUE PORTAL TRIGGERED \n";
+      DoorEvent *doorEvent = new DoorEvent(GameState::BlueLevel, 1, Direction::Up);
+      m_game->queueEvent(doorEvent);
+      return true;
+    }
+    else if(fr.intersects(m_yellowPortal.getGlobalBounds())){
+      std::cout << "YELLOW PORTAL TRIGGERED \n";
+      std::cout << "YELLOW DUNGEON NOT YET IMPLEMENTED \n";
+      // DoorEvent *doorEvent = new DoorEvent(GameState::YellowLevel, 1, Direction::Up);
+      // m_game->queueEvent(doorEvent);
+      return true;
     }
 }
 
@@ -276,13 +292,8 @@ void GameLogic::moveChar(const EventInterface& event) {
         m_onDoor = false;
     }
 
-		if(m_game->getState() == GameState::Hub){
-			bool portalDetected = checkPortals(m_sprite->getGlobalBounds());
-			if(portalDetected){
-				DoorEvent *doorEvent = new DoorEvent(GameState::BlueLevel, 1, dir);
-				m_game->queueEvent(doorEvent);
-			}
-		}
+		checkPortals(m_sprite->getGlobalBounds());
+
 
     // Debug stuff
     if(m_game->inDebugMode()){

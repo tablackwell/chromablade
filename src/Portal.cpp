@@ -1,9 +1,6 @@
 #include "Portal.hpp"
 
-Portal::Portal(std::string name, sf::Vector2f rectDim, int posX, int posY){
-  sf::RectangleShape m_rectangle(rectDim);
-  m_rectangle.setPosition(posX, posY);
-  m_name = name;
+Portal::Portal(){
 }
 
 std::string Portal::getName(){
