@@ -7,3 +7,4 @@
 #define KEY_RED sf::Keyboard::Num1
 #define KEY_BLUE sf::Keyboard::Num2
 #define KEY_YELLOW sf::Keyboard::Num3
+#define KEY_PAUSE sf::Keyboard::Return

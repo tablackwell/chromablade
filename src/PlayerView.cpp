@@ -30,6 +30,7 @@ void PlayerView::init(){
 
     // Load title screen.
     m_title.init();
+    m_pause.init();
 
     // Load texture for character
     if(!m_charTexture.loadFromFile("../res/sprite/spritenew.png")) {
@@ -82,6 +83,7 @@ void PlayerView::init(){
 
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
+    m_pauseCamera.reset(sf::FloatRect(0, 0, WIDTH, HEIGHT));
     isAttacking = false;
     //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
@@ -126,6 +128,17 @@ void PlayerView::handleInput(float deltaTime) {
                 updateCamera(HUB_CAM);
             }
             else m_window->close(); // Selected Exit
+            break;
+        case GameState::Pause:
+            rc = m_pause.update(*m_window);
+            if(rc == 0) {} //Moved the cursor
+            else if (rc == 1) { // Selected Resume
+                m_window->setView(m_camera);
+                GameState state = m_game->getPrevState();
+                ChangeStateEvent* changeState = new ChangeStateEvent(state);
+                m_game->queueEvent(changeState);
+            }
+            else m_window->close();
             break;
         default: // in the game
             sf::Event event;
@@ -175,6 +188,11 @@ void PlayerView::handleInput(float deltaTime) {
                         if (m_gameLogic->hasColor(sf::Color::Yellow)) {
                             m_sword.setColor(sf::Color(255, 255, 0));
                         }
+                    }
+                    if (event.key.code == KEY_PAUSE) {
+                        m_window->setView(m_pauseCamera);
+                        ChangeStateEvent *changeState = new ChangeStateEvent(GameState::Pause);
+                        m_game->queueEvent(changeState);
                     }
                 }
             }
@@ -247,6 +265,9 @@ void PlayerView::draw() {
     switch(state) {
         case GameState::Title:
             m_title.draw(*m_window);
+            break;
+        case GameState::Pause:
+            m_pause.draw(*m_window);
             break;
         default:
             m_window->draw(m_map);
