@@ -7,7 +7,10 @@
 #include "SwitchColorEvent.hpp"
 #include "ChromaBlade.hpp"
 #include "PlayerView.hpp"
+#include "AIView.hpp"
 #include "Mob.hpp"
+#include "MoveMobsEvent.hpp"
+#include "SpawnPositionsEvent.hpp"
 
 #include <iostream>
 
@@ -103,6 +106,13 @@ void GameLogic::setListener() {
     std::function<void(const EventInterface &event)> switchCol = std::bind(&GameLogic::switchColor, this, std::placeholders::_1);
     const EventListener switchListener = EventListener(switchCol, EventType::switchColorEvent);
     m_game->registerListener(switchListener, EventType::switchColorEvent);
+
+    // SpawnPositionsEvent
+    std::function<void(const EventInterface &event)> setSpawnPositions
+        = std::bind(&GameLogic::setSpawnPositions, this, std::placeholders::_1);
+    const EventListener spawnPositionsListener
+        = EventListener(setSpawnPositions, EventType::spawnPositionsEvent);
+    m_game->registerListener(spawnPositionsListener, EventType::spawnPositionsEvent);
 }
 
 
@@ -111,7 +121,7 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     /* Check intersections with mini collision tiles. */
     for(int i = 0; i < m_collisionVector.size(); i++){
         if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
-            std::cout << "COLLISION! \n";
+            //std::cout << "COLLISION! \n";
             return true;
         }
     }
@@ -119,7 +129,7 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     /* Check intersections with rock tiles. */
     for (int i = 0; i < m_rocks.size(); i++) {
         if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
-            std::cout << "ROCK COLLISION! \n";
+            //std::cout << "ROCK COLLISION! \n";
             return true;
         }
     }
@@ -127,7 +137,7 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     /* Check intersections with mobs. */
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
-            std::cout << "MOB COLLISION! \n";
+            //std::cout << "MOB COLLISION! \n";
             return true;
         }
     }
@@ -157,7 +167,7 @@ bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
 bool GameLogic::checkPortals(const sf::FloatRect& fr){
     for (int i=0; i<m_portals.size(); i++) {
 	    if (fr.intersects(m_portals[i].getGlobalBounds())) {
-	        std::cout << "PORTAL COLLISION \n";
+	        //std::cout << "PORTAL COLLISION \n";
 	        return true;
 	    }
     }
@@ -216,8 +226,8 @@ void GameLogic::enemyAttack() {
 }
 
 void GameLogic::moveMobs() {
-    MoveMobsEvent* moveMobsEvent = new MoveMobsEvent(m_player.getPosition());
-    m_game->queueEvent(moveMobsEvent);
+//    MoveMobsEvent* moveMobsEvent = new MoveMobsEvent(m_player.getPosition());
+//    m_game->queueEvent(moveMobsEvent);
 }
 
 /***************************** Event Triggered Functions ******************************/
@@ -363,6 +373,9 @@ void GameLogic::useDoor(const EventInterface& event) {
             m_game->queueEvent(spawnRocksEvent);
             SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
             m_game->queueEvent(spawnMobsEvent);
+            SpawnPositionsEvent *spawnPositionsEvent
+                = new SpawnPositionsEvent(m_rocks, m_mobs);
+            m_game->queueEvent(spawnPositionsEvent);    
         }
     }
 }
@@ -420,10 +433,24 @@ void GameLogic::spawn(const EventInterface& event) {
         } else if (actorType == Actor::Mob) {
             DynamicActor *actor = new Mob(Purple, 100, 20, sf::Vector2f(x,y), 200.f);
             m_mobs.push_back(actor);
+
+            AIView *aiview = new AIView(actor);
+            m_aiviews.push_back(aiview);
         }
     }
 }
 
+/* Triggered by a SpawnPositionsEvent. */
+void GameLogic::setSpawnPositions(const EventInterface& event) {
+    const SpawnPositionsEvent *spawnPositionsEvent
+        = dynamic_cast<const SpawnPositionsEvent*>(&event);
+    std::vector<Actor*> rocks = spawnPositionsEvent->getRocks();
+    std::vector<DynamicActor*> mobs = spawnPositionsEvent->getMobs();
+
+    for (int i=0; i<m_aiviews.size(); i++) {
+        m_aiviews[i]->setSpawnPositions(rocks, mobs);
+    }
+}
 
 /* Triggered by a SwitchColorEvent */
 void GameLogic::switchColor(const EventInterface& event) {
@@ -433,3 +460,4 @@ void GameLogic::switchColor(const EventInterface& event) {
     sf::Color color = switchColorEvent->getColor();
     m_player.changeSwordColor(color);
 }
+

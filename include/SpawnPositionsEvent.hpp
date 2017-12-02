@@ -11,8 +11,8 @@ class SpawnPositionsEvent : public EventInterface {
 public:
     SpawnPositionsEvent(const std::vector<Actor*>& rocks,
                         const std::vector<DynamicActor*> &mobs);
-    const std::vector<Actor*> getRocks();
-    const std::vector<DynamicActor*> getMobs();
+    const std::vector<Actor*> getRocks() const;
+    const std::vector<DynamicActor*> getMobs() const;
 private:
     std::vector<Actor*> m_rocks;
     std::vector<DynamicActor*> m_mobs;

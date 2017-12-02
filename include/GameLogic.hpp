@@ -17,6 +17,7 @@
 
 class ChromaBlade;
 class PlayerView;
+class AIView;
 
 class GameLogic : public Process {
 public:
@@ -50,6 +51,7 @@ private:
     void spawn(const EventInterface& event);
     void useDoor(const EventInterface& event);
     void switchColor(const EventInterface& event);
+    void setSpawnPositions(const EventInterface& event);
 
 
 private:
@@ -65,6 +67,7 @@ private:
     AnimatedSprite* m_sprite;
     ChromaBlade* m_game;
     PlayerView* m_view;
+    std::vector<AIView*> m_aiviews;
     bool m_onDoor;
     bool m_levelToggled;
 };

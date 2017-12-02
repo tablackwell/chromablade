@@ -7,11 +7,11 @@ SpawnPositionsEvent::SpawnPositionsEvent(const std::vector<Actor*>& rocks,
     m_mobs = mobs;
 }
 
-const std::vector<Actor*> SpawnPositionsEvent::getRocks() {
+const std::vector<Actor*> SpawnPositionsEvent::getRocks() const {
     return m_rocks;
 }
 
-const std::vector<DynamicActor*> SpawnPositionsEvent::getMobs() {
+const std::vector<DynamicActor*> SpawnPositionsEvent::getMobs() const {
     return m_mobs;
 }
 
