@@ -42,6 +42,7 @@ private:
     bool checkPortals(const sf::FloatRect& fr);
     void playerAttack(Direction dir);
     void enemyAttack();
+    void moveMobs();
 
     // Event triggered methods
     void moveChar(const EventInterface& event);

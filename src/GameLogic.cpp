@@ -29,6 +29,11 @@ void GameLogic::init(){
 
 
 void GameLogic::update(float &deltaTime){
+    GameState state = m_game->getState();
+
+    if (state != GameState::Hub) {
+        moveMobs();
+    }
 }
 
 
@@ -208,6 +213,11 @@ void GameLogic::playerAttack(Direction dir) {
 
 void GameLogic::enemyAttack() {
 
+}
+
+void GameLogic::moveMobs() {
+    MoveMobsEvent* moveMobsEvent = new MoveMobsEvent(m_player.getPosition());
+    m_game->queueEvent(moveMobsEvent);
 }
 
 /***************************** Event Triggered Functions ******************************/

@@ -15,6 +15,8 @@ enum EventType {
     loadMapEvent,
     spawnEvent,
     switchColorEvent,
+    moveMobsEvent,
+    spawnPositionsEvent,
 };
 
 #endif
