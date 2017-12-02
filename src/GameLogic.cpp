@@ -9,6 +9,7 @@
 #include "PlayerView.hpp"
 #include "Mob.hpp"
 
+
 #include <iostream>
 
 
@@ -25,6 +26,14 @@ void GameLogic::init(){
     sf::RectangleShape bluePortal(sf::Vector2f(32,32));
     bluePortal.setPosition(384,32);
     m_portals.push_back(bluePortal);
+
+    sf::RectangleShape redPortal(sf::Vector2f(32,32));
+    redPortal.setPosition(1184,32);
+    m_portals.push_back(redPortal);
+
+    sf::RectangleShape yellowPortal(sf::Vector2f(32,32));
+    yellowPortal.setPosition(1984,32);
+    m_portals.push_back(yellowPortal);
 }
 
 

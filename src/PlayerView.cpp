@@ -266,7 +266,15 @@ void PlayerView::draw() {
               sf::RectangleShape bluePortal(sf::Vector2f(32,32));
               bluePortal.setPosition(384,32);
               bluePortal.setFillColor(sf::Color(0, 0, 255, 100));
+              sf::RectangleShape redPortal(sf::Vector2f(32,32));
+              redPortal.setPosition(1184,32);
+              redPortal.setFillColor(sf::Color(255,0,0,100));
+              sf::RectangleShape yellowPortal(sf::Vector2f(32,32));
+              yellowPortal.setPosition(1984,32);
+              yellowPortal.setFillColor(sf::Color(255,255,0,100));
               m_window->draw(bluePortal);
+              m_window->draw(redPortal);
+              m_window->draw(yellowPortal);
             }
             break;
     }
