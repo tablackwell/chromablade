@@ -18,7 +18,7 @@ void Pause::init() {
     m_background.setPosition(sf::Vector2f(WIDTH / 3, 100));
 
     // Load font
-    if (!m_font.loadFromFile("../res/PressStart2P.ttf")) {
+    if (!m_font.loadFromFile("../res/OpenSans.ttf")) {
         fprintf(stderr, "%s:%d: cannot load font\n",
                 __FILE__, __LINE__);
         return;
