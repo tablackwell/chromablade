@@ -8,6 +8,8 @@ class SpawnPositionsEvent : public EventInterface {
 public:
     SpawnPositionsEvent(const std::vector& rocks, const std::vector &mobs);
     const EventType& getEventType(void) const;
+    const std::vector getRocks();
+    const std::vector getMobs();
 private:
     EventType m_type;
     const std::vector m_rocks;
