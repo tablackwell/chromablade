@@ -39,6 +39,7 @@ public:
     void setBoundaries(int xBound, int yBound);
     void toggleLevel();
     bool hasColor(sf::Color col);
+    int getLevelsCleared();
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);

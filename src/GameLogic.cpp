@@ -245,6 +245,18 @@ void GameLogic::enemyAttack(DynamicActor* attacker) {
     attacker->attack(m_player);
 }
 
+
+/* Returns information on levels cleared */
+int GameLogic::getLevelsCleared() {
+    int index = 0;
+    for (int k = 0; k < 3; k++) {
+        if (m_possibleMobColors[k] == true) {
+            index = k;
+        }
+    }
+    return index;
+}
+
 /***************************** Event Triggered Functions ******************************/
 
 /* Triggered by a moveEvent */
