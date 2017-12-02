@@ -7,7 +7,7 @@ Mob::Mob(sf::Color color, float hp, float dmg, sf::Vector2f pos, int speed) : Dy
     m_rect.setPosition(pos);
 }
 
-void Mob::attack(DynamicActor target) {
+void Mob::attack(DynamicActor &target) {
     float health = target.getHealth();
     health -= getDamage();
     target.setHealth(health);

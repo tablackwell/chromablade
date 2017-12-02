@@ -207,6 +207,9 @@ void GameLogic::playerAttack(Direction dir) {
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds()) && m_mobs[i]->getColor() == m_player.getColor()) {
             m_player.attack(*m_mobs[i]);
+            if (m_mobs[i]->getHealth() <= 0) {
+                m_mobs.erase(m_mobs.begin() + i); // Delete the dead mobs
+            }
         }
     }
 }
@@ -416,7 +419,7 @@ void GameLogic::spawn(const EventInterface& event) {
                                                 sf::Vector2f(x,y));
             m_rocks.push_back(actor);
         } else if (actorType == Actor::Mob) {
-            DynamicActor *actor = new Mob(Purple, 100, 20, sf::Vector2f(x,y), 200.f);
+            DynamicActor *actor = new Mob(sf::Color(255, 0, 0), 100, 20, sf::Vector2f(x,y), 200.f);
             m_mobs.push_back(actor);
         }
     }
