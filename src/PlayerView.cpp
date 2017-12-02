@@ -45,6 +45,7 @@ void PlayerView::init(){
          // ERROR
     }
     m_sword.setTexture(m_swordTexture);
+    m_sword.setColor(sf::Color(255, 0, 0));
     m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
     m_sword.setScale(0.5,0.5);
 
@@ -153,17 +154,24 @@ void PlayerView::handleInput(float deltaTime) {
                     if (event.key.code == KEY_RED) {
                         SwitchColorEvent *switchColor = new SwitchColorEvent(sf::Color::Red);
                         m_game->queueEvent(switchColor);
-                        m_sword.setColor(sf::Color(255, 0, 0));
+                        if (m_gameLogic->hasColor(sf::Color::Red)) {
+                            m_sword.setColor(sf::Color(255, 0, 0));
+                        }
+
                     }
                     if (event.key.code == KEY_BLUE) {
                         SwitchColorEvent *switchColor = new SwitchColorEvent(sf::Color::Blue);
                         m_game->queueEvent(switchColor);
-                        m_sword.setColor(sf::Color(0, 0, 255));
+                        if (m_gameLogic->hasColor(sf::Color::Blue)) {
+                            m_sword.setColor(sf::Color(0, 0, 255));
+                        }
                     }
                     if (event.key.code == KEY_YELLOW) {
                         SwitchColorEvent *switchColor = new SwitchColorEvent(sf::Color::Yellow);
                         m_game->queueEvent(switchColor);
-                        m_sword.setColor(sf::Color(255, 255, 0));
+                        if (m_gameLogic->hasColor(sf::Color::Yellow)) {
+                            m_sword.setColor(sf::Color(255, 255, 0));
+                        }
                     }
                 }
             }

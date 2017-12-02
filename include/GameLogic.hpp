@@ -35,6 +35,7 @@ public:
     void clearRocks();
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
     void toggleLevel();
+    bool hasColor(sf::Color col);
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);

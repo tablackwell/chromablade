@@ -71,6 +71,12 @@ void GameLogic::toggleLevel(){
 }
 
 
+/* Returns if a color is available */
+bool GameLogic::hasColor(sf::Color col) {
+    return m_player.hasColor(col);
+}
+
+
 /* Adds listeners to eventManager */
 void GameLogic::setListener() {
 
