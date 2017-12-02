@@ -53,13 +53,12 @@ private:
 
 
 private:
-    Level m_level;
     std::vector<sf::RectangleShape> m_collisionVector;
     std::vector<sf::RectangleShape> m_doors;
     std::vector<Actor*> m_rocks;
     std::vector<DynamicActor*> m_mobs;
-    std::vector<DynamicActor*> m_enemies;
     std::vector<int> m_clearedRooms;
+    bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;
     Player m_player;
     AnimatedSprite* m_sprite;

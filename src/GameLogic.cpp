@@ -17,7 +17,6 @@ GameLogic::GameLogic() : Process() {
 
 
 void GameLogic::init(){
-    m_level = red;
     m_levelToggled = false;
     setState(Process::RUNNING);
 
@@ -29,12 +28,6 @@ void GameLogic::init(){
 
 
 void GameLogic::update(float &deltaTime){
-}
-
-
-/* Returns the current level */
-GameLogic::Level GameLogic::getLevel(){
-	return m_level;
 }
 
 
@@ -397,6 +390,13 @@ void GameLogic::spawn(const EventInterface& event) {
     int l = center.x - size.x / 2;
     int t = center.y - size.y / 2;
 
+    int index = 0;
+    for (int k = 0; k < 3; k++) {
+        if (m_possibleMobColors[k] == true) {
+            index = k;
+        }
+    }
+
     sf::FloatRect tile;
     int rx, ry, x, y;
 
@@ -419,7 +419,18 @@ void GameLogic::spawn(const EventInterface& event) {
                                                 sf::Vector2f(x,y));
             m_rocks.push_back(actor);
         } else if (actorType == Actor::Mob) {
-            DynamicActor *actor = new Mob(sf::Color(255, 0, 0), 100, 20, sf::Vector2f(x,y), 200.f);
+            int col_int = rand() % (index + 1);
+            sf::Color col;
+            if (col_int == 0) {
+                col = sf::Color(255, 0, 0);
+            }
+            else if (col_int == 1) {
+                col = sf::Color(0, 0, 255);
+            }
+            else {
+                col = sf::Color(255, 255, 0);
+            }
+            DynamicActor *actor = new Mob(col, 100, 20, sf::Vector2f(x,y), 200.f);
             m_mobs.push_back(actor);
         }
     }
