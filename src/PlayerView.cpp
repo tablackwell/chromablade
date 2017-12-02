@@ -136,9 +136,7 @@ void PlayerView::handleInput(float deltaTime) {
                 m_window->setView(m_camera);
                 GameState state = m_game->getPrevState();
                 ChangeStateEvent* changeState = new ChangeStateEvent(state);
-                LoadMapEvent* loadMap = new LoadMapEvent(state);
                 m_game->queueEvent(changeState);
-                m_game->queueEvent(loadMap);
             }
             else m_window->close();
             break;
