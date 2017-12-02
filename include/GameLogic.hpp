@@ -37,13 +37,14 @@ public:
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
     void setBoundaries(int xBound, int yBound);
     void toggleLevel();
+    bool hasColor(sf::Color col);
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);
     bool checkDoors(sf::FloatRect fr, int extra);
     bool checkPortals(const sf::FloatRect& fr);
     void playerAttack(Direction dir);
-    void enemyAttack();
+    void enemyAttack(DynamicActor* attacker);
 
     // Event triggered methods
     void moveChar(const EventInterface& event);

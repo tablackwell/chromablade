@@ -6,7 +6,7 @@
 class Mob : public DynamicActor {
 public:
     Mob(sf::Color color, float hp, float dmg, sf::Vector2f pos, int speed);
-    void attack(DynamicActor target);
+    void attack(DynamicActor &target);
 };
 
 #endif

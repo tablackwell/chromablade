@@ -82,6 +82,12 @@ void GameLogic::toggleLevel(){
 }
 
 
+/* Returns if a color is available */
+bool GameLogic::hasColor(sf::Color col) {
+    return m_player.hasColor(col);
+}
+
+
 /* Adds listeners to eventManager */
 void GameLogic::setListener() {
 
@@ -231,15 +237,19 @@ void GameLogic::playerAttack(Direction dir) {
 
     /* Check attack's intersection with mobs. */
     for (int i = 0; i < m_mobs.size(); i++) {
-        if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
-            m_mobs[i]->setHealth(m_mobs[i]->getHealth() - m_player.getDamage());
+        if (fr.intersects(m_mobs[i]->getGlobalBounds()) && m_mobs[i]->getColor() == m_player.getColor()) {
+            m_player.attack(*m_mobs[i]);
+            if (m_mobs[i]->getHealth() <= 0) {
+                m_mobs.erase(m_mobs.begin() + i); // Delete the dead mobs
+            }
         }
     }
 }
 
 
-void GameLogic::enemyAttack() {
-
+/* Called after a enemy-initiated attackEvent */
+void GameLogic::enemyAttack(DynamicActor* attacker) {
+    attacker->attack(m_player);
 }
 
 /***************************** Event Triggered Functions ******************************/
@@ -408,12 +418,13 @@ void GameLogic::useDoor(const EventInterface& event) {
 void GameLogic::attack(const EventInterface& event) {
     const EventInterface *ptr = &event;
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
-    Direction dir = attackEvent->getDirection();
     if (attackEvent->isFromPlayer() == true) { // player attack
+        Direction dir = attackEvent->getDirection();
         playerAttack(dir);
     }
     else { // enemy attack
-        enemyAttack();
+        DynamicActor* attacker = attackEvent->getAttacker();
+        enemyAttack(attacker);
     }
 }
 
@@ -454,7 +465,7 @@ void GameLogic::spawn(const EventInterface& event) {
                                                 sf::Vector2f(x,y));
             m_rocks.push_back(actor);
         } else if (actorType == Actor::Mob) {
-            DynamicActor *actor = new Mob(Purple, 100, 20, sf::Vector2f(x,y), 200.f);
+            DynamicActor *actor = new Mob(sf::Color(255, 0, 0), 100, 20, sf::Vector2f(x,y), 200.f);
             m_mobs.push_back(actor);
         }
     }
