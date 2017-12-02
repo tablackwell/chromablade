@@ -14,12 +14,14 @@ class DynamicActor : public Actor {
 		DynamicActor();
 		DynamicActor(sf::Color activeColor, float health, float damage, sf::Vector2f startPos, int speed);
 		float getHealth();
-		virtual void attack(DynamicActor enemy) {};
+		virtual void attack(DynamicActor &enemy) {};
 		void changeColor(sf::Color color);
+		sf::Color getColor();
 		void setHealth(float health);
 		void setPosition(sf::Vector2f pos);
 		sf::Vector2f getPosition();
 		float getDamage();
+
 
 	private:
 
