@@ -78,6 +78,7 @@ void PlayerView::init(){
     setSwordOrientation();
     m_animatedSprite.setScale(0.9f,0.9f);
     m_animatedSprite.play(*m_currAnimation);
+
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
     isAttacking = false;
@@ -405,7 +406,7 @@ void PlayerView::loadMap(const EventInterface& event) {
 
     clearTileMaps();
     m_gameLogic->clearRocks();
-    //clear enemies
+    m_gameLogic->clearEnemies();
 
     switch (state) {
         case GameState::Hub:
@@ -422,6 +423,7 @@ void PlayerView::loadMap(const EventInterface& event) {
                     "../res/level/Hub/Hub_doors.csv",
                     sf::Vector2u(16, 16), 150, 38);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
+            m_gameLogic->setBoundaries(150*16, 38*16);
 
             break;
         case GameState::RedLevel:
@@ -438,6 +440,7 @@ void PlayerView::loadMap(const EventInterface& event) {
                     "../res/level/RedDungeon/dungeon_doors.csv",
                     sf::Vector2u(16, 16), 100, 114);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
+            m_gameLogic->setBoundaries(100*16,114*16);
         break;
         case GameState::BlueLevel:
             fprintf(stderr, "loadingBlueLevel!\n");
@@ -452,6 +455,7 @@ void PlayerView::loadMap(const EventInterface& event) {
                     "../res/level/BlueDungeon/bluedungeon_doors.csv",
                     sf::Vector2u(16, 16), 200, 76);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
+            m_gameLogic->setBoundaries(200*16,76*16);
       break;
     }
 }

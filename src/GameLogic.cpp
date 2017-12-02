@@ -48,9 +48,15 @@ void GameLogic::setGameApplication(ChromaBlade* game) {
 }
 
 
+/* Sets the internal collision mapping for game logic*/
 void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> collVector, std::vector<sf::RectangleShape> doorVector){
 	m_collisionVector = collVector;
 	m_doors = doorVector;
+}
+
+void GameLogic::setBoundaries(int xBound, int yBound){
+  m_xBound = xBound;
+  m_yBound = yBound;
 }
 
 
@@ -66,6 +72,7 @@ void GameLogic::setView(PlayerView* view) {
     m_view = view;
 }
 
+/* Provides a reference to the character's sprite in order to get a bounding box*/
 void GameLogic::setAnimatedSprite(AnimatedSprite* sprite){
 	m_sprite = sprite;
 }
@@ -102,8 +109,6 @@ void GameLogic::setListener() {
     std::function<void(const EventInterface &event)> switchCol = std::bind(&GameLogic::switchColor, this, std::placeholders::_1);
     const EventListener switchListener = EventListener(switchCol, EventType::switchColorEvent);
     m_game->registerListener(switchListener, EventType::switchColorEvent);
-
-    //PortalEVent
 
 }
 
@@ -154,7 +159,6 @@ bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
     return false;
 }
 
-
 /* Checks collision with portal */
 bool GameLogic::checkPortals(const sf::FloatRect& fr){
 
@@ -179,7 +183,6 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
       // m_game->queueEvent(doorEvent);
       return true;
     }
-
     return false; //no portal collisions
 }
 
@@ -195,11 +198,12 @@ std::vector<DynamicActor*> GameLogic::getMobs() {
     return m_mobs;
 }
 
-
+/* remove rocks from memory */
 void GameLogic::clearRocks() {
     m_rocks.clear();
 }
 
+/* Remove enemies from memory */
 void GameLogic::clearEnemies(){
     m_enemies.clear();
 }
@@ -345,6 +349,10 @@ void GameLogic::useDoor(const EventInterface& event) {
 						m_view->updateCamera(BLUE_CAM);
 						setCharPosition(BLUE_POS);
         }
+        else if (newState == GameState::YellowLevel){
+          // m_view->updateCamera(YELLOW_CAM);
+          // setCharPosition(YELLO_CAM);
+        }
     }
 
     else{
@@ -371,7 +379,7 @@ void GameLogic::useDoor(const EventInterface& event) {
           m_view->updateCamera(0,HEIGHT);
         }
 
-        if (new_pos.x < 0 || new_pos.y < 0) {
+        if (new_pos.x < 0 || new_pos.y < 0 || new_pos.x > m_xBound || new_pos.y > m_yBound) {
             DoorEvent *doorEvent = new DoorEvent(GameState::Hub, 0, dir);
             m_game->queueEvent(doorEvent);
             toggleLevel();
