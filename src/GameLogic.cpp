@@ -205,7 +205,7 @@ void GameLogic::playerAttack(Direction dir) {
 
     /* Check attack's intersection with mobs. */
     for (int i = 0; i < m_mobs.size(); i++) {
-        if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
+        if (fr.intersects(m_mobs[i]->getGlobalBounds()) && m_mobs[i]->getColor() == m_player.getColor()) {
             m_player.attack(*m_mobs[i]);
         }
     }

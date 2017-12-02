@@ -146,7 +146,7 @@ void PlayerView::handleInput(float deltaTime) {
                         else if (m_currAnimation == &m_walkingRight) {
                             dir = Right;
                         }
-                        AttackEvent *attack = new AttackEvent(true, dir);
+                        AttackEvent *attack = new AttackEvent(true, dir, m_sword.getColor());
                         m_game->queueEvent(attack);
                         m_sound.play();
                         isAttacking = true;

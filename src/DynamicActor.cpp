@@ -27,6 +27,10 @@ void DynamicActor::changeColor(sf::Color color) {
 }
 
 
+sf::Color DynamicActor::getColor() {
+    return m_activeColor;
+}
+
 /* Returns current health of actor. */
 float DynamicActor::getHealth() {
     return m_health;

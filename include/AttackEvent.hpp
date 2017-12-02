@@ -11,7 +11,7 @@
  */
 class AttackEvent : public EventInterface {
     public:
-        AttackEvent(bool isFromPlayer, Direction dir) { m_dir = dir; m_isFromPlayer = isFromPlayer; m_type = attackEvent; }
+        AttackEvent(bool isFromPlayer, Direction dir, sf::Color col) { m_dir = dir; m_isFromPlayer = isFromPlayer; m_type = attackEvent; m_color = col;}
         AttackEvent(bool isFromPlayer, DynamicActor* attacker) { m_isFromPlayer = isFromPlayer; EventType m_type; m_attacker = attacker; }
         bool isFromPlayer() const { return m_isFromPlayer; }
         const EventType& getEventType(void) const { return m_type; }
@@ -25,6 +25,7 @@ class AttackEvent : public EventInterface {
         EventType m_type;
         Direction m_dir;
         DynamicActor* m_attacker;
+        sf::Color m_color;
 };
 
 #endif
