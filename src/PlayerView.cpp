@@ -503,18 +503,18 @@ void PlayerView::loadMap(const EventInterface& event) {
         case GameState::Hub:
             m_map.loadFromText("../res/tilesets/lightworld.png",
                     "../res/level/Hub/Hub_base.csv",
-                    sf::Vector2u(16, 16), 150, 38);
+                    sf::Vector2u(16, 16), 150, 76);
             m_overlay.loadFromText("../res/tilesets/lightworld.png",
                     "../res/level/Hub/Hub_overlay.csv",
-                    sf::Vector2u(16, 16),150, 38);
+                    sf::Vector2u(16, 16),150, 76);
             m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png",
                     "../res/level/Hub/Hub_collision.csv",
-                    sf::Vector2u(16, 16), 150, 38);
+                    sf::Vector2u(16, 16), 150, 76);
             m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
                     "../res/level/Hub/Hub_doors.csv",
-                    sf::Vector2u(16, 16), 150, 38);
+                    sf::Vector2u(16, 16), 150, 76);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
-            m_gameLogic->setBoundaries(150*16, 38*16);
+            m_gameLogic->setBoundaries(150*16, 76*16);
 
         break;
         case GameState::RedLevel:
