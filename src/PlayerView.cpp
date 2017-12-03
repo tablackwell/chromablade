@@ -105,7 +105,13 @@ void PlayerView::updateHealth() {
     float x = m_animatedSprite.getPosition().x;
     float y = m_animatedSprite.getPosition().y - 10;
 
+    // Calculate pixels for player health convert to ratio of health:30
+    // x = 30*playerHealth / 100
+    float health = m_gameLogic->getPlayerHealth();
+    float newHealth = (30 * health) / 100;
+
     m_totalHealth.setPosition(sf::Vector2f(x, y));
+    m_health.setSize(sf::Vector2f(newHealth, 7));
     m_health.setPosition(sf::Vector2f(x, y));
 }
 
@@ -364,6 +370,7 @@ bool PlayerView::isOpen(){
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
+    updateHealth();
     if (isAttacking) {
         if (m_sword.getRotation() < 70 || m_sword.getRotation() > 290) {
             swingSword(deltaTime);
@@ -452,7 +459,6 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
     setSwordOrientation();
     m_animatedSprite.play(*m_currAnimation);
     m_animatedSprite.move(moving);
-    updateHealth();
 
     if (noKeyPressed) {
         m_animatedSprite.stop();
