@@ -7,7 +7,7 @@ PlayerDied::~PlayerDied() { };
 
 void PlayerDied::init() {
 
-    m_background.setFillColor(sf::Color(255, 255, 255, 125));
+    m_background.setFillColor(sf::Color(0, 0, 0, 125));
     m_background.setSize(sf::Vector2f(WIDTH, HEIGHT));
     m_background.setPosition(0, 0);
 
@@ -19,7 +19,7 @@ void PlayerDied::init() {
     }
 
     // menu text
-    m_died.setString("Oh no you died!");
+    m_died.setString("Oh No! You died!");
     m_died.setFont(m_font);
     m_died.setStyle(sf::Text::Style::Italic);
     m_died.setCharacterSize(24);
@@ -65,6 +65,8 @@ void PlayerDied::init() {
 
 /* Draws the title page */
 void PlayerDied::draw(sf::RenderWindow &window) {
+    window.setView(window.getDefaultView());
+    window.draw(m_background);
     window.draw(m_died);
     window.draw(m_play);
     window.draw(m_exit);

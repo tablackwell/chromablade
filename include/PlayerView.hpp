@@ -8,6 +8,7 @@
 #include "Title.hpp"
 #include "TileMap.hpp"
 #include "Pause.hpp"
+#include "PlayerDied.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -77,6 +78,7 @@ private: //vars and objs
     TileMap m_doors;
     Title m_title;
     Pause m_pause;
+    PlayerDied m_playerDied;
     sf::Sound m_sound;
     sf::SoundBuffer m_buffer;
 };

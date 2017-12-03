@@ -141,6 +141,8 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
             std::cout << "MOB COLLISION! \n";
+            enemyAttack(m_mobs[i]);
+            std::cout<<"Player health"<<m_player.getHealth();
             return true;
         }
     }
@@ -250,6 +252,11 @@ void GameLogic::playerAttack(Direction dir) {
 /* Called after a enemy-initiated attackEvent */
 void GameLogic::enemyAttack(DynamicActor* attacker) {
     attacker->attack(m_player);
+    // Player died
+    if (m_player.getHealth() <= 0) {
+        ChangeStateEvent *changeState = new ChangeStateEvent(GameState::PlayerDied);
+        m_game->queueEvent(changeState);
+    }
 }
 
 /***************************** Event Triggered Functions ******************************/

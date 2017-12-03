@@ -31,6 +31,7 @@ void PlayerView::init(){
     // Load title screen.
     m_title.init();
     m_pause.init();
+    m_playerDied.init();
 
     // Load texture for character
     if(!m_charTexture.loadFromFile("../res/sprite/spritenew.png")) {
@@ -137,6 +138,19 @@ void PlayerView::handleInput(float deltaTime) {
                 GameState state = m_game->getPrevState();
                 ChangeStateEvent* changeState = new ChangeStateEvent(state);
                 m_game->queueEvent(changeState);
+            }
+            else m_window->close();
+            break;
+        case GameState::PlayerDied:
+            rc = m_playerDied.update(*m_window);
+            if (rc == 0) {} // Moved the cursor
+            else if (rc == 1) { // Selected Restart
+                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Hub);
+                LoadMapEvent* loadMap = new LoadMapEvent(GameState::Hub);
+                m_game->queueEvent(changeState);
+                m_game->queueEvent(loadMap);
+                resetCamera();
+                updateCamera(HUB_CAM);
             }
             else m_window->close();
             break;
@@ -268,6 +282,11 @@ void PlayerView::draw() {
             break;
         case GameState::Pause:
             m_pause.draw(*m_window);
+            break;
+        case GameState::PlayerDied:
+            m_window->draw(m_map);
+            m_window->draw(m_overlay); // Draw background of incomplete dungeon
+            m_playerDied.draw(*m_window);
             break;
         default:
             m_window->draw(m_map);
