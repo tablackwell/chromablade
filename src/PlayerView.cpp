@@ -547,7 +547,7 @@ void PlayerView::loadMap(const EventInterface& event) {
                     sf::Vector2u(16, 16), 200, 76);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
             m_gameLogic->setBoundaries(200*16,76*16);
-      break;
+        break;
         case GameState::YellowLevel:
         fprintf(stderr, "loadingYellow!\n");
           m_map.loadFromText("../res/tilesets/dungeon.png",
@@ -562,7 +562,11 @@ void PlayerView::loadMap(const EventInterface& event) {
                   sf::Vector2u(16, 16),50, 38);
           m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
           m_gameLogic->setBoundaries(50*16,38*16);
-      break;
+        break;
+        case GameState::BossLevel:
+        fprintf(stderr, "Loading Boss Level \n");
+          //Load greyscale boss lair
+        break;
     }
 }
 
