@@ -42,6 +42,7 @@ void DynamicActor::setHealth(float health) {
 /* Sets the actor position */
 void DynamicActor::setPosition(sf::Vector2f position) {
     this->m_position = position;
+    m_rect.setPosition(position);
 }
 
 

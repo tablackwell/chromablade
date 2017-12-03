@@ -15,8 +15,8 @@ public:
     void draw(sf::RenderWindow *window);
     sf::FloatRect getGlobalBounds();
 
-protected:
     sf::RectangleShape m_rect;
+protected:
     Type m_type;
 
 private:

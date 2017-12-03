@@ -226,6 +226,9 @@ void GameLogic::enemyAttack() {
 }
 
 void GameLogic::moveMobs() {
+    for (int i=0; i<m_aiviews.size(); i++) {
+        m_aiviews[i]->move(m_player.getPosition());
+    }
 //    MoveMobsEvent* moveMobsEvent = new MoveMobsEvent(m_player.getPosition());
 //    m_game->queueEvent(moveMobsEvent);
 }
