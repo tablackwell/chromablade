@@ -543,16 +543,16 @@ void PlayerView::loadMap(const EventInterface& event) {
         fprintf(stderr, "loadingYellow!\n");
           m_map.loadFromText("../res/tilesets/dungeon.png",
                   "../res/level/YellowDungeon/yellowdungeon_base.csv",
-                  sf::Vector2u(16, 16), 50, 38);
-          m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/YellowDungeon/yellowdungeon_overlay.csv", sf::Vector2u(16, 16),50, 38);
+                  sf::Vector2u(16, 16), 150, 114);
+          m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/YellowDungeon/yellowdungeon_overlay.csv", sf::Vector2u(16, 16),150, 114);
           m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
                   "../res/level/YellowDungeon/yellowdungeon_collision.csv",
-                  sf::Vector2u(16, 16), 50, 38);
+                  sf::Vector2u(16, 16), 150, 114);
           m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
                   "../res/level/YellowDungeon/yellowdungeon_doors.csv",
-                  sf::Vector2u(16, 16),50, 38);
+                  sf::Vector2u(16, 16),150, 114);
           m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
-          m_gameLogic->setBoundaries(50*16,38*16);
+          m_gameLogic->setBoundaries(150*16,114*16);
         break;
         case GameState::BossLevel:
         fprintf(stderr, "Loading Boss Level \n");
