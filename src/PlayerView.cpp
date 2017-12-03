@@ -75,6 +75,8 @@ void PlayerView::init(){
     m_walkingUp.addFrame(sf::IntRect(64, 64, 32, 32));
     m_walkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
 
+    loadMonsterAnimation();
+
     m_currAnimation = &m_walkingDown;
     m_animatedSprite.setPosition(HUB_POS); // (196,255)
     setSwordOrientation();
@@ -86,6 +88,33 @@ void PlayerView::init(){
     m_pauseCamera.reset(sf::FloatRect(0, 0, WIDTH, HEIGHT));
     isAttacking = false;
     //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
+}
+
+
+void PlayerView::loadMonsterAnimation() {
+    // Load texture for monster
+    if(!m_monsterTexture.loadFromFile("../res/sprite/monsters.png")) {
+        // ERROR
+    }
+    m_monsterWalkingDown.setSpriteSheet(m_monsterTexture);
+    m_monsterWalkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
+    m_monsterWalkingDown.addFrame(sf::IntRect(32, 0, 32, 32));
+    m_monsterWalkingDown.addFrame(sf::IntRect(64, 0, 32, 32));
+
+    m_monsterWalkingLeft.setSpriteSheet(m_monsterTexture);
+    m_monsterWalkingLeft.addFrame(sf::IntRect(0, 32, 32, 32));
+    m_monsterWalkingLeft.addFrame(sf::IntRect(32, 32, 32, 32));
+    m_monsterWalkingLeft.addFrame(sf::IntRect(64, 32, 32, 32));
+
+    m_monsterWalkingRight.setSpriteSheet(m_monsterTexture);
+    m_monsterWalkingRight.addFrame(sf::IntRect(0, 64, 32, 32));
+    m_monsterWalkingRight.addFrame(sf::IntRect(32, 64, 32, 32));
+    m_monsterWalkingRight.addFrame(sf::IntRect(64, 64, 32, 32));
+
+    m_monsterWalkingUp.setSpriteSheet(m_monsterTexture);
+    m_monsterWalkingUp.addFrame(sf::IntRect(0, 96, 32, 32));
+    m_monsterWalkingUp.addFrame(sf::IntRect(32, 96, 32, 32));
+    m_monsterWalkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
 }
 
 
@@ -504,4 +533,9 @@ void PlayerView::loadMap(const EventInterface& event) {
           m_gameLogic->setBoundaries(50*16,38*16);
       break;
     }
+}
+
+
+void PlayerView::setMobAnimation(DynamicActor &mob) {
+    mob.setCurrAnimation(m_monsterWalkingDown);
 }

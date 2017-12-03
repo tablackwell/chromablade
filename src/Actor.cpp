@@ -10,13 +10,6 @@ Actor::Actor(Actor::Type type, sf::Vector2f size, sf::Vector2f pos) {
         m_rect.setFillColor(sf::Color(150,75,0));
         m_type = Actor::Rock;
     }
-//        if(!m_texture.loadFromFile("../res/.png")) {
-//            // ERROR
-//        }
-//    }
-//	m_character.setTexture(m_charTexture);
-//	m_character.setPosition(sf::Vector2f(180, 210));
-
     m_type = type;
 }
 

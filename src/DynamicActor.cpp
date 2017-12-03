@@ -18,6 +18,7 @@ DynamicActor::DynamicActor(sf::Color color, float health, float damage, sf::Vect
     this->m_position.x = startPos.x;
     this->m_position.y = startPos.y;
     this->m_speed = speed;
+    this->m_animatedSprite.setPosition(startPos);
 }
 
 
@@ -46,6 +47,7 @@ void DynamicActor::setHealth(float health) {
 /* Sets the actor position */
 void DynamicActor::setPosition(sf::Vector2f position) {
     this->m_position = position;
+    m_animatedSprite.setPosition(position);
 }
 
 
@@ -58,4 +60,20 @@ sf::Vector2f DynamicActor::getPosition() {
 /* Returns the actor's attack damage */
 float DynamicActor::getDamage() {
     return m_damage;
+}
+
+
+void DynamicActor::draw(sf::RenderWindow *window) {
+    window->draw(m_animatedSprite);
+}
+
+
+void DynamicActor::setCurrAnimation(Animation animation) {
+    m_animatedSprite.play(animation);
+}
+
+sf::FloatRect DynamicActor::getGlobalBounds() {
+    sf::FloatRect bound = m_animatedSprite.getGlobalBounds();
+    std::cout << bound.top << " " << bound.left <<  " " << bound.width <<  " " << bound.height << " \n";
+    return bound;
 }
