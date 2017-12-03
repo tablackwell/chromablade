@@ -489,7 +489,7 @@ void GameLogic::spawn(const EventInterface& event) {
                 col = sf::Color(255, 255, 0);
             }
             DynamicActor *actor = new Mob(col, 100, 20, sf::Vector2f(x,y), 200.f);
-            m_view->setMobAnimation(*actor);
+            m_view->setMobAnimation(col, *actor);
             m_mobs.push_back(actor);
         }
     }

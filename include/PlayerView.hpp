@@ -37,7 +37,7 @@ public:
     void setGameLogic(GameLogic* gameLogic);
     void setGameApplication(ChromaBlade* game);
     void clearTileMaps();
-    void setMobAnimation(DynamicActor &mob);
+    void setMobAnimation(sf::Color col, DynamicActor &mob);
 
     // event related methods
     void update1(const EventInterface &event);
@@ -64,10 +64,18 @@ private: //vars and objs
     Animation m_walkingUp;
     Animation m_walkingRight;
     Animation m_walkingLeft;
-    Animation m_monsterWalkingDown;
-    Animation m_monsterWalkingUp;
-    Animation m_monsterWalkingRight;
-    Animation m_monsterWalkingLeft;
+    Animation m_redMobWalkingDown;
+    Animation m_redMobWalkingUp;
+    Animation m_redMobWalkingRight;
+    Animation m_redMobWalkingLeft;
+    Animation m_blueMobWalkingDown;
+    Animation m_blueMobWalkingUp;
+    Animation m_blueMobWalkingRight;
+    Animation m_blueMobWalkingLeft;
+    Animation m_yellowMobWalkingDown;
+    Animation m_yellowMobWalkingUp;
+    Animation m_yellowMobWalkingRight;
+    Animation m_yellowMobWalkingLeft;
     sf::View m_camera;
     sf::View m_pauseCamera;
     sf::FloatRect m_boundaryBox;

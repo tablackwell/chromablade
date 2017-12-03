@@ -23,7 +23,7 @@ class DynamicActor : public Actor {
 		sf::Vector2f getPosition();
 		float getDamage();
 		void draw(sf::RenderWindow *window);
-		void setCurrAnimation(Animation animation);
+		void setCurrAnimation(Animation &animation);
 		sf::FloatRect getGlobalBounds();
 
 	protected:

@@ -68,12 +68,10 @@ void DynamicActor::draw(sf::RenderWindow *window) {
 }
 
 
-void DynamicActor::setCurrAnimation(Animation animation) {
+void DynamicActor::setCurrAnimation(Animation &animation) {
     m_animatedSprite.play(animation);
 }
 
 sf::FloatRect DynamicActor::getGlobalBounds() {
-    sf::FloatRect bound = m_animatedSprite.getGlobalBounds();
-    std::cout << bound.top << " " << bound.left <<  " " << bound.width <<  " " << bound.height << " \n";
-    return bound;
+    return m_animatedSprite.getGlobalBounds();
 }
