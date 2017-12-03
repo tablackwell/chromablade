@@ -256,6 +256,10 @@ void GameLogic::enemyAttack(DynamicActor* attacker) {
     }
 }
 
+/* Return health of player */
+float GameLogic::getPlayerHealth() {
+    return m_player.getHealth();
+}
 
 /* Returns information on levels cleared */
 int GameLogic::getLevelsCleared() {

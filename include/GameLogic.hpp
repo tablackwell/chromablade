@@ -41,6 +41,7 @@ public:
     void toggleLevel();
     bool hasColor(sf::Color col);
     int getLevelsCleared();
+    float getPlayerHealth();
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);

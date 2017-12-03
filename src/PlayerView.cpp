@@ -91,8 +91,31 @@ void PlayerView::resetPlayer() {
     m_animatedSprite.setScale(0.9f,0.9f);
     m_animatedSprite.play(*m_currAnimation);
     isAttacking = false;
+
+    m_totalHealth.setSize(sf::Vector2f(30, 7));
+    m_totalHealth.setFillColor(sf::Color(255, 0, 0));
+    m_totalHealth.setOutlineColor(sf::Color(0, 0, 0));
+    m_totalHealth.setOutlineThickness(1);
+    m_health.setSize(sf::Vector2f(30, 7));
+    m_health.setFillColor(sf::Color(0, 255, 0));
+
+    updateHealth();
 }
 
+/* Update health bar and move with player */
+void PlayerView::updateHealth() {
+    float x = m_animatedSprite.getPosition().x;
+    float y = m_animatedSprite.getPosition().y - 10;
+
+    // Calculate pixels for player health convert to ratio of health:30
+    // x = 30*playerHealth / 100
+    float health = m_gameLogic->getPlayerHealth();
+    float newHealth = (30 * health) / 100;
+
+    m_totalHealth.setPosition(sf::Vector2f(x, y));
+    m_health.setSize(sf::Vector2f(newHealth, 7));
+    m_health.setPosition(sf::Vector2f(x, y));
+}
 
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
@@ -310,6 +333,8 @@ void PlayerView::draw() {
 
             m_window->draw(m_sword);
             m_window->draw(m_animatedSprite);
+            m_window->draw(m_totalHealth);
+            m_window->draw(m_health);
 
             /* Debug stuff */
             if(m_game->inDebugMode()){
@@ -347,6 +372,7 @@ bool PlayerView::isOpen(){
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
+    updateHealth();
     if (isAttacking) {
         if (m_sword.getRotation() < 70 || m_sword.getRotation() > 290) {
             swingSword(deltaTime);
