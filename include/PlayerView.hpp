@@ -13,6 +13,7 @@
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/System/Clock.hpp>
 
 #define TILE_DIM 32
 #define HUB_POS sf::Vector2f(196,255)
@@ -40,11 +41,12 @@ public:
     void clearTileMaps();
 
     // event related methods
-    void update1(const EventInterface &event);
     void setListener();
+    void update1(const EventInterface& event);
     void moveChar(const EventInterface& event);
     void useDoor(const EventInterface& event);
     void loadMap(const EventInterface& event);
+    void playerAttacked(const EventInterface &event);
     void drawAnimation(Direction dir, sf::Vector2f moving, bool noKeyPressed, float deltaTime);
 
     //Camera
@@ -56,9 +58,10 @@ public:
 private: //vars and objs
     void setSwordOrientation();
     void swingSword(float deltaTime);
-    bool isAttacking;
     void resetPlayer();
     void updateHealth();
+    bool isAttacking;
+    bool m_drawPlayer;
     EventManager *m_eventManager;
     Animation *m_currAnimation;
     Animation m_walkingDown;

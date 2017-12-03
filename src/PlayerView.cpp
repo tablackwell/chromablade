@@ -91,6 +91,7 @@ void PlayerView::resetPlayer() {
     m_animatedSprite.setScale(0.9f,0.9f);
     m_animatedSprite.play(*m_currAnimation);
     isAttacking = false;
+    m_drawPlayer = true;
 
     m_totalHealth.setSize(sf::Vector2f(30, 7));
     m_totalHealth.setFillColor(sf::Color(255, 0, 0));
@@ -116,6 +117,7 @@ void PlayerView::updateHealth() {
     m_health.setSize(sf::Vector2f(newHealth, 7));
     m_health.setPosition(sf::Vector2f(x, y));
 }
+
 
 /* Set the window of the view */
 void PlayerView::setContext(sf::RenderWindow* window){
@@ -331,10 +333,12 @@ void PlayerView::draw() {
             }
             // m_window->draw(m_filter);
 
-            m_window->draw(m_sword);
-            m_window->draw(m_animatedSprite);
-            m_window->draw(m_totalHealth);
-            m_window->draw(m_health);
+            if (m_drawPlayer) {
+                m_window->draw(m_sword);
+                m_window->draw(m_animatedSprite);
+                m_window->draw(m_totalHealth);
+                m_window->draw(m_health);
+            }
 
             /* Debug stuff */
             if(m_game->inDebugMode()){
@@ -435,6 +439,11 @@ void PlayerView::setListener() {
     std::function<void(const EventInterface &event)> loadMap = std::bind(&PlayerView::loadMap, this, std::placeholders::_1);
     const EventListener loadMapListener = EventListener(loadMap, EventType::loadMapEvent);
     m_game->registerListener(loadMapListener, EventType::loadMapEvent);
+
+    // AttackEvent
+    std::function<void(const EventInterface &event)> attacked = std::bind(&PlayerView::playerAttacked, this, std::placeholders::_1);
+    const EventListener attackListener = EventListener(attacked, 10);
+    m_game->registerListener(attackListener, EventType::attackEvent);
 }
 
 
@@ -554,5 +563,27 @@ void PlayerView::loadMap(const EventInterface& event) {
           m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
           m_gameLogic->setBoundaries(50*16,38*16);
       break;
+    }
+}
+
+
+/* Player flashes on screen. Triggered by an AttackEvent. */
+void PlayerView::playerAttacked(const EventInterface &event) {
+    const EventInterface *ptr = &event;
+    const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
+    if (attackEvent->isFromPlayer() == false) { // enemy attack
+        int stop = 10;
+        int blinks = 0;
+        // Toggle boolean to only draw player on some frames
+        while (blinks < stop) {
+            if (m_drawPlayer) {
+                m_drawPlayer = false;
+            } else {
+                m_drawPlayer = true;
+            }
+            draw();
+            blinks += 1;
+        }
+        m_drawPlayer = true;
     }
 }
