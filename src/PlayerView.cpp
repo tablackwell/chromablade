@@ -31,6 +31,7 @@ void PlayerView::init(){
     // Load title screen.
     m_title.init();
     m_pause.init();
+    m_playerDied.init();
 
     // Load texture for character
     if(!m_charTexture.loadFromFile("../res/sprite/spritenew.png")) {
@@ -75,17 +76,21 @@ void PlayerView::init(){
     m_walkingUp.addFrame(sf::IntRect(64, 64, 32, 32));
     m_walkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
 
+    resetPlayer();
+
+    setState(Process::RUNNING);
+    m_camera.setSize(WIDTH,HEIGHT);
+    m_pauseCamera.reset(sf::FloatRect(0, 0, WIDTH, HEIGHT));
+    //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
+}
+
+void PlayerView::resetPlayer() {
     m_currAnimation = &m_walkingDown;
     m_animatedSprite.setPosition(HUB_POS); // (196,255)
     setSwordOrientation();
     m_animatedSprite.setScale(0.9f,0.9f);
     m_animatedSprite.play(*m_currAnimation);
-
-    setState(Process::RUNNING);
-    m_camera.setSize(WIDTH,HEIGHT);
-    m_pauseCamera.reset(sf::FloatRect(0, 0, WIDTH, HEIGHT));
     isAttacking = false;
-    //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
 
 
@@ -137,6 +142,22 @@ void PlayerView::handleInput(float deltaTime) {
                 GameState state = m_game->getPrevState();
                 ChangeStateEvent* changeState = new ChangeStateEvent(state);
                 m_game->queueEvent(changeState);
+            }
+            else m_window->close();
+            break;
+        case GameState::PlayerDied:
+            rc = m_playerDied.update(*m_window);
+            if (rc == 0) {} // Moved the cursor
+            else if (rc == 1) { // Selected Restart
+                resetPlayer();
+                m_gameLogic->resetCharacter();
+                resetCamera();
+                updateCamera(HUB_CAM);
+                // Load hub
+                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Hub);
+                LoadMapEvent* loadMap = new LoadMapEvent(GameState::Hub);
+                m_game->queueEvent(changeState);
+                m_game->queueEvent(loadMap);
             }
             else m_window->close();
             break;
@@ -270,6 +291,11 @@ void PlayerView::draw() {
             break;
         case GameState::Pause:
             m_pause.draw(*m_window);
+            break;
+        case GameState::PlayerDied:
+            m_window->draw(m_map);
+            m_window->draw(m_overlay); // Draw background of incomplete dungeon
+            m_playerDied.draw(*m_window);
             break;
         default:
             m_window->draw(m_map);
@@ -409,7 +435,6 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
     setSwordOrientation();
     m_animatedSprite.play(*m_currAnimation);
     m_animatedSprite.move(moving);
-
 
     if (noKeyPressed) {
         m_animatedSprite.stop();

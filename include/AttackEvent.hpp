@@ -7,7 +7,7 @@
 
 
 /*
- * A AttackEvent is generated when the character or enemy attacks.
+ * An AttackEvent is generated when the character or enemy attacks.
  */
 class AttackEvent : public EventInterface {
     public:

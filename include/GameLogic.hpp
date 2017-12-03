@@ -27,6 +27,7 @@ public:
     void update(float &deltaTime);
     Level getLevel();
     void setCharPosition(sf::Vector2f position);
+    void resetCharacter();
     void setGameApplication(ChromaBlade* game);
     void setAnimatedSprite(AnimatedSprite* sprite);
     void setView(PlayerView* view);
