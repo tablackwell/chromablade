@@ -149,12 +149,13 @@ void PlayerView::handleInput(float deltaTime) {
             rc = m_playerDied.update(*m_window);
             if (rc == 0) {} // Moved the cursor
             else if (rc == 1) { // Selected Restart
-                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Hub);
-                LoadMapEvent* loadMap = new LoadMapEvent(GameState::Hub);
                 resetPlayer();
-                m_gameLogic->setCharPosition(HUB_POS);
+                m_gameLogic->resetCharacter();
                 resetCamera();
                 updateCamera(HUB_CAM);
+                // Load hub
+                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Hub);
+                LoadMapEvent* loadMap = new LoadMapEvent(GameState::Hub);
                 m_game->queueEvent(changeState);
                 m_game->queueEvent(loadMap);
             }

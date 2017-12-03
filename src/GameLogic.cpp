@@ -66,6 +66,11 @@ void GameLogic::setCharPosition(sf::Vector2f position) {
     m_sprite->setPosition(position);
 }
 
+/* Reset character stats after death */
+void GameLogic::resetCharacter() {
+    m_player.setHealth(100);
+    setCharPosition(HUB_POS);
+}
 
 /* Links game logic to player view */
 void GameLogic::setView(PlayerView* view) {
