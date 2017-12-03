@@ -94,6 +94,8 @@ void PlayerView::resetPlayer() {
 
     m_totalHealth.setSize(sf::Vector2f(30, 7));
     m_totalHealth.setFillColor(sf::Color(255, 0, 0));
+    m_totalHealth.setOutlineColor(sf::Color(0, 0, 0));
+    m_totalHealth.setOutlineThickness(1);
     m_health.setSize(sf::Vector2f(30, 7));
     m_health.setFillColor(sf::Color(0, 255, 0));
 
