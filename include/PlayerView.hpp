@@ -55,6 +55,7 @@ private: //vars and objs
     void setSwordOrientation();
     void swingSword(float deltaTime);
     bool isAttacking;
+    void resetPlayer();
     EventManager *m_eventManager;
     Animation *m_currAnimation;
     Animation m_walkingDown;

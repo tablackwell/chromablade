@@ -76,17 +76,21 @@ void PlayerView::init(){
     m_walkingUp.addFrame(sf::IntRect(64, 64, 32, 32));
     m_walkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
 
+    resetPlayer();
+
+    setState(Process::RUNNING);
+    m_camera.setSize(WIDTH,HEIGHT);
+    m_pauseCamera.reset(sf::FloatRect(0, 0, WIDTH, HEIGHT));
+    //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
+}
+
+void PlayerView::resetPlayer() {
     m_currAnimation = &m_walkingDown;
     m_animatedSprite.setPosition(HUB_POS); // (196,255)
     setSwordOrientation();
     m_animatedSprite.setScale(0.9f,0.9f);
     m_animatedSprite.play(*m_currAnimation);
-
-    setState(Process::RUNNING);
-    m_camera.setSize(WIDTH,HEIGHT);
-    m_pauseCamera.reset(sf::FloatRect(0, 0, WIDTH, HEIGHT));
     isAttacking = false;
-    //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
 
 
@@ -147,10 +151,12 @@ void PlayerView::handleInput(float deltaTime) {
             else if (rc == 1) { // Selected Restart
                 ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Hub);
                 LoadMapEvent* loadMap = new LoadMapEvent(GameState::Hub);
-                m_game->queueEvent(changeState);
-                m_game->queueEvent(loadMap);
+                resetPlayer();
+                m_gameLogic->setCharPosition(HUB_POS);
                 resetCamera();
                 updateCamera(HUB_CAM);
+                m_game->queueEvent(changeState);
+                m_game->queueEvent(loadMap);
             }
             else m_window->close();
             break;
@@ -426,7 +432,6 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
     setSwordOrientation();
     m_animatedSprite.play(*m_currAnimation);
     m_animatedSprite.move(moving);
-
 
     if (noKeyPressed) {
         m_animatedSprite.stop();
