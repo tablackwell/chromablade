@@ -58,6 +58,7 @@ private: //vars and objs
     void swingSword(float deltaTime);
     bool isAttacking;
     void resetPlayer();
+    void updateHealth();
     EventManager *m_eventManager;
     Animation *m_currAnimation;
     Animation m_walkingDown;
@@ -67,6 +68,8 @@ private: //vars and objs
     sf::View m_camera;
     sf::View m_pauseCamera;
     sf::FloatRect m_boundaryBox;
+    sf::RectangleShape m_totalHealth;
+    sf::RectangleShape m_health;
     AnimatedSprite m_animatedSprite;
     sf::RenderWindow* m_window;
     sf::Texture m_charTexture;
