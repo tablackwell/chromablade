@@ -8,7 +8,7 @@
  * Implementation of Player class, instance of DynamicActor class used for player's
  * character.
  */
-Player::Player() : DynamicActor(sf::Color::Red, 100, 20, sf::Vector2f(196, 255), 200.f) {
+Player::Player() : DynamicActor(sf::Color::Red, 100, 20, sf::Vector2f(1184,320), 200.f) {
     m_colorsAvail.push_back(sf::Color::Red); // Start with red by default.
 }
 

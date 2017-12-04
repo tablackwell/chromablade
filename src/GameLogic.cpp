@@ -443,7 +443,7 @@ void GameLogic::useDoor(const EventInterface& event) {
 
 
     /* Upon entering a new room, spawn enemies / rocks */
-    if (room > 0){
+    if((room > 0) && (doorEvent->getGameState() != GameState::Hub) && (doorEvent->getGameState() != GameState::BossLevel)){
         if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room) == m_clearedRooms.end()) {
             sf::Vector2f center = m_view->getCameraCenter();
             sf::Vector2f size = m_view->getCameraSize();
