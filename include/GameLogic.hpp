@@ -71,12 +71,14 @@ private:
     sf::RectangleShape m_redPortal;
     sf::RectangleShape m_bluePortal;
     sf::RectangleShape m_yellowPortal;
+    sf::RectangleShape m_greyPortal;
+
     int m_xBound;
     int m_yBound;
     sf::Vector2f dungeonReturnPosition;
     sf::Vector2f dungeonReturnCamera;
-    bool inDungeon;
-
+    bool inCombat;
+    bool bossAvailable;
 
     Player m_player;
     AnimatedSprite* m_sprite;

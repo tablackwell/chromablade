@@ -430,9 +430,13 @@ void PlayerView::draw() {
               sf::RectangleShape yellowPortal(sf::Vector2f(32,32));
               yellowPortal.setPosition(1984,32);
               yellowPortal.setFillColor(sf::Color(255,255,0,100));
+              sf::RectangleShape greyPortal(sf::Vector2f(32,32));
+              greyPortal.setPosition(1184,880);
+              greyPortal.setFillColor(sf::Color(128,128,128,100));
               m_window->draw(bluePortal);
               m_window->draw(redPortal);
               m_window->draw(yellowPortal);
+              m_window->draw(greyPortal);
             }
             break;
     }
@@ -637,7 +641,18 @@ void PlayerView::loadMap(const EventInterface& event) {
         break;
         case GameState::BossLevel:
         fprintf(stderr, "Loading Boss Level \n");
-          //Load greyscale boss lair
+          m_map.loadFromText("../res/tilesets/dungeon.png",
+                  "../res/level/BossLevel/bosslevel_base.csv",
+                  sf::Vector2u(16, 16), 50, 76);
+          m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/BossLevel/bosslevel_overlay.csv", sf::Vector2u(16, 16),50, 76);
+          m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
+                  "../res/level/BossLevel/bosslevel_collision.csv",
+                  sf::Vector2u(16, 16), 50, 76);
+          m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
+                  "../res/level/BossLevel/bosslevel_doors.csv",
+                  sf::Vector2u(16, 16),50, 76);
+          m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
+          m_gameLogic->setBoundaries(50*16,76*16);
         break;
     }
 }

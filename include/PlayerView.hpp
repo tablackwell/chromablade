@@ -20,10 +20,12 @@
 #define YELLOW_POS sf::Vector2f(60,255)
 #define RED_POS sf::Vector2f(60,1520)
 #define BLUE_POS sf::Vector2f(60,900)
+#define GREY_POS sf::Vector2f(400,1024)
 #define RED_CAM 400,1520
 #define HUB_CAM 400,300
 #define BLUE_CAM 400,912
 #define YELLOW_CAM 400,300
+#define GREYSCALE_CAM 400,912
 class ChromaBlade; // Forward declaration of class ChromaBlade, so that we can declare a pointer to ChromaBlade in PlayerView
 
 

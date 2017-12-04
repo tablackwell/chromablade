@@ -28,6 +28,9 @@ void GameLogic::init(){
     m_redPortal.setPosition(1184,32);
     m_yellowPortal.setSize(sf::Vector2f(32,32));
     m_yellowPortal.setPosition(1984,32);
+    m_greyPortal.setSize((sf::Vector2f(32,32)));
+    m_greyPortal.setPosition(1184,880);
+    bossAvailable = false;
 }
 
 
@@ -186,6 +189,19 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
       std::cout << "YELLOW PORTAL TRIGGERED \n";
       DoorEvent *doorEvent = new DoorEvent(GameState::YellowLevel, 1, Direction::Up);
       m_game->queueEvent(doorEvent);
+      return true;
+    }
+
+    else if(fr.intersects(m_greyPortal.getGlobalBounds())){
+      if(!bossAvailable){
+        std::cout << "BOSS BATTLE TRIGGERED \n";
+        DoorEvent *doorEvent = new DoorEvent(GameState::BossLevel, 1, Direction::Up);
+        m_game->queueEvent(doorEvent);
+      }
+      else{
+        std::cout << "BOSS BATTLE NOT YET AVAILABLE \n";
+        //display text to user
+      }
       return true;
     }
     return false; //no portal collisions
@@ -383,6 +399,10 @@ void GameLogic::useDoor(const EventInterface& event) {
         else if (newState == GameState::YellowLevel){
             m_view->updateCamera(YELLOW_CAM);
             setCharPosition(YELLOW_POS);
+        }
+        else if (newState == GameState::BossLevel){
+          m_view->updateCamera(GREYSCALE_CAM);
+          setCharPosition(GREY_POS);
         }
     }
 
