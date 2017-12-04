@@ -1,15 +1,19 @@
 #include "GameLogic.hpp"
+#include "ChromaBlade.hpp"
+#include "PlayerView.hpp"
+#include "AIView.hpp"
+#include "Mob.hpp"
+#include "Macros.hpp"
+
 #include "MoveEvent.hpp"
 #include "LoadMapEvent.hpp"
 #include "DoorEvent.hpp"
 #include "AttackEvent.hpp"
 #include "SpawnEvent.hpp"
 #include "SwitchColorEvent.hpp"
-#include "ChromaBlade.hpp"
-#include "PlayerView.hpp"
-#include "Mob.hpp"
-#include "Macros.hpp"
-
+#include "MoveMobsEvent.hpp"
+#include "SpawnPositionsEvent.hpp"
+#include "PathMapEvent.hpp"
 
 #include <iostream>
 
@@ -32,10 +36,23 @@ void GameLogic::init(){
     m_greyPortal.setSize((sf::Vector2f(32,32)));
     m_greyPortal.setPosition(1184,880);
     bossAvailable = false;
+
+    /* Allocate memory for path maps. */
+    m_numNodes.x = WIDTH / TILE_DIM;
+    m_numNodes.y = HEIGHT / TILE_DIM;
+    m_pathMap = new char* [m_numNodes.x];
+    for (int i=0; i<m_numNodes.x; i++) {
+        m_pathMap[i] = new char[m_numNodes.y];
+    }
 }
 
 
 void GameLogic::update(float &deltaTime){
+    GameState state = m_game->getState();
+
+    if (state != GameState::Hub) {
+        moveMobs();
+    }
 }
 
 
@@ -118,6 +135,11 @@ void GameLogic::setListener() {
     const EventListener switchListener = EventListener(switchCol, EventType::switchColorEvent);
     m_game->registerListener(switchListener, EventType::switchColorEvent);
 
+    // PathMapEvent
+    std::function<void(const EventInterface &event)> pathMap = std::bind(&GameLogic::pathMap, this, std::placeholders::_1);
+    const EventListener pathMapListener = EventListener(pathMap, EventType::pathMapEvent);
+    m_game->registerListener(pathMapListener, EventType::pathMapEvent);
+
 }
 
 
@@ -126,7 +148,7 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     /* Check intersections with mini collision tiles. */
     for(int i = 0; i < m_collisionVector.size(); i++){
         if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
-            std::cout << "COLLISION! \n";
+            //std::cout << "COLLISION! \n";
             return true;
         }
     }
@@ -134,7 +156,7 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     /* Check intersections with rock tiles. */
     for (int i = 0; i < m_rocks.size(); i++) {
         if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
-            std::cout << "ROCK COLLISION! \n";
+            //std::cout << "ROCK COLLISION! \n";
             return true;
         }
     }
@@ -142,7 +164,7 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     /* Check intersections with mobs. */
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
-            std::cout << "MOB COLLISION! \n";
+            //std::cout << "MOB COLLISION! \n";
             enemyAttack(m_mobs[i]);
             std::cout<<"Player health"<<m_player.getHealth();
             return true;
@@ -171,7 +193,6 @@ bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
 
 /* Checks collision with portal */
 bool GameLogic::checkPortals(const sf::FloatRect& fr){
-
     if(fr.intersects(m_redPortal.getGlobalBounds())){
       std::cout << "RED PORTAL TRIGGERED \n";
       DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, Direction::Up);
@@ -228,6 +249,16 @@ void GameLogic::clearRocks() {
 /* Remove enemies from memory */
 void GameLogic::clearEnemies(){
     m_mobs.clear();
+}
+
+/* Returns path map. */
+char** GameLogic::getPathMap() {
+    return m_pathMap;
+}
+
+/* Returns number of nodes in path map. */
+sf::Vector2i GameLogic::getNumNodes() {
+    return m_numNodes;
 }
 
 /* Called after a player-initiated attackEvent */
@@ -287,6 +318,14 @@ int GameLogic::getLevelsCleared() {
         }
     }
     return index;
+}
+
+void GameLogic::moveMobs() {
+    for (int i=0; i<m_aiviews.size(); i++) {
+        m_aiviews[i]->move(m_player.getPosition());
+    }
+//    MoveMobsEvent* moveMobsEvent = new MoveMobsEvent(m_player.getPosition());
+//    m_game->queueEvent(moveMobsEvent);
 }
 
 /***************************** Event Triggered Functions ******************************/
@@ -450,8 +489,13 @@ void GameLogic::useDoor(const EventInterface& event) {
             sf::Vector2f size = m_view->getCameraSize();
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 1, size, center);
             m_game->queueEvent(spawnMobsEvent);
+            PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
+            m_game->queueEvent(pathMapEvent);
+//            SpawnPositionsEvent *spawnPositionsEvent
+//                = new SpawnPositionsEvent(m_rocks, m_mobs);
+//            m_game->queueEvent(spawnPositionsEvent);    
         }
     }
 }
@@ -530,10 +574,24 @@ void GameLogic::spawn(const EventInterface& event) {
             DynamicActor *actor = new Mob(col, 100, 20, sf::Vector2f(x,y), 200.f);
             m_view->setMobAnimation(col, *actor);
             m_mobs.push_back(actor);
+
+            AIView *aiview = new AIView(actor, this);
+            m_aiviews.push_back(aiview);
         }
     }
 }
 
+///* Triggered by a SpawnPositionsEvent. */
+//void GameLogic::setSpawnPositions(const EventInterface& event) {
+//    const SpawnPositionsEvent *spawnPositionsEvent
+//        = dynamic_cast<const SpawnPositionsEvent*>(&event);
+//    std::vector<Actor*> rocks = spawnPositionsEvent->getRocks();
+//    std::vector<DynamicActor*> mobs = spawnPositionsEvent->getMobs();
+//
+//    for (int i=0; i<m_aiviews.size(); i++) {
+//        m_aiviews[i]->setSpawnPositions(rocks, mobs);
+//    }
+//}
 
 /* Triggered by a SwitchColorEvent */
 void GameLogic::switchColor(const EventInterface& event) {
@@ -544,7 +602,6 @@ void GameLogic::switchColor(const EventInterface& event) {
     m_player.changeSwordColor(color);
 }
 
-
 /* Unlocks a color that a spawned mob can have.*/
 void GameLogic::unlockColor(GameState state) {
     if (state == GameState::RedLevel) {
@@ -554,5 +611,60 @@ void GameLogic::unlockColor(GameState state) {
     else if (state == GameState::BlueLevel) {
         m_possibleMobColors[2] = true;
         m_player.unlockColor(sf::Color::Yellow);
+    }
+}
+
+void GameLogic::pathMap(const EventInterface& event) {
+    printf("pathMap!\n");
+    const PathMapEvent *pathMapEvent = dynamic_cast<const PathMapEvent*>(&event);
+    const sf::Vector2f size = pathMapEvent->getSize();
+    const sf::Vector2f center = pathMapEvent->getCenter();
+
+    int n = m_numNodes.x;
+    int m = m_numNodes.y;
+    sf::FloatRect gb;
+
+    // Reset map
+    for (int i=0; i<n; i++) {
+        for (int j=0; j<m; j++) {
+            m_pathMap[i][j] = ' ';
+        }
+    }
+
+    // Collision tiles.
+    for(int i = 0; i < m_collisionVector.size(); i++){
+        gb = m_collisionVector[i].getGlobalBounds();
+
+        // Outside of view.
+        if (gb.left < center.x - size.x / 2 || gb.left >= center.x + size.x / 2 ||
+            gb.top < center.y - size.x / 2 || gb.top >= center.y + size.x / 2) {
+            continue;
+        }
+
+        int x = (int) gb.left % WIDTH / TILE_DIM;
+        int y = (int) gb.top % HEIGHT / TILE_DIM;
+        m_pathMap[x][y] = '#';
+    }
+
+    // Rock tiles.
+    for (int i = 0; i < m_rocks.size(); i++) {
+        gb = m_rocks[i]->getGlobalBounds();
+
+        // Outside of view.
+        if (gb.left < center.x - size.x / 2 || gb.left >= center.x + size.x / 2 ||
+            gb.top < center.y - size.x / 2 || gb.top >= center.y + size.x / 2) {
+            continue;
+        }
+
+        int x = (int) gb.left % WIDTH / TILE_DIM;
+        int y = (int) gb.top % HEIGHT / TILE_DIM;
+        printf("rock at %d %d\n", x, y);
+        m_pathMap[x][y] = '#';
+    }
+
+    for(int y=0;y<m;y++) {
+        for(int x=0;x<n;x++)
+            printf("%c", m_pathMap[x][y]);
+        printf("\n");
     }
 }

@@ -16,8 +16,8 @@ public:
     virtual sf::FloatRect getGlobalBounds();
     void setTexture(sf::Texture &texture);
 
-protected:
     sf::RectangleShape m_rect;
+protected:
     Type m_type;
 
 private:

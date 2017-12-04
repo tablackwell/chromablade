@@ -9,11 +9,6 @@ ChangeStateEvent::ChangeStateEvent(GameState state) {
     this->m_newState = state;
 }
 
-/* Return event type. */
-const EventType& ChangeStateEvent::getEventType() const {
-    return m_type;
-}
-
 /* Return game state. */
 const GameState ChangeStateEvent::getGameState() const {
     return m_newState;
