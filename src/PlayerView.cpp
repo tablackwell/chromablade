@@ -54,7 +54,7 @@ void PlayerView::init(){
     m_sword.setTexture(m_swordTexture);
     m_sword.setColor(sf::Color(255, 0, 0));
     m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
-    m_sword.setScale(0.5,0.5);
+//    m_sword.setScale(,0.5);
 
     // Load character animations
     m_walkingDown.setSpriteSheet(m_charTexture);
@@ -481,7 +481,7 @@ bool PlayerView::isOpen(){
 void PlayerView::update(float &deltaTime){
     updateHealthBar();
     if (isAttacking) {
-        if (m_sword.getRotation() < 70 || m_sword.getRotation() > 290) {
+        if (m_sword.getRotation() < 80 || m_sword.getRotation() > 260) {
             swingSword(deltaTime);
         }
         else {

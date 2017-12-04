@@ -267,18 +267,18 @@ void GameLogic::playerAttack(Direction dir) {
     // Change the size and position of the rectangle depending on the attack direction, attack range is 20px
     switch (dir) {
         case Up:
-            fr.height += 20;
-            fr.top -= 20;
+            fr.height += 30;
+            fr.top -= 30;
             break;
         case Down:
-            fr.height += 20;
+            fr.height += 30;
             break;
         case Left:
-            fr.width += 20;
-            fr.left -= 20;
+            fr.width += 30;
+            fr.left -= 30;
             break;
         case Right:
-            fr.width += 20;
+            fr.width += 30;
             break;
     }
 

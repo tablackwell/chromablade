@@ -1,5 +1,5 @@
 #ifndef PATHMAPEVENT_HPP
-#define PATHMAPEVEN_HPP
+#define PATHMAPEVENT_HPP
 
 #include <SFML/Graphics.hpp>
 #include "EventInterface.hpp"
