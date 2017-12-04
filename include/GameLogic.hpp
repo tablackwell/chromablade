@@ -14,8 +14,6 @@
 #include "GameState.hpp"
 #include <functional>
 
-#define SPEED 200.f
-
 class ChromaBlade;
 class PlayerView;
 

@@ -18,7 +18,6 @@
 #include <iostream>
 #include <math.h>
 
-#define SPEED 200.f
 
 
 PlayerView::PlayerView() : Process() {

@@ -15,9 +15,6 @@
 #include "Audio.hpp"
 #include "EventType.hpp"
 
-#define WIDTH 800
-#define HEIGHT 608
-
 class ChromaBlade{
 public:
     ChromaBlade();
