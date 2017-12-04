@@ -95,8 +95,10 @@ private: //vars and objs
     Title m_title;
     Pause m_pause;
     PlayerDied m_playerDied;
-    sf::Sound m_sound;
-    sf::SoundBuffer m_buffer;
+    sf::Sound m_swingSound;
+    sf::SoundBuffer m_swingBuffer;
+    sf::Sound m_switchSound;
+    sf::SoundBuffer m_switchBuffer;
 };
 
 #endif

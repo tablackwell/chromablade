@@ -39,8 +39,11 @@ void PlayerView::init(){
     }
 
     // Load sound for sword swing
-    m_buffer.loadFromFile("../res/sfx/swordSwing.wav");
-    m_sound.setBuffer(m_buffer);
+    m_swingBuffer.loadFromFile("../res/sfx/swordSwing.wav");
+    m_swingSound.setBuffer(m_swingBuffer);
+    // Load sound for sword switch
+    m_switchBuffer.loadFromFile("../res/sfx/swordSwitch.wav");
+    m_switchSound.setBuffer(m_switchBuffer);
 
     // Load texture for sword
     if(!m_swordTexture.loadFromFile("../res/sprite/sword.png")) {
@@ -282,7 +285,7 @@ void PlayerView::handleInput(float deltaTime) {
                         }
                         AttackEvent *attack = new AttackEvent(true, dir, m_sword.getColor());
                         m_game->queueEvent(attack);
-                        m_sound.play();
+                        m_swingSound.play();
                         isAttacking = true;
                     }
                     if (event.key.code == KEY_RED) {
@@ -290,6 +293,7 @@ void PlayerView::handleInput(float deltaTime) {
                         m_game->queueEvent(switchColor);
                         if (m_gameLogic->hasColor(sf::Color::Red)) {
                             m_sword.setColor(sf::Color(255, 0, 0));
+                            m_switchSound.play();
                         }
 
                     }
@@ -298,6 +302,7 @@ void PlayerView::handleInput(float deltaTime) {
                         m_game->queueEvent(switchColor);
                         if (m_gameLogic->hasColor(sf::Color::Blue)) {
                             m_sword.setColor(sf::Color(0, 0, 255));
+                            m_switchSound.play();
                         }
                     }
                     if (event.key.code == KEY_YELLOW) {
@@ -305,6 +310,7 @@ void PlayerView::handleInput(float deltaTime) {
                         m_game->queueEvent(switchColor);
                         if (m_gameLogic->hasColor(sf::Color::Yellow)) {
                             m_sword.setColor(sf::Color(255, 255, 0));
+                            m_switchSound.play();
                         }
                     }
                     if (event.key.code == KEY_PAUSE) {
