@@ -41,6 +41,8 @@ public:
     bool hasColor(sf::Color col);
     int getLevelsCleared();
     float getPlayerHealth();
+    char** getPathMap();
+    sf::Vector2i getNumNodes();
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);

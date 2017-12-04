@@ -251,6 +251,16 @@ void GameLogic::clearEnemies(){
     m_mobs.clear();
 }
 
+/* Returns path map. */
+char** GameLogic::getPathMap() {
+    return m_pathMap;
+}
+
+/* Returns number of nodes in path map. */
+sf::Vector2i GameLogic::getNumNodes() {
+    return m_numNodes;
+}
+
 /* Called after a player-initiated attackEvent */
 void GameLogic::playerAttack(Direction dir) {
     sf::FloatRect fr = m_sprite->getGlobalBounds();
@@ -479,7 +489,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             sf::Vector2f size = m_view->getCameraSize();
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 1, size, center);
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
@@ -564,7 +574,7 @@ void GameLogic::spawn(const EventInterface& event) {
             m_view->setMobAnimation(col, *actor);
             m_mobs.push_back(actor);
 
-            AIView *aiview = new AIView(actor, &m_rocks, &m_mobs);
+            AIView *aiview = new AIView(actor, this);
             m_aiviews.push_back(aiview);
         }
     }
@@ -604,6 +614,7 @@ void GameLogic::unlockColor(GameState state) {
 }
 
 void GameLogic::pathMap(const EventInterface& event) {
+    printf("pathMap!\n");
     const PathMapEvent *pathMapEvent = dynamic_cast<const PathMapEvent*>(&event);
     const sf::Vector2f size = pathMapEvent->getSize();
     const sf::Vector2f center = pathMapEvent->getCenter();
@@ -646,6 +657,7 @@ void GameLogic::pathMap(const EventInterface& event) {
 
         int x = (int) gb.left % WIDTH / TILE_DIM;
         int y = (int) gb.top % HEIGHT / TILE_DIM;
+        printf("rock at %d %d\n", x, y);
         m_pathMap[x][y] = '#';
     }
 
