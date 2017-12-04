@@ -68,8 +68,12 @@ void DynamicActor::draw(sf::RenderWindow *window) {
 }
 
 
-void DynamicActor::setCurrAnimation(Animation &animation) {
-    m_animatedSprite.play(animation);
+void DynamicActor::setAnimation(Animation &leftAnimation, Animation &rightAnimation, Animation &upAnimation, Animation &downAnimation) {
+    m_animatedSprite.play(downAnimation);
+    m_MobWalkingDown = downAnimation;
+    m_MobWalkingUp = upAnimation;
+    m_MobWalkingRight = rightAnimation;
+    m_MobWalkingLeft = leftAnimation;
 }
 
 sf::FloatRect DynamicActor::getGlobalBounds() {

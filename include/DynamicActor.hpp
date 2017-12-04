@@ -23,11 +23,15 @@ class DynamicActor : public Actor {
 		sf::Vector2f getPosition();
 		float getDamage();
 		void draw(sf::RenderWindow *window);
-		void setCurrAnimation(Animation &animation);
+		void setAnimation(Animation &leftAnimation, Animation &rightAnimation, Animation &upAnimation, Animation &downAnimation);
 		sf::FloatRect getGlobalBounds();
 
 	protected:
         AnimatedSprite m_animatedSprite;
+        Animation m_MobWalkingDown;
+        Animation m_MobWalkingUp;
+        Animation m_MobWalkingRight;
+        Animation m_MobWalkingLeft;
 
 	private:
         sf::Color m_activeColor;

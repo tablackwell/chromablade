@@ -581,12 +581,12 @@ void PlayerView::loadMap(const EventInterface& event) {
 
 void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
     if (col == sf::Color::Red) {
-        mob.setCurrAnimation(m_redMobWalkingDown);
+        mob.setAnimation(m_redMobWalkingLeft, m_redMobWalkingRight, m_redMobWalkingUp, m_redMobWalkingDown);
     }
     else if (col == sf::Color::Blue) {
-        mob.setCurrAnimation(m_blueMobWalkingDown);
+        mob.setAnimation(m_blueMobWalkingLeft, m_blueMobWalkingRight, m_blueMobWalkingUp, m_blueMobWalkingDown);
     }
     else {
-        mob.setCurrAnimation(m_yellowMobWalkingDown);
+        mob.setAnimation(m_yellowMobWalkingLeft, m_yellowMobWalkingRight, m_yellowMobWalkingUp, m_yellowMobWalkingDown);
     }
 }
