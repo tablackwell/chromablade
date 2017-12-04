@@ -39,7 +39,7 @@ void PlayerView::init(){
     }
 
     // Load sound for sword swing
-    m_swingBuffer.loadFromFile("../res/sfx/swordSwing.wav");
+    m_swingBuffer.loadFromFile("../res/sfx/swordSwing.flac");
     m_swingSound.setBuffer(m_swingBuffer);
     // Load sound for sword switch
     m_switchBuffer.loadFromFile("../res/sfx/swordSwitch.wav");
