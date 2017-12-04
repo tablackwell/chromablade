@@ -1,17 +1,19 @@
 #include "GameLogic.hpp"
+#include "ChromaBlade.hpp"
+#include "PlayerView.hpp"
+#include "AIView.hpp"
+#include "Mob.hpp"
+#include "Macros.hpp"
+
 #include "MoveEvent.hpp"
 #include "LoadMapEvent.hpp"
 #include "DoorEvent.hpp"
 #include "AttackEvent.hpp"
 #include "SpawnEvent.hpp"
 #include "SwitchColorEvent.hpp"
-#include "ChromaBlade.hpp"
-#include "PlayerView.hpp"
-#include "AIView.hpp"
-#include "Mob.hpp"
 #include "MoveMobsEvent.hpp"
 #include "SpawnPositionsEvent.hpp"
-#include "Macros.hpp"
+#include "PathMapEvent.hpp"
 
 #include <iostream>
 
@@ -34,6 +36,14 @@ void GameLogic::init(){
     m_greyPortal.setSize((sf::Vector2f(32,32)));
     m_greyPortal.setPosition(1184,880);
     bossAvailable = false;
+
+    /* Allocate memory for path maps. */
+    int n = WIDTH / TILE_DIM;
+    int m = HEIGHT / TILE_DIM;
+    m_pathMap = new int* [n];
+    for (int i=0; i<n; i++) {
+        m_pathMap[i] = new int[m];
+    }
 }
 
 
@@ -124,6 +134,11 @@ void GameLogic::setListener() {
     std::function<void(const EventInterface &event)> switchCol = std::bind(&GameLogic::switchColor, this, std::placeholders::_1);
     const EventListener switchListener = EventListener(switchCol, EventType::switchColorEvent);
     m_game->registerListener(switchListener, EventType::switchColorEvent);
+
+    // PathMapEvent
+    std::function<void(const EventInterface &event)> pathMap = std::bind(&GameLogic::pathMap, this, std::placeholders::_1);
+    const EventListener pathMapListener = EventListener(pathMap, EventType::pathMapEvent);
+    m_game->registerListener(pathMapListener, EventType::pathMapEvent);
 
 }
 
@@ -466,6 +481,8 @@ void GameLogic::useDoor(const EventInterface& event) {
             m_game->queueEvent(spawnRocksEvent);
             SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
             m_game->queueEvent(spawnMobsEvent);
+            PathMapEvent *pathMapEvent = new PathMapEvent();
+            m_game->queueEvent(pathMapEvent);
 //            SpawnPositionsEvent *spawnPositionsEvent
 //                = new SpawnPositionsEvent(m_rocks, m_mobs);
 //            m_game->queueEvent(spawnPositionsEvent);    
@@ -584,4 +601,7 @@ void GameLogic::unlockColor(GameState state) {
         m_possibleMobColors[2] = true;
         m_player.unlockColor(sf::Color::Yellow);
     }
+}
+
+void GameLogic::pathMap(const EventInterface& event) {
 }

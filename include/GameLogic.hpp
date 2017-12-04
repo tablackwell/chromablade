@@ -57,6 +57,7 @@ private:
     void useDoor(const EventInterface& event);
     void switchColor(const EventInterface& event);
     void unlockColor(GameState state);
+    void pathMap(const EventInterface& event);
 
 
 private:
@@ -67,6 +68,7 @@ private:
     std::vector<int> m_clearedRooms;
     bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;
+    int **m_pathMap;
 
     sf::RectangleShape m_redPortal;
     sf::RectangleShape m_bluePortal;

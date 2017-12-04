@@ -17,6 +17,7 @@ enum EventType {
     switchColorEvent,
     moveMobsEvent,
     spawnPositionsEvent,
+    pathMapEvent,
 };
 
 #endif
