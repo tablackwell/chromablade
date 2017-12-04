@@ -1,6 +1,7 @@
 #include "ChromaBlade.hpp"
 #include "PlayerView.hpp"
 #include "GameLogic.hpp"
+#include "Macros.hpp"
 
 #include <cstdio>
 

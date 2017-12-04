@@ -8,6 +8,7 @@
 #include "ChromaBlade.hpp"
 #include "PlayerView.hpp"
 #include "Mob.hpp"
+#include "Macros.hpp"
 
 
 #include <iostream>

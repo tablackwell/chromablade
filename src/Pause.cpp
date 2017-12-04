@@ -1,5 +1,5 @@
-#include "ChromaBlade.hpp"
 #include "Pause.hpp"
+#include "Macros.hpp"
 
 #include <iostream>
 Pause::Pause() { };

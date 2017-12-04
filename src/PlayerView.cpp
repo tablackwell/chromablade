@@ -3,6 +3,7 @@
 #include "ChromaBlade.hpp"
 #include "KeySetting.hpp"
 #include "Actor.hpp"
+#include "Macros.hpp"
 
 #include "MoveEvent.hpp"
 #include "DoorEvent.hpp"
