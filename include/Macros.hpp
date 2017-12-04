@@ -10,7 +10,7 @@
 #define BLUE_POS sf::Vector2f(60,900)
 #define GREY_POS sf::Vector2f(400,1024)
 #define RED_CAM 400,1520
-#define HUB_CAM 1200,300
+#define HUB_CAM 1200,304
 #define BLUE_CAM 400,912
-#define YELLOW_CAM 400,300
+#define YELLOW_CAM 400,304
 #define GREYSCALE_CAM 400,912
