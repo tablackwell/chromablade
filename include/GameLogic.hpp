@@ -27,6 +27,7 @@ public:
     void update(float &deltaTime);
     Level getLevel();
     void setCharPosition(sf::Vector2f position);
+    void resetCharacter();
     void setGameApplication(ChromaBlade* game);
     void setAnimatedSprite(AnimatedSprite* sprite);
     void setView(PlayerView* view);
@@ -40,6 +41,7 @@ public:
     void toggleLevel();
     bool hasColor(sf::Color col);
     int getLevelsCleared();
+    float getPlayerHealth();
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);

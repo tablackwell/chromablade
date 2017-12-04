@@ -8,10 +8,12 @@
 #include "Title.hpp"
 #include "TileMap.hpp"
 #include "Pause.hpp"
+#include "PlayerDied.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include <SFML/System/Clock.hpp>
 
 #define TILE_DIM 32
 #define HUB_POS sf::Vector2f(196,255)
@@ -40,11 +42,12 @@ public:
     void setMobAnimation(sf::Color col, DynamicActor &mob);
 
     // event related methods
-    void update1(const EventInterface &event);
     void setListener();
+    void update1(const EventInterface& event);
     void moveChar(const EventInterface& event);
     void useDoor(const EventInterface& event);
     void loadMap(const EventInterface& event);
+    void playerAttacked(const EventInterface &event);
     void drawAnimation(Direction dir, sf::Vector2f moving, bool noKeyPressed, float deltaTime);
 
     //Camera
@@ -57,7 +60,10 @@ private: //vars and objs
     void setSwordOrientation();
     void swingSword(float deltaTime);
     void loadMonsterAnimation();
+    void resetPlayer();
+    void updateHealth();
     bool isAttacking;
+    bool m_drawPlayer;
     EventManager *m_eventManager;
     Animation *m_currAnimation;
     Animation m_walkingDown;
@@ -79,6 +85,8 @@ private: //vars and objs
     sf::View m_camera;
     sf::View m_pauseCamera;
     sf::FloatRect m_boundaryBox;
+    sf::RectangleShape m_totalHealth;
+    sf::RectangleShape m_health;
     AnimatedSprite m_animatedSprite;
     sf::RenderWindow* m_window;
     sf::Texture m_charTexture;
@@ -94,6 +102,7 @@ private: //vars and objs
     TileMap m_doors;
     Title m_title;
     Pause m_pause;
+    PlayerDied m_playerDied;
     sf::Sound m_sound;
     sf::SoundBuffer m_buffer;
 };

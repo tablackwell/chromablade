@@ -31,6 +31,7 @@ void PlayerView::init(){
     // Load title screen.
     m_title.init();
     m_pause.init();
+    m_playerDied.init();
 
     // Load texture for character
     if(!m_charTexture.loadFromFile("../res/sprite/spritenew.png")) {
@@ -77,17 +78,46 @@ void PlayerView::init(){
 
     loadMonsterAnimation();
 
+    resetPlayer();
+
+    setState(Process::RUNNING);
+    m_camera.setSize(WIDTH,HEIGHT);
+    m_pauseCamera.reset(sf::FloatRect(0, 0, WIDTH, HEIGHT));
+    //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
+}
+
+void PlayerView::resetPlayer() {
     m_currAnimation = &m_walkingDown;
     m_animatedSprite.setPosition(HUB_POS); // (196,255)
     setSwordOrientation();
     m_animatedSprite.setScale(0.9f,0.9f);
     m_animatedSprite.play(*m_currAnimation);
-
-    setState(Process::RUNNING);
-    m_camera.setSize(WIDTH,HEIGHT);
-    m_pauseCamera.reset(sf::FloatRect(0, 0, WIDTH, HEIGHT));
     isAttacking = false;
-    //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
+    m_drawPlayer = true;
+
+    m_totalHealth.setSize(sf::Vector2f(30, 7));
+    m_totalHealth.setFillColor(sf::Color(255, 0, 0));
+    m_totalHealth.setOutlineColor(sf::Color(0, 0, 0));
+    m_totalHealth.setOutlineThickness(1);
+    m_health.setSize(sf::Vector2f(30, 7));
+    m_health.setFillColor(sf::Color(0, 255, 0));
+
+    updateHealth();
+}
+
+/* Update health bar and move with player */
+void PlayerView::updateHealth() {
+    float x = m_animatedSprite.getPosition().x;
+    float y = m_animatedSprite.getPosition().y - 10;
+
+    // Calculate pixels for player health convert to ratio of health:30
+    // x = 30*playerHealth / 100
+    float health = m_gameLogic->getPlayerHealth();
+    float newHealth = (30 * health) / 100;
+
+    m_totalHealth.setPosition(sf::Vector2f(x, y));
+    m_health.setSize(sf::Vector2f(newHealth, 7));
+    m_health.setPosition(sf::Vector2f(x, y));
 }
 
 
@@ -209,6 +239,22 @@ void PlayerView::handleInput(float deltaTime) {
                 GameState state = m_game->getPrevState();
                 ChangeStateEvent* changeState = new ChangeStateEvent(state);
                 m_game->queueEvent(changeState);
+            }
+            else m_window->close();
+            break;
+        case GameState::PlayerDied:
+            rc = m_playerDied.update(*m_window);
+            if (rc == 0) {} // Moved the cursor
+            else if (rc == 1) { // Selected Restart
+                resetPlayer();
+                m_gameLogic->resetCharacter();
+                resetCamera();
+                updateCamera(HUB_CAM);
+                // Load hub
+                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Hub);
+                LoadMapEvent* loadMap = new LoadMapEvent(GameState::Hub);
+                m_game->queueEvent(changeState);
+                m_game->queueEvent(loadMap);
             }
             else m_window->close();
             break;
@@ -343,6 +389,11 @@ void PlayerView::draw() {
         case GameState::Pause:
             m_pause.draw(*m_window);
             break;
+        case GameState::PlayerDied:
+            m_window->draw(m_map);
+            m_window->draw(m_overlay); // Draw background of incomplete dungeon
+            m_playerDied.draw(*m_window);
+            break;
         default:
             m_window->draw(m_map);
             m_window->draw(m_overlay);
@@ -354,8 +405,12 @@ void PlayerView::draw() {
             }
             // m_window->draw(m_filter);
 
-            m_window->draw(m_sword);
-            m_window->draw(m_animatedSprite);
+            if (m_drawPlayer) {
+                m_window->draw(m_sword);
+                m_window->draw(m_animatedSprite);
+                m_window->draw(m_totalHealth);
+                m_window->draw(m_health);
+            }
 
             /* Debug stuff */
             if(m_game->inDebugMode()){
@@ -393,6 +448,7 @@ bool PlayerView::isOpen(){
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
+    updateHealth();
     if (isAttacking) {
         if (m_sword.getRotation() < 70 || m_sword.getRotation() > 290) {
             swingSword(deltaTime);
@@ -455,6 +511,11 @@ void PlayerView::setListener() {
     std::function<void(const EventInterface &event)> loadMap = std::bind(&PlayerView::loadMap, this, std::placeholders::_1);
     const EventListener loadMapListener = EventListener(loadMap, EventType::loadMapEvent);
     m_game->registerListener(loadMapListener, EventType::loadMapEvent);
+
+    // AttackEvent
+    std::function<void(const EventInterface &event)> attacked = std::bind(&PlayerView::playerAttacked, this, std::placeholders::_1);
+    const EventListener attackListener = EventListener(attacked, 10);
+    m_game->registerListener(attackListener, EventType::attackEvent);
 }
 
 
@@ -481,7 +542,6 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
     setSwordOrientation();
     m_animatedSprite.play(*m_currAnimation);
     m_animatedSprite.move(moving);
-
 
     if (noKeyPressed) {
         m_animatedSprite.stop();
@@ -515,18 +575,18 @@ void PlayerView::loadMap(const EventInterface& event) {
         case GameState::Hub:
             m_map.loadFromText("../res/tilesets/lightworld.png",
                     "../res/level/Hub/Hub_base.csv",
-                    sf::Vector2u(16, 16), 150, 38);
+                    sf::Vector2u(16, 16), 150, 76);
             m_overlay.loadFromText("../res/tilesets/lightworld.png",
                     "../res/level/Hub/Hub_overlay.csv",
-                    sf::Vector2u(16, 16),150, 38);
+                    sf::Vector2u(16, 16),150, 76);
             m_collisions.loadCollisionsFromText("../res/tilesets/lightworld.png",
                     "../res/level/Hub/Hub_collision.csv",
-                    sf::Vector2u(16, 16), 150, 38);
+                    sf::Vector2u(16, 16), 150, 76);
             m_doors.loadDoorsFromText("../res/tilesets/lightworld.png",
                     "../res/level/Hub/Hub_doors.csv",
-                    sf::Vector2u(16, 16), 150, 38);
+                    sf::Vector2u(16, 16), 150, 76);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
-            m_gameLogic->setBoundaries(150*16, 38*16);
+            m_gameLogic->setBoundaries(150*16, 76*16);
 
         break;
         case GameState::RedLevel:
@@ -559,22 +619,48 @@ void PlayerView::loadMap(const EventInterface& event) {
                     sf::Vector2u(16, 16), 200, 76);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
             m_gameLogic->setBoundaries(200*16,76*16);
-      break;
+        break;
         case GameState::YellowLevel:
         fprintf(stderr, "loadingYellow!\n");
           m_map.loadFromText("../res/tilesets/dungeon.png",
                   "../res/level/YellowDungeon/yellowdungeon_base.csv",
-                  sf::Vector2u(16, 16), 50, 38);
-          m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/YellowDungeon/yellowdungeon_overlay.csv", sf::Vector2u(16, 16),50, 38);
+                  sf::Vector2u(16, 16), 150, 114);
+          m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/YellowDungeon/yellowdungeon_overlay.csv", sf::Vector2u(16, 16),150, 114);
           m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
                   "../res/level/YellowDungeon/yellowdungeon_collision.csv",
-                  sf::Vector2u(16, 16), 50, 38);
+                  sf::Vector2u(16, 16), 150, 114);
           m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
                   "../res/level/YellowDungeon/yellowdungeon_doors.csv",
-                  sf::Vector2u(16, 16),50, 38);
+                  sf::Vector2u(16, 16),150, 114);
           m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
-          m_gameLogic->setBoundaries(50*16,38*16);
-      break;
+          m_gameLogic->setBoundaries(150*16,114*16);
+        break;
+        case GameState::BossLevel:
+        fprintf(stderr, "Loading Boss Level \n");
+          //Load greyscale boss lair
+        break;
+    }
+}
+
+
+/* Player flashes on screen. Triggered by an AttackEvent. */
+void PlayerView::playerAttacked(const EventInterface &event) {
+    const EventInterface *ptr = &event;
+    const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
+    if (attackEvent->isFromPlayer() == false) { // enemy attack
+        int stop = 10;
+        int blinks = 0;
+        // Toggle boolean to only draw player on some frames
+        while (blinks < stop) {
+            if (m_drawPlayer) {
+                m_drawPlayer = false;
+            } else {
+                m_drawPlayer = true;
+            }
+            draw();
+            blinks += 1;
+        }
+        m_drawPlayer = true;
     }
 }
 
