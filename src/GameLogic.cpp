@@ -481,7 +481,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             m_game->queueEvent(spawnRocksEvent);
             SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
             m_game->queueEvent(spawnMobsEvent);
-            PathMapEvent *pathMapEvent = new PathMapEvent();
+            PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
 //            SpawnPositionsEvent *spawnPositionsEvent
 //                = new SpawnPositionsEvent(m_rocks, m_mobs);
@@ -619,53 +619,35 @@ void GameLogic::pathMap(const EventInterface& event) {
         }
     }
 
-    /* Collision tiles. */
+    // Collision tiles.
     printf("Collisions\n");
     for(int i = 0; i < m_collisionVector.size(); i++){
         gb = m_collisionVector[i].getGlobalBounds();
-        sf::Vector2i tl, tr, bl, br;
-        tl.x = gb.left;                tl.y = gb.top;
-        bl.x = gb.left;                bl.y = gb.top + gb.height - 1;
-        tr.x = gb.left + gb.width - 1; tr.y = gb.top;
-        br.x = gb.left + gb.width - 1; br.y = gb.top + gb.height - 1;
-        
-        int x1, x2, x3, x4;
-        x1 = tl.x % WIDTH / TILE_DIM;
-        x2 = bl.x % WIDTH / TILE_DIM;
-        x3 = tr.x % WIDTH / TILE_DIM;
-        x4 = br.x % WIDTH / TILE_DIM;
-        printf("%d %d %d %d ", x1, x2, x3, x4);
-        
-        int y1, y2, y3, y4;
-        y1 = tl.y % HEIGHT / TILE_DIM;
-        y2 = bl.y % HEIGHT / TILE_DIM;
-        y3 = tr.y % HEIGHT / TILE_DIM;
-        y4 = br.y % HEIGHT / TILE_DIM;
-        printf("%d %d %d %d\n", y1, y2, y3, y4);
+
+        // Outside of view.
+        if (gb.left < center.x - size.x / 2 || gb.left >= center.x + size.x / 2 ||
+            gb.top < center.y - size.x / 2 || gb.top >= center.y + size.x / 2) {
+            continue;
+        }
+
+        int x = (int) gb.left % WIDTH / TILE_DIM;
+        int y = (int) gb.top % HEIGHT / TILE_DIM;
+        m_pathMap[x][y] = 1;
     }
 
-    /* Rock tiles. */
+    // Rock tiles.
     printf("Rocks\n");
     for (int i = 0; i < m_rocks.size(); i++) {
         gb = m_rocks[i]->getGlobalBounds();
-        sf::Vector2i tl, tr, bl, br;
-        tl.x = gb.left;                tl.y = gb.top;
-        bl.x = gb.left;                bl.y = gb.top + gb.height - 1;
-        tr.x = gb.left + gb.width - 1; tr.y = gb.top;
-        br.x = gb.left + gb.width - 1; br.y = gb.top + gb.height - 1;
-        
-        int x1, x2, x3, x4;
-        x1 = tl.x % WIDTH / TILE_DIM;
-        x2 = bl.x % WIDTH / TILE_DIM;
-        x3 = tr.x % WIDTH / TILE_DIM;
-        x4 = br.x % WIDTH / TILE_DIM;
-        printf("%d %d %d %d ", x1, x2, x3, x4);
-        
-        int y1, y2, y3, y4;
-        y1 = tl.y % HEIGHT / TILE_DIM;
-        y2 = bl.y % HEIGHT / TILE_DIM;
-        y3 = tr.y % HEIGHT / TILE_DIM;
-        y4 = br.y % HEIGHT / TILE_DIM;
-        printf("%d %d %d %d\n", y1, y2, y3, y4);
+
+        // Outside of view.
+        if (gb.left < center.x - size.x / 2 || gb.left >= center.x + size.x / 2 ||
+            gb.top < center.y - size.x / 2 || gb.top >= center.y + size.x / 2) {
+            continue;
+        }
+
+        int x = (int) gb.left % WIDTH / TILE_DIM;
+        int y = (int) gb.top % HEIGHT / TILE_DIM;
+        m_pathMap[x][y] = 1;
     }
 }
