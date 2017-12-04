@@ -9,6 +9,7 @@
 #include "TileMap.hpp"
 #include "Pause.hpp"
 #include "PlayerDied.hpp"
+#include "Instruction.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -31,7 +32,7 @@ public:
     void setGameApplication(ChromaBlade* game);
     void clearTileMaps();
     void setMobAnimation(sf::Color col, DynamicActor &mob);
-    void setGreyscaleAnimation(DynamicActor &greyscale);
+    void setRockTexture(Actor &rock);
 
     // event related methods
     void setListener();
@@ -53,7 +54,7 @@ private: //vars and objs
     void swingSword(float deltaTime);
     void loadMonsterAnimation();
     void resetPlayer();
-    void updateHealth();
+    void updateHealthBar();
     bool isAttacking;
     bool m_drawPlayer;
     EventManager *m_eventManager;
@@ -99,8 +100,11 @@ private: //vars and objs
     Title m_title;
     Pause m_pause;
     PlayerDied m_playerDied;
-    sf::Sound m_sound;
-    sf::SoundBuffer m_buffer;
+    Instruction m_instruction;
+    sf::Sound m_swingSound;
+    sf::SoundBuffer m_swingBuffer;
+    sf::Sound m_switchSound;
+    sf::SoundBuffer m_switchBuffer;
 };
 
 #endif

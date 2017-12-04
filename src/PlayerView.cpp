@@ -28,10 +28,11 @@ PlayerView::PlayerView() : Process() {
 /* Initialize player view by loading files and setting initial positions */
 void PlayerView::init(){
 
-    // Load title screen.
+    // Load screens.
     m_title.init();
     m_pause.init();
     m_playerDied.init();
+    m_instruction.init();
 
     // Load texture for character
     if(!m_charTexture.loadFromFile("../res/sprite/spritenew.png")) {
@@ -39,8 +40,12 @@ void PlayerView::init(){
     }
 
     // Load sound for sword swing
-    m_buffer.loadFromFile("../res/sfx/swordSwing.wav");
-    m_sound.setBuffer(m_buffer);
+    m_swingBuffer.loadFromFile("../res/sfx/swordSwing.flac");
+    m_swingSound.setBuffer(m_swingBuffer);
+
+    // Load sound for sword switch
+    m_switchBuffer.loadFromFile("../res/sfx/swordSwitch.wav");
+    m_switchSound.setBuffer(m_switchBuffer);
 
     // Load texture for sword
     if(!m_swordTexture.loadFromFile("../res/sprite/sword.png")) {
@@ -51,7 +56,7 @@ void PlayerView::init(){
     m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
     m_sword.setScale(0.5,0.5);
 
-    // Load animations
+    // Load character animations
     m_walkingDown.setSpriteSheet(m_charTexture);
     m_walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
     m_walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
@@ -88,7 +93,7 @@ void PlayerView::init(){
 
 void PlayerView::resetPlayer() {
     m_currAnimation = &m_walkingDown;
-    m_animatedSprite.setPosition(HUB_POS); // (196,255)
+    m_animatedSprite.setPosition(HUB_POS);
     setSwordOrientation();
     m_animatedSprite.setScale(0.9f,0.9f);
     m_animatedSprite.play(*m_currAnimation);
@@ -102,16 +107,16 @@ void PlayerView::resetPlayer() {
     m_health.setSize(sf::Vector2f(30, 7));
     m_health.setFillColor(sf::Color(0, 255, 0));
 
-    updateHealth();
+    updateHealthBar();
 }
 
 /* Update health bar and move with player */
-void PlayerView::updateHealth() {
+void PlayerView::updateHealthBar() {
     float x = m_animatedSprite.getPosition().x;
     float y = m_animatedSprite.getPosition().y - 10;
 
     // Calculate pixels for player health convert to ratio of health:30
-    // x = 30*playerHealth / 100
+    // x = 30 * playerHealth / 100
     float health = m_gameLogic->getPlayerHealth();
     float newHealth = (30 * health) / 100;
 
@@ -121,6 +126,7 @@ void PlayerView::updateHealth() {
 }
 
 
+/* Load animation for monsters */
 void PlayerView::loadMonsterAnimation() {
     // Load texture for monster
     if(!m_monsterTexture.loadFromFile("../res/sprite/enemies.png")) {
@@ -250,11 +256,17 @@ void PlayerView::handleInput(float deltaTime) {
                 resetCamera();
                 updateCamera(HUB_CAM);
             }
-            else m_window->close(); // Selected Exit
+            else if (rc == 2) { // Selected Instruction
+                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Instruction);
+                m_game->queueEvent(changeState);
+            }
+            else {
+                m_window->close(); // Selected Exit
+            }
             break;
         case GameState::Pause:
             rc = m_pause.update(*m_window);
-            if(rc == 0) {} //Moved the cursor
+            if(rc == 0) {} // Moved the cursor
             else if (rc == 1) { // Selected Resume
                 m_window->setView(m_camera);
                 GameState state = m_game->getPrevState();
@@ -276,6 +288,15 @@ void PlayerView::handleInput(float deltaTime) {
                 LoadMapEvent* loadMap = new LoadMapEvent(GameState::Hub);
                 m_game->queueEvent(changeState);
                 m_game->queueEvent(loadMap);
+            }
+            else m_window->close();
+            break;
+        case GameState::Instruction:
+            rc = m_instruction.update(*m_window);
+            if (rc == 0) {} // Did nothing
+            else if (rc == 1) {
+                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Title);
+                m_game->queueEvent(changeState);
             }
             else m_window->close();
             break;
@@ -303,7 +324,7 @@ void PlayerView::handleInput(float deltaTime) {
                         }
                         AttackEvent *attack = new AttackEvent(true, dir, m_sword.getColor());
                         m_game->queueEvent(attack);
-                        m_sound.play();
+                        m_swingSound.play();
                         isAttacking = true;
                     }
                     if (event.key.code == KEY_RED) {
@@ -311,6 +332,7 @@ void PlayerView::handleInput(float deltaTime) {
                         m_game->queueEvent(switchColor);
                         if (m_gameLogic->hasColor(sf::Color::Red)) {
                             m_sword.setColor(sf::Color(255, 0, 0));
+                            m_switchSound.play();
                         }
 
                     }
@@ -319,6 +341,7 @@ void PlayerView::handleInput(float deltaTime) {
                         m_game->queueEvent(switchColor);
                         if (m_gameLogic->hasColor(sf::Color::Blue)) {
                             m_sword.setColor(sf::Color(0, 0, 255));
+                            m_switchSound.play();
                         }
                     }
                     if (event.key.code == KEY_YELLOW) {
@@ -326,6 +349,7 @@ void PlayerView::handleInput(float deltaTime) {
                         m_game->queueEvent(switchColor);
                         if (m_gameLogic->hasColor(sf::Color::Yellow)) {
                             m_sword.setColor(sf::Color(255, 255, 0));
+                            m_switchSound.play();
                         }
                     }
                     if (event.key.code == KEY_PAUSE) {
@@ -416,6 +440,9 @@ void PlayerView::draw() {
             m_window->draw(m_overlay); // Draw background of incomplete dungeon
             m_playerDied.draw(*m_window);
             break;
+        case GameState::Instruction:
+            m_instruction.draw(*m_window);
+            break;
         default:
             m_window->draw(m_map);
             m_window->draw(m_overlay);
@@ -479,7 +506,7 @@ bool PlayerView::isOpen(){
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
-    updateHealth();
+    updateHealthBar();
     if (isAttacking) {
         if (m_sword.getRotation() < 70 || m_sword.getRotation() > 290) {
             swingSword(deltaTime);
@@ -721,4 +748,8 @@ void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
     else {
         mob.setAnimation(m_yellowMobWalkingLeft, m_yellowMobWalkingRight, m_yellowMobWalkingUp, m_yellowMobWalkingDown);
     }
+}
+
+void PlayerView::setRockTexture(Actor &rock) {
+    rock.setTexture(*m_map.getTileSet());
 }

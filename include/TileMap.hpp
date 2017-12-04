@@ -22,6 +22,7 @@ public:
     int getWidth();
     virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
     void clear();
+    sf::Texture* getTileSet();
 
     std::vector<sf::RectangleShape> m_boxes;
 private:
