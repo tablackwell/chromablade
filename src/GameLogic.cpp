@@ -513,6 +513,7 @@ void GameLogic::spawn(const EventInterface& event) {
         if (actorType == Actor::Rock) {
             Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM),
                                                 sf::Vector2f(x,y));
+            m_view->setRockTexture(*actor);
             m_rocks.push_back(actor);
         } else if (actorType == Actor::Mob) {
             int col_int = rand() % (index + 1);

@@ -31,6 +31,7 @@ public:
     void setGameApplication(ChromaBlade* game);
     void clearTileMaps();
     void setMobAnimation(sf::Color col, DynamicActor &mob);
+    void setRockTexture(Actor &rock);
 
     // event related methods
     void setListener();

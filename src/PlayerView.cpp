@@ -691,3 +691,7 @@ void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
         mob.setAnimation(m_yellowMobWalkingLeft, m_yellowMobWalkingRight, m_yellowMobWalkingUp, m_yellowMobWalkingDown);
     }
 }
+
+void PlayerView::setRockTexture(Actor &rock) {
+    rock.setTexture(*m_map.getTileSet());
+}
