@@ -82,7 +82,7 @@ bool operator<(const Node & a, const Node & b)
 // The route returned is a string of direction digits.
 std::string pathFind( const int & xStart, const int & yStart, 
                  const int & xFinish, const int & yFinish,
-                 int **map, const int & n, const int & m)
+                 char **map, const int & n, const int & m)
 {
     int closed_nodes_map[n][m]; // map of closed (tried-out) nodes
     int open_nodes_map[n][m]; // map of open (not-yet-tried) nodes
@@ -155,7 +155,7 @@ std::string pathFind( const int & xStart, const int & yStart,
         {
             xdx=x+dx[i]; ydy=y+dy[i];
 
-            if(!(xdx<0 || xdx>n-1 || ydy<0 || ydy>m-1 || map[xdx][ydy]==1 
+            if(!(xdx<0 || xdx>n-1 || ydy<0 || ydy>m-1 || map[xdx][ydy]=='#' 
                 || closed_nodes_map[xdx][ydy]==1))
             {
                 // generate a child node

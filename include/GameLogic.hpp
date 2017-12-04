@@ -69,7 +69,7 @@ private:
     bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;
 
-    int **m_pathMap;
+    char **m_pathMap;
     sf::Vector2i m_numNodes;
 
     sf::RectangleShape m_redPortal;

@@ -40,9 +40,9 @@ void GameLogic::init(){
     /* Allocate memory for path maps. */
     m_numNodes.x = WIDTH / TILE_DIM;
     m_numNodes.y = HEIGHT / TILE_DIM;
-    m_pathMap = new int* [m_numNodes.x];
+    m_pathMap = new char* [m_numNodes.x];
     for (int i=0; i<m_numNodes.x; i++) {
-        m_pathMap[i] = new int[m_numNodes.y];
+        m_pathMap[i] = new char[m_numNodes.y];
     }
 }
 
@@ -615,7 +615,7 @@ void GameLogic::pathMap(const EventInterface& event) {
     // Reset map
     for (int i=0; i<n; i++) {
         for (int j=0; j<m; j++) {
-            m_pathMap[i][j] = 0;
+            m_pathMap[i][j] = ' ';
         }
     }
 
@@ -631,7 +631,7 @@ void GameLogic::pathMap(const EventInterface& event) {
 
         int x = (int) gb.left % WIDTH / TILE_DIM;
         int y = (int) gb.top % HEIGHT / TILE_DIM;
-        m_pathMap[x][y] = 1;
+        m_pathMap[x][y] = '#';
     }
 
     // Rock tiles.
@@ -646,15 +646,12 @@ void GameLogic::pathMap(const EventInterface& event) {
 
         int x = (int) gb.left % WIDTH / TILE_DIM;
         int y = (int) gb.top % HEIGHT / TILE_DIM;
-        m_pathMap[x][y] = 1;
+        m_pathMap[x][y] = '#';
     }
 
     for(int y=0;y<m;y++) {
         for(int x=0;x<n;x++)
-            if(m_pathMap[x][y]==0)
-                printf(" ");
-            else if(m_pathMap[x][y]==1)
-                printf("#");
+            printf("%c", m_pathMap[x][y]);
         printf("\n");
     }
 }
