@@ -11,6 +11,7 @@
 #include "Mob.hpp"
 #include "MoveMobsEvent.hpp"
 #include "SpawnPositionsEvent.hpp"
+#include "Macros.hpp"
 
 #include <iostream>
 
@@ -20,14 +21,19 @@ GameLogic::GameLogic() : Process() {
 
 
 void GameLogic::init(){
-    m_level = red;
     m_levelToggled = false;
     setState(Process::RUNNING);
 
-    /* Temporary Hard-coding values of portals */
-    sf::RectangleShape bluePortal(sf::Vector2f(32,32));
-    bluePortal.setPosition(384,32);
-    m_portals.push_back(bluePortal);
+    /* Init portals */
+    m_bluePortal.setSize((sf::Vector2f(32,32)));
+    m_bluePortal.setPosition(384,32);
+    m_redPortal.setSize(sf::Vector2f(32,32));
+    m_redPortal.setPosition(1184,32);
+    m_yellowPortal.setSize(sf::Vector2f(32,32));
+    m_yellowPortal.setPosition(1984,32);
+    m_greyPortal.setSize((sf::Vector2f(32,32)));
+    m_greyPortal.setPosition(1184,880);
+    bossAvailable = false;
 }
 
 
@@ -40,21 +46,21 @@ void GameLogic::update(float &deltaTime){
 }
 
 
-/* Returns the current level */
-GameLogic::Level GameLogic::getLevel(){
-	return m_level;
-}
-
-
 /* Links game logic to game application */
 void GameLogic::setGameApplication(ChromaBlade* game) {
     m_game = game;
 }
 
 
+/* Sets the internal collision mapping for game logic*/
 void GameLogic::setCollisionMapping(std::vector<sf::RectangleShape> collVector, std::vector<sf::RectangleShape> doorVector){
 	m_collisionVector = collVector;
 	m_doors = doorVector;
+}
+
+void GameLogic::setBoundaries(int xBound, int yBound){
+  m_xBound = xBound;
+  m_yBound = yBound;
 }
 
 
@@ -64,18 +70,30 @@ void GameLogic::setCharPosition(sf::Vector2f position) {
     m_sprite->setPosition(position);
 }
 
+/* Reset character stats after death */
+void GameLogic::resetCharacter() {
+    m_player.setHealth(100);
+    setCharPosition(HUB_POS);
+}
 
 /* Links game logic to player view */
 void GameLogic::setView(PlayerView* view) {
     m_view = view;
 }
 
+/* Provides a reference to the character's sprite in order to get a bounding box*/
 void GameLogic::setAnimatedSprite(AnimatedSprite* sprite){
 	m_sprite = sprite;
 }
 
 void GameLogic::toggleLevel(){
 	m_levelToggled = !m_levelToggled;
+}
+
+
+/* Returns if a color is available */
+bool GameLogic::hasColor(sf::Color col) {
+    return m_player.hasColor(col);
 }
 
 
@@ -107,12 +125,6 @@ void GameLogic::setListener() {
     const EventListener switchListener = EventListener(switchCol, EventType::switchColorEvent);
     m_game->registerListener(switchListener, EventType::switchColorEvent);
 
-//    // SpawnPositionsEvent
-//    std::function<void(const EventInterface &event)> setSpawnPositions
-//        = std::bind(&GameLogic::setSpawnPositions, this, std::placeholders::_1);
-//    const EventListener spawnPositionsListener
-//        = EventListener(setSpawnPositions, EventType::spawnPositionsEvent);
-//    m_game->registerListener(spawnPositionsListener, EventType::spawnPositionsEvent);
 }
 
 
@@ -133,11 +145,13 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
             return true;
         }
     }
-    
+
     /* Check intersections with mobs. */
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
             //std::cout << "MOB COLLISION! \n";
+            enemyAttack(m_mobs[i]);
+            std::cout<<"Player health"<<m_player.getHealth();
             return true;
         }
     }
@@ -162,15 +176,42 @@ bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
     return false;
 }
 
-
 /* Checks collision with portal */
 bool GameLogic::checkPortals(const sf::FloatRect& fr){
-    for (int i=0; i<m_portals.size(); i++) {
-	    if (fr.intersects(m_portals[i].getGlobalBounds())) {
-	        //std::cout << "PORTAL COLLISION \n";
-	        return true;
-	    }
+    if(fr.intersects(m_redPortal.getGlobalBounds())){
+      std::cout << "RED PORTAL TRIGGERED \n";
+      DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, Direction::Up);
+      m_game->queueEvent(doorEvent);
+      return true;
     }
+
+    else if(fr.intersects(m_bluePortal.getGlobalBounds())){
+      std::cout << "BLUE PORTAL TRIGGERED \n";
+      DoorEvent *doorEvent = new DoorEvent(GameState::BlueLevel, 1, Direction::Up);
+      m_game->queueEvent(doorEvent);
+      return true;
+    }
+
+    else if(fr.intersects(m_yellowPortal.getGlobalBounds())){
+      std::cout << "YELLOW PORTAL TRIGGERED \n";
+      DoorEvent *doorEvent = new DoorEvent(GameState::YellowLevel, 1, Direction::Up);
+      m_game->queueEvent(doorEvent);
+      return true;
+    }
+
+    else if(fr.intersects(m_greyPortal.getGlobalBounds())){
+      if(!bossAvailable){
+        std::cout << "BOSS BATTLE TRIGGERED \n";
+        DoorEvent *doorEvent = new DoorEvent(GameState::BossLevel, 1, Direction::Up);
+        m_game->queueEvent(doorEvent);
+      }
+      else{
+        std::cout << "BOSS BATTLE NOT YET AVAILABLE \n";
+        //display text to user
+      }
+      return true;
+    }
+    return false; //no portal collisions
 }
 
 
@@ -185,11 +226,15 @@ std::vector<DynamicActor*> GameLogic::getMobs() {
     return m_mobs;
 }
 
-
+/* remove rocks from memory */
 void GameLogic::clearRocks() {
     m_rocks.clear();
 }
 
+/* Remove enemies from memory */
+void GameLogic::clearEnemies(){
+    m_mobs.clear();
+}
 
 /* Called after a player-initiated attackEvent */
 void GameLogic::playerAttack(Direction dir) {
@@ -214,15 +259,40 @@ void GameLogic::playerAttack(Direction dir) {
 
     /* Check attack's intersection with mobs. */
     for (int i = 0; i < m_mobs.size(); i++) {
-        if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
-            m_mobs[i]->setHealth(m_mobs[i]->getHealth() - m_player.getDamage());
+        if (fr.intersects(m_mobs[i]->getGlobalBounds()) && m_mobs[i]->getColor() == m_player.getColor()) {
+            m_player.attack(*m_mobs[i]);
+            if (m_mobs[i]->getHealth() <= 0) {
+                m_mobs.erase(m_mobs.begin() + i); // Delete the dead mobs
+            }
         }
     }
 }
 
 
-void GameLogic::enemyAttack() {
+/* Called after a enemy-initiated attackEvent */
+void GameLogic::enemyAttack(DynamicActor* attacker) {
+    attacker->attack(m_player);
+    // Player died
+    if (m_player.getHealth() <= 0) {
+        ChangeStateEvent *changeState = new ChangeStateEvent(GameState::PlayerDied);
+        m_game->queueEvent(changeState);
+    }
+}
 
+/* Return health of player */
+float GameLogic::getPlayerHealth() {
+    return m_player.getHealth();
+}
+
+/* Returns information on levels cleared */
+int GameLogic::getLevelsCleared() {
+    int index = 0;
+    for (int k = 0; k < 3; k++) {
+        if (m_possibleMobColors[k] == true) {
+            index = k;
+        }
+    }
+    return index;
 }
 
 void GameLogic::moveMobs() {
@@ -282,8 +352,7 @@ void GameLogic::moveChar(const EventInterface& event) {
     if (doorDetected && !m_onDoor) {
         std::cout << "onDoor\n";
         m_onDoor = true;
-
-        DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, dir);
+        DoorEvent *doorEvent = new DoorEvent(m_game->getState(), 1, dir);
         m_game->queueEvent(doorEvent);
     }
     else if (!doorDetected && m_onDoor) {
@@ -292,7 +361,11 @@ void GameLogic::moveChar(const EventInterface& event) {
     }
 
     if(m_game->getState() == GameState::Hub){
-        bool portalDetected = checkPortals(m_sprite->getGlobalBounds());
+      bool portalDetected = checkPortals(m_sprite->getGlobalBounds());
+      if(portalDetected){
+        dungeonReturnPosition = prev;
+        dungeonReturnCamera = m_view->getCameraCenter();
+      }
     }
 
     // Debug stuff
@@ -312,9 +385,11 @@ void GameLogic::useDoor(const EventInterface& event) {
     const EventInterface *ptr = &event;
     const DoorEvent *doorEvent = dynamic_cast<const DoorEvent*>(ptr);
     GameState curState = m_game->getState();
+
     const GameState newState = doorEvent->getGameState();
     const int room = doorEvent->getRoom();
     const Direction dir = doorEvent->getDirection();
+
     if (newState != curState) {
         fprintf(stderr, "door leads to %d\n", newState);
         ChangeStateEvent* changeState = new ChangeStateEvent(newState);
@@ -322,19 +397,31 @@ void GameLogic::useDoor(const EventInterface& event) {
         m_game->queueEvent(changeState);
         m_game->queueEvent(loadMapEvent);
         m_view->resetCamera();
+
         if (newState == GameState::Hub) {
-            setCharPosition(HUB_POS);
-            m_view->updateCamera(HUB_CAM);
+            setCharPosition(dungeonReturnPosition);
+            m_view->updateCamera(dungeonReturnCamera.x, dungeonReturnCamera.y);
+            unlockColor(curState);
         }
         else if (newState == GameState::RedLevel) {
             m_view->updateCamera(RED_CAM);
             setCharPosition(RED_POS);
         }
-        else {
+        else if (newState == GameState::BlueLevel){
+            m_view->updateCamera(BLUE_CAM);
+            setCharPosition(BLUE_POS);
+        }
+        else if (newState == GameState::YellowLevel){
+            m_view->updateCamera(YELLOW_CAM);
+            setCharPosition(YELLOW_POS);
+        }
+        else if (newState == GameState::BossLevel){
+          m_view->updateCamera(GREYSCALE_CAM);
+          setCharPosition(GREY_POS);
         }
     }
 
-    if(m_levelToggled){
+    else{
         sf::Vector2f pos = m_player.getPosition();
         sf::Vector2f new_pos;
         if (dir == Direction::Left) {
@@ -358,17 +445,20 @@ void GameLogic::useDoor(const EventInterface& event) {
           m_view->updateCamera(0,HEIGHT);
         }
 
-        if (new_pos.x < 0 || new_pos.y < 0) {
+        if (new_pos.x < 0 || new_pos.y < 0 || new_pos.x > m_xBound || new_pos.y > m_yBound) {
             DoorEvent *doorEvent = new DoorEvent(GameState::Hub, 0, dir);
             m_game->queueEvent(doorEvent);
             toggleLevel();
-        } else {
+        }
+        else {
             setCharPosition(new_pos);
             m_onDoor = false;
         }
     }
 
-    if (room > 0) {
+
+    /* Upon entering a new room, spawn enemies / rocks */
+    if((room > 0) && (doorEvent->getGameState() != GameState::Hub) && (doorEvent->getGameState() != GameState::BossLevel)){
         if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room) == m_clearedRooms.end()) {
             sf::Vector2f center = m_view->getCameraCenter();
             sf::Vector2f size = m_view->getCameraSize();
@@ -388,12 +478,13 @@ void GameLogic::useDoor(const EventInterface& event) {
 void GameLogic::attack(const EventInterface& event) {
     const EventInterface *ptr = &event;
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
-    Direction dir = attackEvent->getDirection();
     if (attackEvent->isFromPlayer() == true) { // player attack
+        Direction dir = attackEvent->getDirection();
         playerAttack(dir);
     }
     else { // enemy attack
-        enemyAttack();
+        DynamicActor* attacker = attackEvent->getAttacker();
+        enemyAttack(attacker);
     }
 }
 
@@ -412,6 +503,13 @@ void GameLogic::spawn(const EventInterface& event) {
     int l = center.x - size.x / 2;
     int t = center.y - size.y / 2;
 
+    int index = 0;
+    for (int k = 0; k < 3; k++) {
+        if (m_possibleMobColors[k] == true) {
+            index = k;
+        }
+    }
+
     sf::FloatRect tile;
     int rx, ry, x, y;
 
@@ -429,12 +527,24 @@ void GameLogic::spawn(const EventInterface& event) {
         } while (checkCollisions(tile) || checkDoors(tile, 3));
 
         /* have a valid spawn location. */
-        if (actorType == Actor::Rock) { 
-            Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM), 
+        if (actorType == Actor::Rock) {
+            Actor *actor = new Actor(actorType, sf::Vector2f(TILE_DIM,TILE_DIM),
                                                 sf::Vector2f(x,y));
             m_rocks.push_back(actor);
         } else if (actorType == Actor::Mob) {
-            DynamicActor *actor = new Mob(Purple, 100, 20, sf::Vector2f(x,y), 200.f);
+            int col_int = rand() % (index + 1);
+            sf::Color col;
+            if (col_int == 0) {
+                col = sf::Color(255, 0, 0);
+            }
+            else if (col_int == 1) {
+                col = sf::Color(0, 0, 255);
+            }
+            else {
+                col = sf::Color(255, 255, 0);
+            }
+            DynamicActor *actor = new Mob(col, 100, 20, sf::Vector2f(x,y), 200.f);
+            m_view->setMobAnimation(col, *actor);
             m_mobs.push_back(actor);
 
             AIView *aiview = new AIView(actor, &m_rocks, &m_mobs);
@@ -464,3 +574,14 @@ void GameLogic::switchColor(const EventInterface& event) {
     m_player.changeSwordColor(color);
 }
 
+/* Unlocks a color that a spawned mob can have.*/
+void GameLogic::unlockColor(GameState state) {
+    if (state == GameState::RedLevel) {
+        m_possibleMobColors[1] = true;
+        m_player.unlockColor(sf::Color::Blue);
+    }
+    else if (state == GameState::BlueLevel) {
+        m_possibleMobColors[2] = true;
+        m_player.unlockColor(sf::Color::Yellow);
+    }
+}

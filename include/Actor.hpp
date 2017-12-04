@@ -12,8 +12,8 @@ public:
     Actor();
     enum Type { Player, Mob, Rock };
     Actor(Type type, sf::Vector2f size, sf::Vector2f pos);
-    void draw(sf::RenderWindow *window);
-    sf::FloatRect getGlobalBounds();
+    virtual void draw(sf::RenderWindow *window);
+    virtual sf::FloatRect getGlobalBounds();
 
     sf::RectangleShape m_rect;
 protected:

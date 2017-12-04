@@ -1,21 +1,15 @@
-#include "Title.hpp"
+#include "PlayerDied.hpp"
 #include "Macros.hpp"
 
 #include <iostream>
-Title::Title() { };
-Title::~Title() { };
+PlayerDied::PlayerDied() { };
+PlayerDied::~PlayerDied() { };
 
-void Title::init() {
+void PlayerDied::init() {
 
-    // load background
-    if (!m_texture.loadFromFile("../res/chromablade.png")) {
-        fprintf(stderr, "%s:%d: cannot load texture\n",
-                __FILE__, __LINE__);
-        return;
-    }
-    m_background.setTexture(&m_texture);
-    m_background.setSize(sf::Vector2f(WIDTH / 2, HEIGHT / 2));
-    m_background.setPosition(sf::Vector2f(200, 40));
+    m_background.setFillColor(sf::Color(0, 0, 0, 125));
+    m_background.setSize(sf::Vector2f(WIDTH, HEIGHT));
+    m_background.setPosition(0, 0);
 
     // load font
     if (!m_font.loadFromFile("../res/OpenSans.ttf")) {
@@ -25,7 +19,16 @@ void Title::init() {
     }
 
     // menu text
-    m_play.setString("Play");
+    m_died.setString("Oh No! You died!");
+    m_died.setFont(m_font);
+    m_died.setStyle(sf::Text::Style::Italic);
+    m_died.setCharacterSize(24);
+    m_died.setFillColor(sf::Color::White);
+    m_died.setOutlineColor(sf::Color::Black);
+    m_died.setOutlineThickness(1.0);
+    m_died.setPosition(0, HEIGHT / 2);
+
+    m_play.setString("Restart");
     m_play.setFont(m_font);
     m_play.setStyle(sf::Text::Style::Italic);
     m_play.setCharacterSize(24);
@@ -53,6 +56,7 @@ void Title::init() {
     m_cursor.setOutlineThickness(1.0);
 
     // align text
+    centerText(m_died);
     centerText(m_play);
     centerText(m_exit);
     moveCursor(m_play);
@@ -60,8 +64,10 @@ void Title::init() {
 
 
 /* Draws the title page */
-void Title::draw(sf::RenderWindow &window) {
+void PlayerDied::draw(sf::RenderWindow &window) {
+    window.setView(window.getDefaultView());
     window.draw(m_background);
+    window.draw(m_died);
     window.draw(m_play);
     window.draw(m_exit);
     window.draw(m_cursor);
@@ -69,7 +75,7 @@ void Title::draw(sf::RenderWindow &window) {
 
 
 /* Centers text based on dimensions. */
-void Title::centerText(sf::Text &text) {
+void PlayerDied::centerText(sf::Text &text) {
     sf::FloatRect g = text.getGlobalBounds();
     sf::FloatRect l = text.getLocalBounds();
     text.setPosition((WIDTH - g.width) / 2, g.top - l.top);
@@ -77,20 +83,20 @@ void Title::centerText(sf::Text &text) {
 
 
 /* Moves the menu cursor on Up and Down key press. */
-void Title::moveCursor(const sf::Text &text) {
+void PlayerDied::moveCursor(const sf::Text &text) {
     m_cursor.setPosition(text.getPosition().x - WIDTH / 20.0,
                        text.getPosition().y);
 }
 
 
 /* Checks which option the cursor is at. */
-int Title::checkCursor(const sf::Text &text) {
+int PlayerDied::checkCursor(const sf::Text &text) {
     return m_cursor.getPosition().y == text.getPosition().y;
 }
 
 
 /* Returns an integer that indicates the action based on keyboard input. */
-int Title::update(sf::RenderWindow &window) {
+int PlayerDied::update(sf::RenderWindow &window) {
     sf::Event event;
     while(window.pollEvent(event)) {
         switch (event.type) {

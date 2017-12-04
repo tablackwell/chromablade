@@ -16,11 +16,12 @@ class Player: public DynamicActor{
         Player();
         void changeSwordColor(sf::Color color);
         void unlockColor(sf::Color color);
-        void attack(DynamicActor enemy);
+        void attack(DynamicActor &enemy);
+        bool hasColor(sf::Color color);
     private:
 
     private:
-        std::vector<sf::Color> m_colorsAvail; // Hash map of available colors.
+        std::vector<sf::Color> m_colorsAvail; // Vector of available colors.
 };
 
 #endif
