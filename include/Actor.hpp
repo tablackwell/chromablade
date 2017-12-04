@@ -10,7 +10,7 @@ static sf::Color Purple(128,0,128);
 class Actor {
 public:
     Actor();
-    enum Type { Player, Mob, Rock };
+    enum Type { Player, Mob, Rock, Greyscale };
     Actor(Type type, sf::Vector2f size, sf::Vector2f pos);
     virtual void draw(sf::RenderWindow *window);
     virtual sf::FloatRect getGlobalBounds();

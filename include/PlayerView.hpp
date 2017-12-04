@@ -31,6 +31,7 @@ public:
     void setGameApplication(ChromaBlade* game);
     void clearTileMaps();
     void setMobAnimation(sf::Color col, DynamicActor &mob);
+    void setGreyscaleAnimation(DynamicActor &greyscale);
 
     // event related methods
     void setListener();
@@ -73,6 +74,10 @@ private: //vars and objs
     Animation m_yellowMobWalkingUp;
     Animation m_yellowMobWalkingRight;
     Animation m_yellowMobWalkingLeft;
+    Animation m_greyMobWalkingDown;
+    Animation m_greyMobWalkingUp;
+    Animation m_greyMobWalkingRight;
+    Animation m_greyMobWalkingLeft;
     sf::View m_camera;
     sf::View m_pauseCamera;
     sf::FloatRect m_boundaryBox;

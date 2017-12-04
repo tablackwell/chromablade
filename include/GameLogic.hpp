@@ -33,6 +33,7 @@ public:
     void setListener();
     std::vector<Actor*> getRocks();
     std::vector<DynamicActor*> getMobs();
+    std::vector<DynamicActor*> getGreyscale();
     void clearRocks();
     void clearEnemies();
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
@@ -51,6 +52,7 @@ private:
     void playerAttack(Direction dir);
     void moveMobs();
     void enemyAttack(DynamicActor* attacker);
+    void spawnGreyscale();
 
     // Event triggered methods
     void moveChar(const EventInterface& event);
@@ -67,6 +69,7 @@ private:
     std::vector<sf::RectangleShape> m_doors;
     std::vector<Actor*> m_rocks;
     std::vector<DynamicActor*> m_mobs;
+    std::vector<DynamicActor*> m_greyscaleVec;
     std::vector<int> m_clearedRooms;
     bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;

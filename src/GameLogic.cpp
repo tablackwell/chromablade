@@ -3,6 +3,7 @@
 #include "PlayerView.hpp"
 #include "AIView.hpp"
 #include "Mob.hpp"
+#include "Greyscale.hpp"
 #include "Macros.hpp"
 
 #include "MoveEvent.hpp"
@@ -219,6 +220,7 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
         std::cout << "BOSS BATTLE TRIGGERED \n";
         DoorEvent *doorEvent = new DoorEvent(GameState::BossLevel, 1, Direction::Up);
         m_game->queueEvent(doorEvent);
+        spawnGreyscale();
       }
       else{
         std::cout << "BOSS BATTLE NOT YET AVAILABLE \n";
@@ -229,6 +231,16 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
     return false; //no portal collisions
 }
 
+void GameLogic::spawnGreyscale(){
+  DynamicActor *actor = new Greyscale(sf::Color(255,255,0), 100, 20, sf::Vector2f(400,80), 200.f);
+  m_view->setGreyscaleAnimation(*actor);
+  m_greyscaleVec.push_back(actor);
+
+}
+
+std::vector<DynamicActor*> GameLogic::getGreyscale(){
+  return m_greyscaleVec;
+}
 
 /* Returns rock vector */
 std::vector<Actor*> GameLogic::getRocks() {
@@ -495,7 +507,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             m_game->queueEvent(pathMapEvent);
 //            SpawnPositionsEvent *spawnPositionsEvent
 //                = new SpawnPositionsEvent(m_rocks, m_mobs);
-//            m_game->queueEvent(spawnPositionsEvent);    
+//            m_game->queueEvent(spawnPositionsEvent);
         }
     }
 }

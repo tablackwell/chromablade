@@ -188,6 +188,27 @@ void PlayerView::loadMonsterAnimation() {
     m_yellowMobWalkingUp.addFrame(sf::IntRect(96, 64, 32, 32));
     m_yellowMobWalkingUp.addFrame(sf::IntRect(128, 64, 32, 32));
     m_yellowMobWalkingUp.addFrame(sf::IntRect(160, 64, 32, 32));
+
+    m_greyMobWalkingUp.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingDown.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
+    m_greyMobWalkingDown.addFrame(sf::IntRect(32, 0, 32, 32));
+    m_greyMobWalkingDown.addFrame(sf::IntRect(64, 0, 32, 32));
+
+    m_greyMobWalkingLeft.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingLeft.addFrame(sf::IntRect(288, 0, 32, 32));
+    m_greyMobWalkingLeft.addFrame(sf::IntRect(320, 0, 32, 32));
+    m_greyMobWalkingLeft.addFrame(sf::IntRect(352, 0, 32, 32));
+
+    m_greyMobWalkingRight.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingRight.addFrame(sf::IntRect(384, 0, 32, 32));
+    m_greyMobWalkingRight.addFrame(sf::IntRect(416, 0, 32, 32));
+    m_greyMobWalkingRight.addFrame(sf::IntRect(448, 0, 32, 32));
+
+    m_greyMobWalkingUp.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingUp.addFrame(sf::IntRect(96, 0, 32, 32));
+    m_greyMobWalkingUp.addFrame(sf::IntRect(128, 0, 32, 32));
+    m_greyMobWalkingUp.addFrame(sf::IntRect(160, 0, 32, 32));
 }
 
 
@@ -381,6 +402,7 @@ void PlayerView::draw() {
     std::vector<Actor*> rocks = m_gameLogic->getRocks();
     std::vector<DynamicActor*> mobs = m_gameLogic->getMobs();
 
+
     // Render the content depending on the game state
     switch(state) {
         case GameState::Title:
@@ -410,6 +432,11 @@ void PlayerView::draw() {
                 m_window->draw(m_animatedSprite);
                 m_window->draw(m_totalHealth);
                 m_window->draw(m_health);
+            }
+
+            if(state == GameState::BossLevel){
+              DynamicActor* greyscale = m_gameLogic->getGreyscale()[0];
+              greyscale->draw(m_window);
             }
 
             /* Debug stuff */
@@ -677,6 +704,10 @@ void PlayerView::playerAttacked(const EventInterface &event) {
         }
         m_drawPlayer = true;
     }
+}
+
+void PlayerView::setGreyscaleAnimation(DynamicActor &greyscale){
+  greyscale.setAnimation(m_greyMobWalkingLeft, m_greyMobWalkingRight, m_greyMobWalkingUp, m_greyMobWalkingDown);
 }
 
 
