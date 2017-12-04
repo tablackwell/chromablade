@@ -76,6 +76,8 @@ void PlayerView::init(){
     m_walkingUp.addFrame(sf::IntRect(64, 64, 32, 32));
     m_walkingUp.addFrame(sf::IntRect(64, 96, 32, 32));
 
+    loadMonsterAnimation();
+
     resetPlayer();
 
     setState(Process::RUNNING);
@@ -116,6 +118,76 @@ void PlayerView::updateHealth() {
     m_totalHealth.setPosition(sf::Vector2f(x, y));
     m_health.setSize(sf::Vector2f(newHealth, 7));
     m_health.setPosition(sf::Vector2f(x, y));
+}
+
+
+void PlayerView::loadMonsterAnimation() {
+    // Load texture for monster
+    if(!m_monsterTexture.loadFromFile("../res/sprite/monsters.png")) {
+        // ERROR
+    }
+    // Red mob
+    m_redMobWalkingDown.setSpriteSheet(m_monsterTexture);
+    m_redMobWalkingDown.addFrame(sf::IntRect(288, 0, 32, 32));
+    m_redMobWalkingDown.addFrame(sf::IntRect(320, 0, 32, 32));
+    m_redMobWalkingDown.addFrame(sf::IntRect(352, 0, 32, 32));
+
+    m_redMobWalkingLeft.setSpriteSheet(m_monsterTexture);
+    m_redMobWalkingLeft.addFrame(sf::IntRect(288, 32, 32, 32));
+    m_redMobWalkingLeft.addFrame(sf::IntRect(320, 32, 32, 32));
+    m_redMobWalkingLeft.addFrame(sf::IntRect(352, 32, 32, 32));
+
+    m_redMobWalkingRight.setSpriteSheet(m_monsterTexture);
+    m_redMobWalkingRight.addFrame(sf::IntRect(288, 64, 32, 32));
+    m_redMobWalkingRight.addFrame(sf::IntRect(320, 64, 32, 32));
+    m_redMobWalkingRight.addFrame(sf::IntRect(352, 64, 32, 32));
+
+    m_redMobWalkingUp.setSpriteSheet(m_monsterTexture);
+    m_redMobWalkingUp.addFrame(sf::IntRect(288, 96, 32, 32));
+    m_redMobWalkingUp.addFrame(sf::IntRect(320, 96, 32, 32));
+    m_redMobWalkingUp.addFrame(sf::IntRect(352, 96, 32, 32));
+
+    // Blue mob
+    m_blueMobWalkingDown.setSpriteSheet(m_monsterTexture);
+    m_blueMobWalkingDown.addFrame(sf::IntRect(96, 0, 32, 32));
+    m_blueMobWalkingDown.addFrame(sf::IntRect(128, 0, 32, 32));
+    m_blueMobWalkingDown.addFrame(sf::IntRect(160, 0, 32, 32));
+
+    m_blueMobWalkingLeft.setSpriteSheet(m_monsterTexture);
+    m_blueMobWalkingLeft.addFrame(sf::IntRect(96, 32, 32, 32));
+    m_blueMobWalkingLeft.addFrame(sf::IntRect(128, 32, 32, 32));
+    m_blueMobWalkingLeft.addFrame(sf::IntRect(160, 32, 32, 32));
+
+    m_blueMobWalkingRight.setSpriteSheet(m_monsterTexture);
+    m_blueMobWalkingRight.addFrame(sf::IntRect(96, 64, 32, 32));
+    m_blueMobWalkingRight.addFrame(sf::IntRect(128, 64, 32, 32));
+    m_blueMobWalkingRight.addFrame(sf::IntRect(160, 64, 32, 32));
+
+    m_blueMobWalkingUp.setSpriteSheet(m_monsterTexture);
+    m_blueMobWalkingUp.addFrame(sf::IntRect(96, 96, 32, 32));
+    m_blueMobWalkingUp.addFrame(sf::IntRect(128, 96, 32, 32));
+    m_blueMobWalkingUp.addFrame(sf::IntRect(160, 96, 32, 32));
+
+    // Yellow mob
+    m_yellowMobWalkingDown.setSpriteSheet(m_monsterTexture);
+    m_yellowMobWalkingDown.addFrame(sf::IntRect(192, 0, 32, 32));
+    m_yellowMobWalkingDown.addFrame(sf::IntRect(224, 0, 32, 32));
+    m_yellowMobWalkingDown.addFrame(sf::IntRect(256, 0, 32, 32));
+
+    m_yellowMobWalkingLeft.setSpriteSheet(m_monsterTexture);
+    m_yellowMobWalkingLeft.addFrame(sf::IntRect(192, 32, 32, 32));
+    m_yellowMobWalkingLeft.addFrame(sf::IntRect(224, 32, 32, 32));
+    m_yellowMobWalkingLeft.addFrame(sf::IntRect(256, 32, 32, 32));
+
+    m_yellowMobWalkingRight.setSpriteSheet(m_monsterTexture);
+    m_yellowMobWalkingRight.addFrame(sf::IntRect(192, 64, 32, 32));
+    m_yellowMobWalkingRight.addFrame(sf::IntRect(224, 64, 32, 32));
+    m_yellowMobWalkingRight.addFrame(sf::IntRect(256, 64, 32, 32));
+
+    m_yellowMobWalkingUp.setSpriteSheet(m_monsterTexture);
+    m_yellowMobWalkingUp.addFrame(sf::IntRect(192, 96, 32, 32));
+    m_yellowMobWalkingUp.addFrame(sf::IntRect(224, 96, 32, 32));
+    m_yellowMobWalkingUp.addFrame(sf::IntRect(256, 96, 32, 32));
 }
 
 
@@ -604,5 +676,18 @@ void PlayerView::playerAttacked(const EventInterface &event) {
             blinks += 1;
         }
         m_drawPlayer = true;
+    }
+}
+
+
+void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
+    if (col == sf::Color::Red) {
+        mob.setAnimation(m_redMobWalkingLeft, m_redMobWalkingRight, m_redMobWalkingUp, m_redMobWalkingDown);
+    }
+    else if (col == sf::Color::Blue) {
+        mob.setAnimation(m_blueMobWalkingLeft, m_blueMobWalkingRight, m_blueMobWalkingUp, m_blueMobWalkingDown);
+    }
+    else {
+        mob.setAnimation(m_yellowMobWalkingLeft, m_yellowMobWalkingRight, m_yellowMobWalkingUp, m_yellowMobWalkingDown);
     }
 }

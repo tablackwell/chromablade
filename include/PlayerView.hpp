@@ -41,6 +41,7 @@ public:
     void setGameLogic(GameLogic* gameLogic);
     void setGameApplication(ChromaBlade* game);
     void clearTileMaps();
+    void setMobAnimation(sf::Color col, DynamicActor &mob);
 
     // event related methods
     void setListener();
@@ -60,6 +61,7 @@ public:
 private: //vars and objs
     void setSwordOrientation();
     void swingSword(float deltaTime);
+    void loadMonsterAnimation();
     void resetPlayer();
     void updateHealth();
     bool isAttacking;
@@ -70,6 +72,18 @@ private: //vars and objs
     Animation m_walkingUp;
     Animation m_walkingRight;
     Animation m_walkingLeft;
+    Animation m_redMobWalkingDown;
+    Animation m_redMobWalkingUp;
+    Animation m_redMobWalkingRight;
+    Animation m_redMobWalkingLeft;
+    Animation m_blueMobWalkingDown;
+    Animation m_blueMobWalkingUp;
+    Animation m_blueMobWalkingRight;
+    Animation m_blueMobWalkingLeft;
+    Animation m_yellowMobWalkingDown;
+    Animation m_yellowMobWalkingUp;
+    Animation m_yellowMobWalkingRight;
+    Animation m_yellowMobWalkingLeft;
     sf::View m_camera;
     sf::View m_pauseCamera;
     sf::FloatRect m_boundaryBox;
@@ -78,6 +92,7 @@ private: //vars and objs
     AnimatedSprite m_animatedSprite;
     sf::RenderWindow* m_window;
     sf::Texture m_charTexture;
+    sf::Texture m_monsterTexture;
     sf::Texture m_swordTexture;
     sf::Sprite m_sword;
     //sf::RectangleShape m_filter;
