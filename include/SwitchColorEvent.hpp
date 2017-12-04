@@ -13,13 +13,11 @@ class SwitchColorEvent : public EventInterface {
     public:
         SwitchColorEvent(sf::Color col) { m_color = col; m_type = switchColorEvent; }
         const sf::Color getColor(void) const { return m_color; }
-        const EventType& getEventType(void) const { return m_type; }
 
     private:
 
     private: // event data
         sf::Color m_color;
-        EventType m_type;
 };
 
 #endif

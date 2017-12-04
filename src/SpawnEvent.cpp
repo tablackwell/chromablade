@@ -8,10 +8,6 @@ SpawnEvent::SpawnEvent(Actor::Type type, int count, sf::Vector2f size, sf::Vecto
     m_center = center;
 }
 
-const EventType& SpawnEvent::getEventType() const {
-    return m_type;
-}
-
 const Actor::Type SpawnEvent::getActorType() const {
     return m_actorType;
 }
