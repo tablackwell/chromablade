@@ -620,7 +620,6 @@ void GameLogic::pathMap(const EventInterface& event) {
     }
 
     // Collision tiles.
-    printf("Collisions\n");
     for(int i = 0; i < m_collisionVector.size(); i++){
         gb = m_collisionVector[i].getGlobalBounds();
 
@@ -636,7 +635,6 @@ void GameLogic::pathMap(const EventInterface& event) {
     }
 
     // Rock tiles.
-    printf("Rocks\n");
     for (int i = 0; i < m_rocks.size(); i++) {
         gb = m_rocks[i]->getGlobalBounds();
 
@@ -649,5 +647,14 @@ void GameLogic::pathMap(const EventInterface& event) {
         int x = (int) gb.left % WIDTH / TILE_DIM;
         int y = (int) gb.top % HEIGHT / TILE_DIM;
         m_pathMap[x][y] = 1;
+    }
+
+    for(int y=0;y<m;y++) {
+        for(int x=0;x<n;x++)
+            if(m_pathMap[x][y]==0)
+                printf(" ");
+            else if(m_pathMap[x][y]==1)
+                printf("#");
+        printf("\n");
     }
 }
