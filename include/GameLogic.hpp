@@ -16,6 +16,7 @@
 
 class ChromaBlade;
 class PlayerView;
+class AIView;
 
 class GameLogic : public Process {
 public:
@@ -40,12 +41,15 @@ public:
     bool hasColor(sf::Color col);
     int getLevelsCleared();
     float getPlayerHealth();
+    char** getPathMap();
+    sf::Vector2i getNumNodes();
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);
     bool checkDoors(sf::FloatRect fr, int extra);
     bool checkPortals(const sf::FloatRect& fr);
     void playerAttack(Direction dir);
+    void moveMobs();
     void enemyAttack(DynamicActor* attacker);
 
     // Event triggered methods
@@ -55,6 +59,7 @@ private:
     void useDoor(const EventInterface& event);
     void switchColor(const EventInterface& event);
     void unlockColor(GameState state);
+    void pathMap(const EventInterface& event);
 
 
 private:
@@ -65,6 +70,9 @@ private:
     std::vector<int> m_clearedRooms;
     bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;
+
+    char **m_pathMap;
+    sf::Vector2i m_numNodes;
 
     sf::RectangleShape m_redPortal;
     sf::RectangleShape m_bluePortal;
@@ -82,6 +90,7 @@ private:
     AnimatedSprite* m_sprite;
     ChromaBlade* m_game;
     PlayerView* m_view;
+    std::vector<AIView*> m_aiviews;
     bool m_onDoor;
     bool m_levelToggled;
 };
