@@ -32,6 +32,7 @@ void PlayerView::init(){
     m_title.init();
     m_pause.init();
     m_playerDied.init();
+    m_instruction.init();
 
     // Load texture for character
     if(!m_charTexture.loadFromFile("../res/sprite/spritenew.png")) {
@@ -125,6 +126,7 @@ void PlayerView::updateHealthBar() {
 }
 
 
+/* Load animation for monsters */
 void PlayerView::loadMonsterAnimation() {
     // Load texture for monster
     if(!m_monsterTexture.loadFromFile("../res/sprite/enemies.png")) {
@@ -237,7 +239,7 @@ void PlayerView::handleInput(float deltaTime) {
             break;
         case GameState::Pause:
             rc = m_pause.update(*m_window);
-            if(rc == 0) {} //Moved the cursor
+            if(rc == 0) {} // Moved the cursor
             else if (rc == 1) { // Selected Resume
                 m_window->setView(m_camera);
                 GameState state = m_game->getPrevState();
@@ -262,6 +264,8 @@ void PlayerView::handleInput(float deltaTime) {
             }
             else m_window->close();
             break;
+        case GameState::Instruction:
+
         default: // in the game
             sf::Event event;
             while(m_window->pollEvent(event)){
@@ -401,6 +405,9 @@ void PlayerView::draw() {
             m_window->draw(m_overlay); // Draw background of incomplete dungeon
             m_playerDied.draw(*m_window);
             break;
+        case GameState::Instruction:
+            m_instruction.draw(*m_window);
+            break;
         default:
             m_window->draw(m_map);
             m_window->draw(m_overlay);
@@ -459,7 +466,7 @@ bool PlayerView::isOpen(){
 
 /* Update view. */
 void PlayerView::update(float &deltaTime){
-    updateHealth();
+    updateHealthBar();
     if (isAttacking) {
         if (m_sword.getRotation() < 70 || m_sword.getRotation() > 290) {
             swingSword(deltaTime);

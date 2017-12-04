@@ -9,7 +9,6 @@ class Title {
 public:
     Title();
     ~Title();
-    void setWindow(sf::RenderWindow *window);
     void init();
     void draw(sf::RenderWindow &window);
 	int update(sf::RenderWindow &window);

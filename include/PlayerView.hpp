@@ -9,6 +9,7 @@
 #include "TileMap.hpp"
 #include "Pause.hpp"
 #include "PlayerDied.hpp"
+#include "Instruction.hpp"
 
 #include <vector>
 #include <SFML/Graphics.hpp>
@@ -95,6 +96,7 @@ private: //vars and objs
     Title m_title;
     Pause m_pause;
     PlayerDied m_playerDied;
+    Instruction m_instruction;
     sf::Sound m_swingSound;
     sf::SoundBuffer m_swingBuffer;
     sf::Sound m_switchSound;
