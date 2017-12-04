@@ -28,7 +28,7 @@ PlayerView::PlayerView() : Process() {
 /* Initialize player view by loading files and setting initial positions */
 void PlayerView::init(){
 
-    // Load title screen.
+    // Load screens.
     m_title.init();
     m_pause.init();
     m_playerDied.init();
@@ -41,6 +41,7 @@ void PlayerView::init(){
     // Load sound for sword swing
     m_swingBuffer.loadFromFile("../res/sfx/swordSwing.flac");
     m_swingSound.setBuffer(m_swingBuffer);
+
     // Load sound for sword switch
     m_switchBuffer.loadFromFile("../res/sfx/swordSwitch.wav");
     m_switchSound.setBuffer(m_switchBuffer);
@@ -54,7 +55,7 @@ void PlayerView::init(){
     m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
     m_sword.setScale(0.5,0.5);
 
-    // Load animations
+    // Load character animations
     m_walkingDown.setSpriteSheet(m_charTexture);
     m_walkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
     m_walkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
@@ -91,7 +92,7 @@ void PlayerView::init(){
 
 void PlayerView::resetPlayer() {
     m_currAnimation = &m_walkingDown;
-    m_animatedSprite.setPosition(HUB_POS); // (196,255)
+    m_animatedSprite.setPosition(HUB_POS);
     setSwordOrientation();
     m_animatedSprite.setScale(0.9f,0.9f);
     m_animatedSprite.play(*m_currAnimation);
@@ -105,16 +106,16 @@ void PlayerView::resetPlayer() {
     m_health.setSize(sf::Vector2f(30, 7));
     m_health.setFillColor(sf::Color(0, 255, 0));
 
-    updateHealth();
+    updateHealthBar();
 }
 
 /* Update health bar and move with player */
-void PlayerView::updateHealth() {
+void PlayerView::updateHealthBar() {
     float x = m_animatedSprite.getPosition().x;
     float y = m_animatedSprite.getPosition().y - 10;
 
     // Calculate pixels for player health convert to ratio of health:30
-    // x = 30*playerHealth / 100
+    // x = 30 * playerHealth / 100
     float health = m_gameLogic->getPlayerHealth();
     float newHealth = (30 * health) / 100;
 

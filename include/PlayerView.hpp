@@ -53,7 +53,7 @@ private: //vars and objs
     void swingSword(float deltaTime);
     void loadMonsterAnimation();
     void resetPlayer();
-    void updateHealth();
+    void updateHealthBar();
     bool isAttacking;
     bool m_drawPlayer;
     EventManager *m_eventManager;
