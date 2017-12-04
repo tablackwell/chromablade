@@ -23,6 +23,7 @@ private:
     sf::RectangleShape m_background;
     sf::Font m_font;
     sf::Text m_play;
+    sf::Text m_instruction;
     sf::Text m_exit;
     sf::Text m_cursor;
 };

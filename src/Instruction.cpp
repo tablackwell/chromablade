@@ -16,14 +16,14 @@ void Instruction::init() {
     }
 
     // menu text
-    m_instruction.setString("instruction");
+    m_instruction.setString("ENTER  -  Select/Pause\nARROW KEYS  -  Movement\nSPACE BAR  -  Attack\n1  -  Red Sword\n2  -  Blue Sword\n3  -  Yellow Sword");
     m_instruction.setFont(m_font);
     m_instruction.setStyle(sf::Text::Style::Italic);
     m_instruction.setCharacterSize(24);
     m_instruction.setFillColor(sf::Color::White);
     m_instruction.setOutlineColor(sf::Color::Black);
     m_instruction.setOutlineThickness(1.0);
-    m_instruction.setPosition(0, HEIGHT / 1.5);
+    m_instruction.setPosition(0, HEIGHT / 3.5);
 
     m_menu.setString("menu");
     m_menu.setFont(m_font);
@@ -69,4 +69,25 @@ void Instruction::centerText(sf::Text &text) {
 /* Moves the menu cursor on Up and Down key press. */
 void Instruction::setCursor(const sf::Text &text) {
     m_cursor.setPosition(text.getPosition().x - WIDTH / 20.0, text.getPosition().y);
+}
+
+
+/* Returns an integer that indicates the action based on keyboard input. */
+int Instruction::update(sf::RenderWindow &window) {
+    sf::Event event;
+    while(window.pollEvent(event)) {
+        switch (event.type) {
+            case sf::Event::KeyPressed:
+                if (event.key.code == sf::Keyboard::Return) {
+                    return 1;
+                }
+                break;
+            case sf::Event::Closed:
+                return 2;
+                break;
+            default:
+                break;
+        }
+    }
+    return 0;
 }

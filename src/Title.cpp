@@ -34,6 +34,15 @@ void Title::init() {
     m_play.setOutlineThickness(1.0);
     m_play.setPosition(0, HEIGHT / 1.5);
 
+    m_instruction.setString("Instruction");
+    m_instruction.setFont(m_font);
+    m_instruction.setStyle(sf::Text::Style::Italic);
+    m_instruction.setCharacterSize(24);
+    m_instruction.setFillColor(sf::Color::White);
+    m_instruction.setOutlineColor(sf::Color::Black);
+    m_instruction.setOutlineThickness(1.0);
+    m_instruction.setPosition(0, HEIGHT / 1.35);
+
     m_exit.setString("Exit");
     m_exit.setFont(m_font);
     m_exit.setStyle(sf::Text::Style::Italic);
@@ -41,7 +50,7 @@ void Title::init() {
     m_exit.setFillColor(sf::Color::White);
     m_exit.setOutlineColor(sf::Color::Black);
     m_exit.setOutlineThickness(1.0);
-    m_exit.setPosition(0, HEIGHT / 1.35);
+    m_exit.setPosition(0, HEIGHT / 1.23);
 
     // create menu cursor
     m_cursor.setString(">");
@@ -54,6 +63,7 @@ void Title::init() {
 
     // align text
     centerText(m_play);
+    centerText(m_instruction);
     centerText(m_exit);
     moveCursor(m_play);
 }
@@ -63,6 +73,7 @@ void Title::init() {
 void Title::draw(sf::RenderWindow &window) {
     window.draw(m_background);
     window.draw(m_play);
+    window.draw(m_instruction);
     window.draw(m_exit);
     window.draw(m_cursor);
 }
@@ -78,8 +89,7 @@ void Title::centerText(sf::Text &text) {
 
 /* Moves the menu cursor on Up and Down key press. */
 void Title::moveCursor(const sf::Text &text) {
-    m_cursor.setPosition(text.getPosition().x - WIDTH / 20.0,
-                       text.getPosition().y);
+    m_cursor.setPosition(text.getPosition().x - WIDTH / 20.0, text.getPosition().y);
 }
 
 
@@ -96,16 +106,19 @@ int Title::update(sf::RenderWindow &window) {
         switch (event.type) {
             case sf::Event::KeyPressed:
                 if (event.key.code == sf::Keyboard::Down) {
-                    if (checkCursor(m_play)) moveCursor(m_exit); // will return 0
+                    if (checkCursor(m_play)) moveCursor(m_instruction); // will return 0
+                    else if (checkCursor(m_instruction)) moveCursor(m_exit); // will return 0
                 } else if (event.key.code == sf::Keyboard::Up) {
-                    if (checkCursor(m_exit)) moveCursor(m_play); // will return 0
+                    if (checkCursor(m_exit)) moveCursor(m_instruction); // will return 0
+                    else if (checkCursor(m_instruction)) moveCursor(m_play); // will return 0
                 } else if (event.key.code == sf::Keyboard::Return) {
                     if (checkCursor(m_play)) return 1;
-                    else if (checkCursor(m_exit)) return 2;
+                    else if (checkCursor(m_instruction)) return 2;
+                    else return 3; // exit
                 }
                 break;
             case sf::Event::Closed:
-                return 2;
+                return 3;
                 break;
             default:
                 break;

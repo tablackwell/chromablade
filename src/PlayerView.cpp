@@ -235,7 +235,13 @@ void PlayerView::handleInput(float deltaTime) {
                 resetCamera();
                 updateCamera(HUB_CAM);
             }
-            else m_window->close(); // Selected Exit
+            else if (rc == 2) { // Selected Instruction
+                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Instruction);
+                m_game->queueEvent(changeState);
+            }
+            else {
+                m_window->close(); // Selected Exit
+            }
             break;
         case GameState::Pause:
             rc = m_pause.update(*m_window);
@@ -265,7 +271,14 @@ void PlayerView::handleInput(float deltaTime) {
             else m_window->close();
             break;
         case GameState::Instruction:
-
+            rc = m_instruction.update(*m_window);
+            if (rc == 0) {} // Did nothing
+            else if (rc == 1) {
+                ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Title);
+                m_game->queueEvent(changeState);
+            }
+            else m_window->close();
+            break;
         default: // in the game
             sf::Event event;
             while(m_window->pollEvent(event)){
