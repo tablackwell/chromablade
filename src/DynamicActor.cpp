@@ -79,3 +79,23 @@ void DynamicActor::setAnimation(Animation &leftAnimation, Animation &rightAnimat
 sf::FloatRect DynamicActor::getGlobalBounds() {
     return m_animatedSprite.getGlobalBounds();
 }
+
+void DynamicActor::move(int x, int y, float deltaTime) {
+    Direction dir;
+    if (x == 1) {
+        m_animatedSprite.play(m_MobWalkingRight);
+    }
+    else if (x == -1) {
+        m_animatedSprite.play(m_MobWalkingLeft);
+    }
+    else if (y == -1) {
+        m_animatedSprite.play(m_MobWalkingUp);
+    }
+    else {
+        m_animatedSprite.play(m_MobWalkingDown);
+    }
+    m_animatedSprite.move(x, y);
+    this->m_position.x += x;
+    this->m_position.y += y;
+    m_animatedSprite.update(sf::seconds(deltaTime));
+}

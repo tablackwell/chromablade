@@ -68,7 +68,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             if (!mobIntersect) {
                 if (!gb.intersects(pgb)) {
                     // move if no mob-mob, mob-player collisions
-                    m_actor->setPosition(newPos);
+                    m_actor->move(dx[m_di.x], dy[m_di.y], deltaTime);
 
                     sf::Vector2f dist;
                     dist.x = abs(newPos.x - m_dest.x);
