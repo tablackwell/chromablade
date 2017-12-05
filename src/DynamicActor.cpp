@@ -19,6 +19,7 @@ DynamicActor::DynamicActor(sf::Color color, float health, float damage, sf::Vect
     this->m_position.y = startPos.y;
     this->m_speed = speed;
     this->m_animatedSprite.setPosition(startPos);
+    m_knockback = false;
 }
 
 
@@ -80,6 +81,14 @@ sf::FloatRect DynamicActor::getGlobalBounds() {
     return m_animatedSprite.getGlobalBounds();
 }
 
+void DynamicActor::setKnockback(bool b) {
+    m_knockback = b;
+}
+
+bool DynamicActor::getKnockback() {
+    return m_knockback;
+}
+
 void DynamicActor::move(int x, int y, float deltaTime) {
     Direction dir;
     if (x == 1) {
@@ -94,9 +103,12 @@ void DynamicActor::move(int x, int y, float deltaTime) {
     else {
         m_animatedSprite.play(m_MobWalkingDown);
     }
-    m_animatedSprite.move(x * deltaTime * m_speed, y * deltaTime * m_speed);
-    this->m_position.x += x * deltaTime * m_speed;
-    this->m_position.y += y * deltaTime * m_speed;
+//    m_animatedSprite.move(x * deltaTime * m_speed, y * deltaTime * m_speed);
+//    this->m_position.x += x * deltaTime * m_speed;
+//    this->m_position.y += y * deltaTime * m_speed;
+    m_animatedSprite.move(x, y);
+    this->m_position.x += x;
+    this->m_position.y += y;
     m_animatedSprite.update(sf::seconds(deltaTime));
 }
 
