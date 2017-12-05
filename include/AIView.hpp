@@ -15,7 +15,10 @@ private:
     DynamicActor *m_actor;
     GameLogic *m_gameLogic;
     sf::Vector2i m_prevEnd;
+    sf::Vector2i m_di;
+    sf::Vector2f m_dest;
     std::string m_route;
+    int m_walk;
 };
 
 #endif
