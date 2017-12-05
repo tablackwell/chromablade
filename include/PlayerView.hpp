@@ -33,7 +33,8 @@ public:
     void clearTileMaps();
     void setMobAnimation(sf::Color col, DynamicActor &mob);
     void setRockTexture(Actor &rock);
-    sf::FloatRect getGlobalBounds();
+    sf::Vector2f getPosition() const;
+    sf::FloatRect getGlobalBounds() const;
 
     // event related methods
     void setListener();

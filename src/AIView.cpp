@@ -1,23 +1,29 @@
 #include "AIView.hpp"
 #include "Macros.hpp"
 #include "AStar.hpp"
+#include "AttackEvent.hpp"
 
-AIView::AIView(DynamicActor *actor, GameLogic *gameLogic) {
+AIView::AIView(DynamicActor *actor, GameLogic *gameLogic, ChromaBlade *game) {
     m_actor = actor;
     m_gameLogic = gameLogic;
+    m_game = game;
     m_prevEnd.x = m_prevEnd.y = -1;
     m_dest.x = m_dest. y = -1;
     m_route = "";
     m_walk = 0;
 }
 
-void AIView::move(const sf::Vector2f& target, float &deltaTime) {
+void AIView::move(const PlayerView* pview, float &deltaTime) {
     char **pathMap = m_gameLogic->getPathMap();
     sf::Vector2i numNodes = m_gameLogic->getNumNodes();
     sf::Vector2f pos = m_actor->getPosition();
     sf::Vector2f prevPos(pos);
     sf::FloatRect gb = m_actor->getGlobalBounds();
     std::vector<DynamicActor*> mobs = m_gameLogic->getMobs();
+
+    sf::Vector2f ppos = pview->getPosition();
+    sf::FloatRect pgb = pview->getGlobalBounds();
+    sf::Vector2f target(ppos.x + pgb.width / 2, ppos.y + pgb.height / 2);
 
     sf::Vector2i start((int) pos.x % WIDTH / TILE_DIM,
                        (int) pos.y % HEIGHT / TILE_DIM);
@@ -47,30 +53,38 @@ void AIView::move(const sf::Vector2f& target, float &deltaTime) {
             gb.left = newPos.x;
 
             // check intersection with other mobs
-            bool intersect = false;
+            bool mobIntersect = false;
             for (int i = 0; i < mobs.size(); i++) {
                 sf::Vector2f mobPos = mobs[i]->getPosition();
                 if (mobPos == pos) {
                     continue;
                 }
                 if (gb.intersects(mobs[i]->getGlobalBounds())) {
-                    intersect = true;
+                    mobIntersect = true;
                     break;
                 }
             }
 
-            if (!intersect) {
-                m_actor->setPosition(newPos);
+            if (!mobIntersect) {
+                if (!gb.intersects(pgb)) {
+                    // move if no mob-mob, mob-player collisions
+                    m_actor->setPosition(newPos);
 
-                sf::Vector2f dist;
-                dist.x = abs(newPos.x - m_dest.x);
-                dist.y = abs(newPos.y - m_dest.y);
+                    sf::Vector2f dist;
+                    dist.x = abs(newPos.x - m_dest.x);
+                    dist.y = abs(newPos.y - m_dest.y);
 
-                // reset if went past destination
-                if (dist.x > m_prevDist.x || dist.y > m_prevDist.y) {
-                    m_actor->setPosition(m_dest);
+                    // reset if went past destination
+                    if (dist.x > m_prevDist.x || dist.y > m_prevDist.y) {
+                        m_actor->setPosition(m_dest);
+                    } else {
+                        m_prevDist = dist;
+                    }
+                // collided with player
                 } else {
-                    m_prevDist = dist;
+                    printf("send attackEvent!\n");
+                    AttackEvent *attackEvent = new AttackEvent(false, m_actor);
+                    m_game->queueEvent(attackEvent);
                 }
             }
 

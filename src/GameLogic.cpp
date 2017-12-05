@@ -340,12 +340,8 @@ int GameLogic::getLevelsCleared() {
 }
 
 void GameLogic::moveMobs(float &deltaTime) {
-    sf::Vector2f pos = m_player.getPosition();
-    sf::FloatRect gb = m_view->getGlobalBounds();
-    sf::Vector2f target(pos.x + gb.width / 2, pos.y + gb.height / 2);
-
     for (int i=0; i<m_aiviews.size(); i++) {
-        m_aiviews[i]->move(target, deltaTime);
+        m_aiviews[i]->move(m_view, deltaTime);
     }
 }
 
@@ -521,6 +517,7 @@ void GameLogic::useDoor(const EventInterface& event) {
 
 /* Triggered by an attackEvent */
 void GameLogic::attack(const EventInterface& event) {
+    printf("recv attackEvent!\n");
     const EventInterface *ptr = &event;
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
     if (attackEvent->isFromPlayer() == true) { // player attack
@@ -599,7 +596,7 @@ void GameLogic::spawn(const EventInterface& event) {
             m_view->setMobAnimation(col, *actor);
             m_mobs.push_back(actor);
 
-            AIView *aiview = new AIView(actor, this);
+            AIView *aiview = new AIView(actor, this, m_game);
             m_aiviews.push_back(aiview);
         }
     }

@@ -217,8 +217,13 @@ void PlayerView::setGameApplication(ChromaBlade* game) {
     m_game = game;
 }
 
+/* Return position of the sprite. */
+sf::Vector2f PlayerView::getPosition() const {
+    return m_animatedSprite.getPosition();
+}
+
 /* Return global bounds of the sprite. */
-sf::FloatRect PlayerView::getGlobalBounds() {
+sf::FloatRect PlayerView::getGlobalBounds() const {
     return m_animatedSprite.getGlobalBounds();
 }
 
