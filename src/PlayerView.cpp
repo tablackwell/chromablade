@@ -759,7 +759,7 @@ void PlayerView::playerAttacked(const EventInterface &event) {
     const EventInterface *ptr = &event;
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
     if (attackEvent->isFromPlayer() == false) { // enemy attack
-        int stop = 10;
+        int stop = 3;
         int blinks = 0;
         // Toggle boolean to only draw player on some frames
         while (blinks < stop) {
