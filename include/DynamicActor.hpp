@@ -27,6 +27,7 @@ class DynamicActor : public Actor {
 		void setAnimation(Animation &leftAnimation, Animation &rightAnimation, Animation &upAnimation, Animation &downAnimation);
 		sf::FloatRect getGlobalBounds();
 		void move(int x, int y, float deltaTime);
+		int getSpeed();
 
 	protected:
         AnimatedSprite m_animatedSprite;

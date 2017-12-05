@@ -47,8 +47,8 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
         // if not at destination
         if (pos != m_dest) {
             // move
-            sf::Vector2f newPos(pos.x + SPEED/1.7 * deltaTime * dx[m_di.x],
-                                pos.y + SPEED/1.7 * deltaTime * dy[m_di.y]);
+            sf::Vector2f newPos(pos.x + m_actor->getSpeed() * deltaTime * dx[m_di.x],
+                                pos.y + m_actor->getSpeed() * deltaTime * dy[m_di.y]);
             gb.top = newPos.y;
             gb.left = newPos.x;
 

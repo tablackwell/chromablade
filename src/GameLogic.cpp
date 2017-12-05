@@ -645,15 +645,15 @@ void GameLogic::spawn(const EventInterface& event) {
             DynamicActor *actor;
             if (col_int == 0) { // Red: high health, low attack, low speed, good for getting familiar with game
                 col = sf::Color(255, 0, 0);
-                actor = new Mob(col, 150, 4, sf::Vector2f(x,y), 250.f);
+                actor = new Mob(col, 150, 4, sf::Vector2f(x,y), 50.f);
             }
-            else if (col_int == 1) { // Blue: low health, medium attack, high speed, medium mobs
+            else if (col_int == 1) { // Blue: medium health, medium attack, medium speed, medium mobs
                 col = sf::Color(0, 0, 255);
-                actor = new Mob(col, 100, 8, sf::Vector2f(x,y), 300.f);
+                actor = new Mob(col, 100, 8, sf::Vector2f(x,y), 100.f);
             }
             else { // Yellow: low health, high attack, high speed, hard mobs
                 col = sf::Color(255, 255, 0);
-                actor = new Mob(col, 100, 12, sf::Vector2f(x,y), 350.f);
+                actor = new Mob(col, 50, 12, sf::Vector2f(x,y), 150.f);
             }
 
             m_view->setMobAnimation(col, *actor);
@@ -731,7 +731,9 @@ void GameLogic::pathMap(const EventInterface& event) {
         int x = (int) gb.left % WIDTH / TILE_DIM;
         int y = (int) gb.top % HEIGHT / TILE_DIM;
         printf("rock at %d %d\n", x, y);
-        m_pathMap[x][y] = '#';
+        if (x > 0 && y > 0) {
+            m_pathMap[x][y] = '#';
+        }
     }
 
     for(int y=0;y<m;y++) {
