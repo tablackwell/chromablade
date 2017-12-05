@@ -235,21 +235,21 @@ bool GameLogic::checkPlayer(sf::FloatRect fr, int extra) {
 bool GameLogic::checkPortals(const sf::FloatRect& fr){
     if(fr.intersects(m_redPortal.getGlobalBounds())){
       std::cout << "RED PORTAL TRIGGERED \n";
-      DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, 1, Direction::Up);
+      DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, true, Direction::Up);
       m_game->queueEvent(doorEvent);
       return true;
     }
 
     else if(fr.intersects(m_bluePortal.getGlobalBounds())){
       std::cout << "BLUE PORTAL TRIGGERED \n";
-      DoorEvent *doorEvent = new DoorEvent(GameState::BlueLevel, 1, Direction::Up);
+      DoorEvent *doorEvent = new DoorEvent(GameState::BlueLevel, true, Direction::Up);
       m_game->queueEvent(doorEvent);
       return true;
     }
 
     else if(fr.intersects(m_yellowPortal.getGlobalBounds())){
       std::cout << "YELLOW PORTAL TRIGGERED \n";
-      DoorEvent *doorEvent = new DoorEvent(GameState::YellowLevel, 1, Direction::Up);
+      DoorEvent *doorEvent = new DoorEvent(GameState::YellowLevel, true, Direction::Up);
       m_game->queueEvent(doorEvent);
       return true;
     }
@@ -257,7 +257,7 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
     else if(fr.intersects(m_greyPortal.getGlobalBounds())){
       if(!bossAvailable){
         std::cout << "BOSS BATTLE TRIGGERED \n";
-        DoorEvent *doorEvent = new DoorEvent(GameState::BossLevel, 1, Direction::Up);
+        DoorEvent *doorEvent = new DoorEvent(GameState::BossLevel, true, Direction::Up);
         m_game->queueEvent(doorEvent);
         spawnGreyscale();
       }
@@ -292,16 +292,6 @@ std::vector<DynamicActor*> GameLogic::getMobs() {
     return m_mobs;
 }
 
-/* remove rocks from memory */
-void GameLogic::clearRocks() {
-    m_rocks.clear();
-}
-
-/* Remove enemies from memory */
-void GameLogic::clearEnemies(){
-    m_mobs.clear();
-}
-
 /* Returns path map. */
 char** GameLogic::getPathMap() {
     return m_pathMap;
@@ -314,7 +304,6 @@ sf::Vector2i GameLogic::getNumNodes() {
 
 /* Called after a player-initiated attackEvent */
 void GameLogic::playerAttack(Direction dir) {
-    printf("playerAttack!\n");
     sf::FloatRect fr = m_sprite->getGlobalBounds();
     float verticalMove, horizontalMove;
     // Change the size and position of the rectangle depending on the attack direction, attack range is 20px
@@ -461,7 +450,7 @@ void GameLogic::moveChar(const EventInterface& event) {
         if (m_mobs.size() == 0) {
             std::cout << "onDoor\n";
             m_onDoor = true;
-            DoorEvent *doorEvent = new DoorEvent(m_game->getState(), 1, dir);
+            DoorEvent *doorEvent = new DoorEvent(m_game->getState(), true, dir);
             m_game->queueEvent(doorEvent);
         } else {
             printf("%d\n", m_mobs.size());
@@ -500,7 +489,7 @@ void GameLogic::useDoor(const EventInterface& event) {
     GameState curState = m_game->getState();
 
     const GameState newState = doorEvent->getGameState();
-    const int room = doorEvent->getRoom();
+    const int isDungeon = doorEvent->isDungeon();
     const Direction dir = doorEvent->getDirection();
 
     if (newState != curState) {
@@ -559,7 +548,7 @@ void GameLogic::useDoor(const EventInterface& event) {
         }
 
         if (new_pos.x < 0 || new_pos.y < 0 || new_pos.x > m_xBound || new_pos.y > m_yBound) {
-            DoorEvent *doorEvent = new DoorEvent(GameState::Hub, 0, dir);
+            DoorEvent *doorEvent = new DoorEvent(GameState::Hub, false, dir);
             m_game->queueEvent(doorEvent);
             toggleLevel();
         }
@@ -571,16 +560,31 @@ void GameLogic::useDoor(const EventInterface& event) {
 
 
     /* Upon entering a new room, spawn enemies / rocks */
-    if((room > 0) && (doorEvent->getGameState() != GameState::Hub) && (doorEvent->getGameState() != GameState::BossLevel)){
-        if (std::find(m_clearedRooms.begin(), m_clearedRooms.end(), room) == m_clearedRooms.end()) {
-            sf::Vector2f center = m_view->getCameraCenter();
-            sf::Vector2f size = m_view->getCameraSize();
+    if(isDungeon && (doorEvent->getGameState() != GameState::Hub) && (doorEvent->getGameState() != GameState::BossLevel)){
+        sf::Vector2f center = m_view->getCameraCenter();
+        sf::Vector2f size = m_view->getCameraSize();
+        sf::Vector2i room((int) center.x / WIDTH, (int) center.y / HEIGHT);
+        printf("room is %d %d\n", room.x, room.y);
+
+        std::vector<sf::Vector2i> *v;
+        if (newState == GameState::RedLevel) {
+            v = &m_redCleared;
+        } else if (newState == GameState::YellowLevel) {
+            v = &m_yellowCleared;
+        } else if (newState == GameState::BlueLevel) {
+            v = &m_blueCleared;
+        }
+        printf("size=%d\n", v->size());
+
+        if (std::find(v->begin(), v->end(), room) == v->end()) {
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
             SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 1, size, center);
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
+            printf("added %d %d\n", room.x, room.y);
+            v->push_back(room);
         }
     }
 }
@@ -741,15 +745,14 @@ void GameLogic::pathMap(const EventInterface& event) {
 
         int x = (int) gb.left % WIDTH / TILE_DIM;
         int y = (int) gb.top % HEIGHT / TILE_DIM;
-        printf("rock at %d %d\n", x, y);
         if (x > 0 && y > 0) {
             m_pathMap[x][y] = '#';
         }
     }
 
-    for(int y=0;y<m;y++) {
-        for(int x=0;x<n;x++)
-            printf("%c", m_pathMap[x][y]);
-        printf("\n");
-    }
+//    for(int y=0;y<m;y++) {
+//        for(int x=0;x<n;x++)
+//            printf("%c", m_pathMap[x][y]);
+//        printf("\n");
+//    }
 }
