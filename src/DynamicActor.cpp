@@ -19,6 +19,7 @@ DynamicActor::DynamicActor(sf::Color color, float health, float damage, sf::Vect
     this->m_position.y = startPos.y;
     this->m_speed = speed;
     this->m_animatedSprite.setPosition(startPos);
+    m_knockback = false;
 }
 
 
@@ -78,6 +79,14 @@ void DynamicActor::setAnimation(Animation &leftAnimation, Animation &rightAnimat
 
 sf::FloatRect DynamicActor::getGlobalBounds() {
     return m_animatedSprite.getGlobalBounds();
+}
+
+void DynamicActor::setKnockback(bool b) {
+    m_knockback = b;
+}
+
+bool DynamicActor::getKnockback() {
+    return m_knockback;
 }
 
 void DynamicActor::move(int x, int y, float deltaTime) {
