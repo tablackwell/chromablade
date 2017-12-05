@@ -15,6 +15,9 @@ void AIView::move(const sf::Vector2f& target, float &deltaTime) {
     char **pathMap = m_gameLogic->getPathMap();
     sf::Vector2i numNodes = m_gameLogic->getNumNodes();
     sf::Vector2f pos = m_actor->getPosition();
+    sf::Vector2f prevPos(pos);
+    sf::FloatRect gb = m_actor->getGlobalBounds();
+    std::vector<DynamicActor*> mobs = m_gameLogic->getMobs();
 
     sf::Vector2i start((int) pos.x % WIDTH / TILE_DIM,
                        (int) pos.y % HEIGHT / TILE_DIM);
@@ -40,18 +43,37 @@ void AIView::move(const sf::Vector2f& target, float &deltaTime) {
             // move
             sf::Vector2f newPos(pos.x + SPEED/1.7 * deltaTime * dx[m_di.x],
                                 pos.y + SPEED/1.7 * deltaTime * dy[m_di.y]);
-            m_actor->setPosition(newPos);
+            gb.top = newPos.y;
+            gb.left = newPos.x;
 
-            sf::Vector2f dist;
-            dist.x = abs(newPos.x - m_dest.x);
-            dist.y = abs(newPos.y - m_dest.y);
-
-            // reset if went past destination
-            if (dist.x > m_prevDist.x || dist.y > m_prevDist.y) {
-                m_actor->setPosition(m_dest);
-            } else {
-                m_prevDist = dist;
+            // check intersection with other mobs
+            bool intersect = false;
+            for (int i = 0; i < mobs.size(); i++) {
+                sf::Vector2f mobPos = mobs[i]->getPosition();
+                if (mobPos == pos) {
+                    continue;
+                }
+                if (gb.intersects(mobs[i]->getGlobalBounds())) {
+                    intersect = true;
+                    break;
+                }
             }
+
+            if (!intersect) {
+                m_actor->setPosition(newPos);
+
+                sf::Vector2f dist;
+                dist.x = abs(newPos.x - m_dest.x);
+                dist.y = abs(newPos.y - m_dest.y);
+
+                // reset if went past destination
+                if (dist.x > m_prevDist.x || dist.y > m_prevDist.y) {
+                    m_actor->setPosition(m_dest);
+                } else {
+                    m_prevDist = dist;
+                }
+            }
+
         // reached destination
         } else {
             // if target has moved, get a new route
