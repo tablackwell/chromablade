@@ -142,6 +142,9 @@ void PlayerView::loadMonsterAnimation() {
     if(!m_monsterTexture.loadFromFile("../res/sprite/enemies.png")) {
         // ERROR
     }
+    if(!m_greyscaleTexture.loadFromFile("../res/sprite/greyScale.png")){
+      //error
+    }
     // Red mob
     m_redMobWalkingDown.setSpriteSheet(m_monsterTexture);
     m_redMobWalkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
@@ -205,26 +208,46 @@ void PlayerView::loadMonsterAnimation() {
     m_yellowMobWalkingUp.addFrame(sf::IntRect(128, 64, 32, 32));
     m_yellowMobWalkingUp.addFrame(sf::IntRect(160, 64, 32, 32));
 
-    m_greyMobWalkingUp.setSpriteSheet(m_monsterTexture);
-    m_greyMobWalkingDown.setSpriteSheet(m_monsterTexture);
-    m_greyMobWalkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
-    m_greyMobWalkingDown.addFrame(sf::IntRect(32, 0, 32, 32));
-    m_greyMobWalkingDown.addFrame(sf::IntRect(64, 0, 32, 32));
+    // greyscale
+    // m_greyMobWalkingDown.setSpriteSheet(m_monsterTexture);
+    // m_greyMobWalkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
+    // m_greyMobWalkingDown.addFrame(sf::IntRect(32, 0, 32, 32));
+    // m_greyMobWalkingDown.addFrame(sf::IntRect(64, 0, 32, 32));
+    //
+    // m_greyMobWalkingLeft.setSpriteSheet(m_monsterTexture);
+    // m_greyMobWalkingLeft.addFrame(sf::IntRect(288, 0, 32, 32));
+    // m_greyMobWalkingLeft.addFrame(sf::IntRect(320, 0, 32, 32));
+    // m_greyMobWalkingLeft.addFrame(sf::IntRect(352, 0, 32, 32));
+    //
+    // m_greyMobWalkingRight.setSpriteSheet(m_monsterTexture);
+    // m_greyMobWalkingRight.addFrame(sf::IntRect(384, 0, 32, 32));
+    // m_greyMobWalkingRight.addFrame(sf::IntRect(416, 0, 32, 32));
+    // m_greyMobWalkingRight.addFrame(sf::IntRect(448, 0, 32, 32));
+    //
+    // m_greyMobWalkingUp.setSpriteSheet(m_monsterTexture);
+    // m_greyMobWalkingUp.addFrame(sf::IntRect(96, 0, 32, 32));
+    // m_greyMobWalkingUp.addFrame(sf::IntRect(128, 0, 32, 32));
+    // m_greyMobWalkingUp.addFrame(sf::IntRect(160, 0, 32, 32));
+    
+    m_greyMobWalkingDown.setSpriteSheet(m_greyscaleTexture);
+    m_greyMobWalkingDown.addFrame(sf::IntRect(0, 0, 64, 64));
+    m_greyMobWalkingDown.addFrame(sf::IntRect(64, 0, 64, 64));
+    m_greyMobWalkingDown.addFrame(sf::IntRect(128, 0, 64, 64));
 
-    m_greyMobWalkingLeft.setSpriteSheet(m_monsterTexture);
-    m_greyMobWalkingLeft.addFrame(sf::IntRect(288, 0, 32, 32));
-    m_greyMobWalkingLeft.addFrame(sf::IntRect(320, 0, 32, 32));
-    m_greyMobWalkingLeft.addFrame(sf::IntRect(352, 0, 32, 32));
+    m_greyMobWalkingLeft.setSpriteSheet(m_greyscaleTexture);
+    m_greyMobWalkingLeft.addFrame(sf::IntRect(384, 0, 64, 64));
+    m_greyMobWalkingLeft.addFrame(sf::IntRect(448, 0, 64, 64));
+    m_greyMobWalkingLeft.addFrame(sf::IntRect(512, 0, 64, 64));
 
-    m_greyMobWalkingRight.setSpriteSheet(m_monsterTexture);
-    m_greyMobWalkingRight.addFrame(sf::IntRect(384, 0, 32, 32));
-    m_greyMobWalkingRight.addFrame(sf::IntRect(416, 0, 32, 32));
-    m_greyMobWalkingRight.addFrame(sf::IntRect(448, 0, 32, 32));
+    m_greyMobWalkingRight.setSpriteSheet(m_greyscaleTexture);
+    m_greyMobWalkingRight.addFrame(sf::IntRect(576, 0, 64, 64));
+    m_greyMobWalkingRight.addFrame(sf::IntRect(640, 0, 64, 64));
+    m_greyMobWalkingRight.addFrame(sf::IntRect(704, 0, 64, 64));
 
-    m_greyMobWalkingUp.setSpriteSheet(m_monsterTexture);
-    m_greyMobWalkingUp.addFrame(sf::IntRect(96, 0, 32, 32));
-    m_greyMobWalkingUp.addFrame(sf::IntRect(128, 0, 32, 32));
-    m_greyMobWalkingUp.addFrame(sf::IntRect(160, 0, 32, 32));
+    m_greyMobWalkingUp.setSpriteSheet(m_greyscaleTexture);
+    m_greyMobWalkingUp.addFrame(sf::IntRect(192, 0, 64, 64));
+    m_greyMobWalkingUp.addFrame(sf::IntRect(256, 0, 64, 64));
+    m_greyMobWalkingUp.addFrame(sf::IntRect(320, 0, 64, 64));
 }
 
 
@@ -664,7 +687,7 @@ void PlayerView::loadMap(const EventInterface& event) {
     const GameState state = loadMapEvent->getGameState();
 
     clearTileMaps();
-
+    m_gameLogic->clearRocks();
     switch (state) {
         case GameState::Hub:
             m_map.loadFromText("../res/tilesets/lightworld.png",

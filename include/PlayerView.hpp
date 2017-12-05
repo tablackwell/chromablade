@@ -96,6 +96,7 @@ private: //vars and objs
     sf::RenderWindow* m_window;
     sf::Texture m_charTexture;
     sf::Texture m_monsterTexture;
+    sf::Texture m_greyscaleTexture;
     sf::Texture m_swordTexture;
     sf::Sprite m_sword;
 
