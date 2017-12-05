@@ -359,7 +359,7 @@ void GameLogic::playerAttack(Direction dir) {
 
             // Mob dies
             if (m_mobs[i]->getHealth() <= 0) {
-                // flashes and disappear
+                // TODO: flashes and disappear
                 m_mobs.erase(m_mobs.begin() + i); // Delete the dead mob
                 m_aiviews.erase(m_aiviews.begin() + i); // Delete the dead mob's aiview
             }
@@ -615,6 +615,11 @@ void GameLogic::spawn(const EventInterface& event) {
     const sf::Vector2f size = spawnEvent->getSize();
     const sf::Vector2f center = spawnEvent->getCenter();
 
+    // Clears vector before spawning
+    if (actorType == Actor::Mob) {
+        m_mobs.clear();
+        m_aiviews.clear();
+    }
 
     int l = center.x - size.x / 2;
     int t = center.y - size.y / 2;
