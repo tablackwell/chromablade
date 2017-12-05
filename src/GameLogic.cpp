@@ -348,16 +348,25 @@ void GameLogic::playerAttack(Direction dir) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds()) && m_mobs[i]->getColor() == m_player.getColor()) {
             m_player.attack(*m_mobs[i]);
 
-            // Bounce back
+            // Knock back
             sf::Vector2f prevPos = m_mobs[i]->getPosition();
-            prevPos.x = round(prevPos.x / MINI_TILE_DIM) * MINI_TILE_DIM;
-            prevPos.y = round(prevPos.y / MINI_TILE_DIM) * MINI_TILE_DIM;
+//            prevPos.x = round(prevPos.x / MINI_TILE_DIM) * MINI_TILE_DIM;
+//            prevPos.y = round(prevPos.y / MINI_TILE_DIM) * MINI_TILE_DIM;
 
-            m_mobs[i]->setPosition(sf::Vector2f(prevPos.x + horizontalMove, prevPos.y + verticalMove));
+
             m_mobs[i]->setKnockback(true);
+            sf::FloatRect mgb = m_mobs[i]->getGlobalBounds();
+            mgb.height += abs(verticalMove);
+            mgb.width += abs(horizontalMove);
+            if (verticalMove < 0) {
+                mgb.top += verticalMove;
+            }
+            if (horizontalMove < 0) {
+                mgb.left += horizontalMove;
+            }
 
-            if (checkTileCollisions(m_mobs[i]->getGlobalBounds()) || checkRockCollisions(m_mobs[i]->getGlobalBounds())) {
-                m_mobs[i]->setPosition(prevPos);
+            if (!checkTileCollisions(mgb) && !checkRockCollisions(mgb)) {
+                m_mobs[i]->setPosition(sf::Vector2f(prevPos.x + horizontalMove, prevPos.y + verticalMove));
             }
 
             // Mob dies
