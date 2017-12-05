@@ -31,8 +31,6 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
     sf::Vector2i end((int) target.x % WIDTH / TILE_DIM,
                      (int) target.y % HEIGHT / TILE_DIM);
 
-    printf("%d %d ", start.x, start.y);
-    printf("%d %d\n", end.x, end.y);
     // initialize
     if (m_init) {
         m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
@@ -57,13 +55,14 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                 return;
             }
 
-            // move
-            sf::Vector2f newPos(pos.x + (SPEED/1.7 * deltaTime * dx[m_di]),
-                                pos.y + (SPEED/1.7 * deltaTime * dy[m_di]));
-            gb.top = newPos.y;
-            gb.left = newPos.x;
+            // If movement is more than 1 pixel, bad things will happen...
+            sf::Vector2f newPos(pos.x + (int) (SPEED/2 * deltaTime * dx[m_di]),
+                                pos.y + (int) (SPEED/2 * deltaTime * dy[m_di]));
+
 
             // check intersection with other mobs
+            gb.top = newPos.y;
+            gb.left = newPos.x;
             bool mobIntersect = false;
             for (int i = 0; i < mobs.size(); i++) {
                 sf::Vector2f mobPos = mobs[i]->getPosition();
@@ -86,12 +85,12 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                     dist.y = abs(newPos.y - m_dest.y);
 
                     // reset if went past destination
-                    if (dist.x > m_prevDist.x || dist.y > m_prevDist.y) {
-                        m_actor->setPosition(m_dest);
-                        printf("resetting!\n");
-                    } else {
-                        m_prevDist = dist;
-                    }
+//                    if (dist.x > m_prevDist.x || dist.y > m_prevDist.y) {
+//                        m_actor->setPosition(m_dest);
+//                        printf("resetting!\n");
+//                    } else {
+//                        m_prevDist = dist;
+//                    }
                 // collided with player
                 } else {
                     AttackEvent *attackEvent = new AttackEvent(false, m_actor);
