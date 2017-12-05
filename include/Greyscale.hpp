@@ -2,6 +2,11 @@
 #define GREYSCALE_HPP
 
 #include "DynamicActor.hpp"
+#include "GameLogic.hpp"
+#include "PlayerView.hpp"
+#include "ChromaBlade.hpp"
+#include <SFML/Graphics.hpp>
+#include <string>
 
 class Greyscale : public DynamicActor {
 
@@ -9,6 +14,7 @@ class Greyscale : public DynamicActor {
 public:
   Greyscale(sf::Color color, float hp, float dmg, sf::Vector2f pos, int speed);
   void attack(DynamicActor &target);
+  void move(const PlayerView* pview, float &deltaTime);
 private:
   sf::Color m_activeColor;
   float m_health;

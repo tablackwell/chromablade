@@ -17,6 +17,7 @@
 class ChromaBlade;
 class PlayerView;
 class AIView;
+class BossScript;
 
 class GameLogic : public Process {
 public:
@@ -57,6 +58,7 @@ private:
     void moveMobs(float &deltaTime);
     void enemyAttack(DynamicActor* attacker);
     void spawnGreyscale();
+    void updateGreyscale(float &deltaTime);
 
     // Event triggered methods
     void moveChar(const EventInterface& event);
@@ -98,6 +100,7 @@ private:
     ChromaBlade* m_game;
     PlayerView* m_view;
     std::vector<AIView*> m_aiviews;
+    std::vector<BossScript*> m_bossScripts;
     bool m_onDoor;
     bool m_levelToggled;
 };

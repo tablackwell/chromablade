@@ -2,6 +2,7 @@
 #include "ChromaBlade.hpp"
 #include "PlayerView.hpp"
 #include "AIView.hpp"
+#include "BossScript.hpp"
 #include "Mob.hpp"
 #include "Greyscale.hpp"
 #include "Macros.hpp"
@@ -51,6 +52,10 @@ void GameLogic::update(float &deltaTime){
 
     if (state != GameState::Hub) {
         moveMobs(deltaTime);
+    }
+
+    if (state == GameState::BossLevel){
+      updateGreyscale(deltaTime);
     }
 }
 
@@ -275,6 +280,9 @@ void GameLogic::spawnGreyscale(){
   m_view->setGreyscaleAnimation(*actor);
   m_greyscaleVec.push_back(actor);
   m_view->setFadeGoal(0);
+
+  BossScript *bossScript = new BossScript(actor, this, m_game);
+  m_bossScripts.push_back(bossScript);
 }
 
 std::vector<DynamicActor*> GameLogic::getGreyscale(){
@@ -402,6 +410,12 @@ void GameLogic::moveMobs(float &deltaTime) {
     for (int i=0; i<m_aiviews.size(); i++) {
         m_aiviews[i]->move(m_view, deltaTime);
     }
+}
+
+void GameLogic::updateGreyscale(float &deltaTime){
+  for(int i = 0; i<m_bossScripts.size(); i++){
+    m_bossScripts[i]->update(m_view, deltaTime);
+  }
 }
 
 /***************************** Event Triggered Functions ******************************/
