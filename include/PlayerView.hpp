@@ -34,6 +34,8 @@ public:
     void setMobAnimation(sf::Color col, DynamicActor &mob);
     void setGreyscaleAnimation(DynamicActor &greyscale);
     void setRockTexture(Actor &rock);
+    sf::Vector2f getPosition() const;
+    sf::FloatRect getGlobalBounds() const;
 
     // event related methods
     void setListener();

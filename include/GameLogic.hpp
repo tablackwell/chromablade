@@ -46,14 +46,15 @@ public:
     sf::Vector2i getNumNodes();
 
 private:
-    bool checkCollisions(const sf::FloatRect& fr);
+    bool checkCollisions(sf::FloatRect fr, int extra);
     bool checkTileCollisions(const sf::FloatRect& fr);
     bool checkRockCollisions(const sf::FloatRect& fr);
     bool checkMobCollisions(const sf::FloatRect& fr);
     bool checkDoors(sf::FloatRect fr, int extra);
+    bool checkPlayer(sf::FloatRect fr, int extra);
     bool checkPortals(const sf::FloatRect& fr);
     void playerAttack(Direction dir);
-    void moveMobs();
+    void moveMobs(float &deltaTime);
     void enemyAttack(DynamicActor* attacker);
     void spawnGreyscale();
 
