@@ -731,7 +731,9 @@ void GameLogic::pathMap(const EventInterface& event) {
         int x = (int) gb.left % WIDTH / TILE_DIM;
         int y = (int) gb.top % HEIGHT / TILE_DIM;
         printf("rock at %d %d\n", x, y);
-        m_pathMap[x][y] = '#';
+        if (x > 0 && y > 0) {
+            m_pathMap[x][y] = '#';
+        }
     }
 
     for(int y=0;y<m;y++) {
