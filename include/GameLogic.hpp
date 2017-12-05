@@ -35,6 +35,8 @@ public:
     std::vector<Actor*> getRocks();
     std::vector<DynamicActor*> getMobs();
     std::vector<DynamicActor*> getGreyscale();
+    void clearRocks();
+    void clearEnemies();
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
     void setBoundaries(int xBound, int yBound);
     void toggleLevel();
@@ -74,9 +76,7 @@ private:
     std::vector<Actor*> m_rocks;
     std::vector<DynamicActor*> m_mobs;
     std::vector<DynamicActor*> m_greyscaleVec;
-    std::vector<sf::Vector2i> m_redCleared;
-    std::vector<sf::Vector2i> m_yellowCleared;
-    std::vector<sf::Vector2i> m_blueCleared;
+    std::vector<int> m_clearedRooms;
     bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;
 

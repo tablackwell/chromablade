@@ -8,13 +8,13 @@
 
 class DoorEvent : public EventInterface {
 public:
-    DoorEvent(GameState state, bool isDungeon, Direction dir);
-    const int isDungeon() const;
+    DoorEvent(GameState state, int room, Direction dir);
+    const int getRoom() const;
     const Direction getDirection() const;
     const GameState getGameState() const;
 private:
     GameState m_state;
     Direction m_dir;
-    bool m_isDungeon;
+    int m_room;
 };
 #endif

@@ -35,7 +35,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
     if (m_init) {
         m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
                                             pathMap, numNodes.x, numNodes.y);
-        //printf("starting route: %s\n", m_route.c_str());
+        printf("starting route: %s\n", m_route.c_str());
         m_prevEnd = end;
 
         m_walk = 0;
@@ -51,6 +51,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             if (m_actor->getKnockback()) {
                 m_actor->setKnockback(false);
                 m_init = true;
+                printf("processed knockback!\n");
                 return;
             }
 
@@ -104,7 +105,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             if (end != m_prevEnd) {
                 m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
                                                     pathMap, numNodes.x, numNodes.y);
-                //printf("new route: %s\n", m_route.c_str());
+                printf("new route: %s\n", m_route.c_str());
                 m_prevEnd = end;
                 m_walk = 0;
             // else same target, update new destination
