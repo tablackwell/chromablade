@@ -88,3 +88,27 @@ void DynamicActor::setKnockback(bool b) {
 bool DynamicActor::getKnockback() {
     return m_knockback;
 }
+
+void DynamicActor::move(int x, int y, float deltaTime) {
+    Direction dir;
+    if (x == 1) {
+        m_animatedSprite.play(m_MobWalkingRight);
+    }
+    else if (x == -1) {
+        m_animatedSprite.play(m_MobWalkingLeft);
+    }
+    else if (y == -1) {
+        m_animatedSprite.play(m_MobWalkingUp);
+    }
+    else {
+        m_animatedSprite.play(m_MobWalkingDown);
+    }
+    m_animatedSprite.move(x * deltaTime * m_speed, y * deltaTime * m_speed);
+    this->m_position.x += x * deltaTime * m_speed;
+    this->m_position.y += y * deltaTime * m_speed;
+    m_animatedSprite.update(sf::seconds(deltaTime));
+}
+
+int DynamicActor::getSpeed() {
+    return m_speed;
+}

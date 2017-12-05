@@ -6,6 +6,7 @@
 
 #include "Actor.hpp"
 #include "AnimatedSprite.hpp"
+#include "MoveEvent.hpp"
 
 /*
  * Dynamic actor class. All dynamic actors inherit from the dynamic actor class.
@@ -27,6 +28,8 @@ class DynamicActor : public Actor {
 		sf::FloatRect getGlobalBounds();
         void setKnockback(bool b);
         bool getKnockback();
+		void move(int x, int y, float deltaTime);
+		int getSpeed();
 
 	protected:
         AnimatedSprite m_animatedSprite;

@@ -36,6 +36,7 @@ public:
     void setRockTexture(Actor &rock);
     sf::Vector2f getPosition() const;
     sf::FloatRect getGlobalBounds() const;
+    void setFadeGoal(int goal);
 
     // event related methods
     void setListener();
@@ -119,6 +120,7 @@ private: //vars and objs
     sf::Sprite m_greyOverlay;
     sf::Texture m_greyOverlayTexture;
     int fadeValue = 0;
+    int fadeGoal = 254;
 };
 
 #endif

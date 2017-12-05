@@ -94,7 +94,6 @@ void PlayerView::init(){
       //error...
     }
     m_greyOverlay.setTexture(m_greyOverlayTexture);
-    m_greyOverlay.setScale(2.f, 2.f);
     m_greyOverlay.setColor(sf::Color(255,255,255,fadeValue));
     //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
@@ -439,6 +438,10 @@ sf::Vector2f PlayerView::getCameraSize(){
   return m_camera.getSize();
 }
 
+void PlayerView::setFadeGoal(int goal){
+  fadeGoal = goal;
+}
+
 
 /* Render */
 void PlayerView::draw() {
@@ -470,8 +473,14 @@ void PlayerView::draw() {
             if(state == GameState::Hub){
               m_window->draw(m_greyOverlay);
               m_greyOverlay.setColor(sf::Color(255,255,255,fadeValue));
-              if(fadeValue < 254){
-                fadeValue = fadeValue +2;
+              if(fadeValue < fadeGoal){
+                fadeValue += 2;
+              }
+              else if (fadeValue > fadeGoal){
+                fadeValue -= 2;
+              }
+              else{
+                //do nothing
               }
             }
 
@@ -746,7 +755,7 @@ void PlayerView::playerAttacked(const EventInterface &event) {
     const EventInterface *ptr = &event;
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
     if (attackEvent->isFromPlayer() == false) { // enemy attack
-        int stop = 10;
+        int stop = 3;
         int blinks = 0;
         // Toggle boolean to only draw player on some frames
         while (blinks < stop) {
