@@ -83,6 +83,9 @@ void GameLogic::setCharPosition(sf::Vector2f position) {
 void GameLogic::resetCharacter() {
     m_player.setHealth(100);
     setCharPosition(HUB_POS);
+    m_mobs.clear();
+    m_rocks.clear();
+    m_aiviews.clear();
 }
 
 /* Links game logic to player view */
