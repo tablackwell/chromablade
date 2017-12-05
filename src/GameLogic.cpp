@@ -365,7 +365,8 @@ void GameLogic::playerAttack(Direction dir) {
             // Mob dies
             if (m_mobs[i]->getHealth() <= 0) {
                 // flashes and disappear
-                m_mobs.erase(m_mobs.begin() + i); // Delete the dead mobs
+                m_mobs.erase(m_mobs.begin() + i); // Delete the dead mob
+                m_aiviews.erase(m_aiviews.begin() + i); // Delete the dead mob's aiview
             }
         }
     }
