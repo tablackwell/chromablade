@@ -22,22 +22,21 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
     sf::FloatRect gb = m_actor->getGlobalBounds();
     std::vector<DynamicActor*> mobs = m_gameLogic->getMobs();
 
-    sf::Vector2f ppos = pview->getPosition();
     sf::FloatRect pgb = pview->getGlobalBounds();
-    sf::Vector2f target(ppos.x + pgb.width * 0.4, ppos.y + pgb.height * 0.4);
+    sf::Vector2f target(pgb.left + pgb.width * 0, pgb.top + pgb.height * 0);
 
     sf::Vector2i start((int) pos.x % WIDTH / MINI_TILE_DIM,
                        (int) pos.y % HEIGHT / MINI_TILE_DIM);
     sf::Vector2i end((int) target.x % WIDTH / MINI_TILE_DIM,
                      (int) target.y % HEIGHT / MINI_TILE_DIM);
 
-    //printf("%d %d\n", end.x, end.y);
     // initialize
     if (m_init) {
         m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
                                             pathMap, numNodes.x, numNodes.y);
-        printf("starting route: %s\n", m_route.c_str());
+        //printf("starting route: %s\n", m_route.c_str());
         m_prevEnd = end;
+        if (m_route == "") return;
 
         m_walk = 0;
         m_di = m_route[m_walk] - '0';
@@ -109,7 +108,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             if (end != m_prevEnd) {
                 m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
                                                     pathMap, numNodes.x, numNodes.y);
-                printf("new route: |%s|\n", m_route.c_str());
+                //printf("new route: |%s|\n", m_route.c_str());
                 if (m_route == "") return;
                 m_prevEnd = end;
                 m_walk = 0;

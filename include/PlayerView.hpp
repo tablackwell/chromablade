@@ -31,6 +31,8 @@ public:
     void setGameLogic(GameLogic* gameLogic);
     void setGameApplication(ChromaBlade* game);
     void clearTileMaps();
+    void clearRocks();
+    void clearMobs();
     void setMobAnimation(sf::Color col, DynamicActor &mob);
     void setGreyscaleAnimation(DynamicActor &greyscale);
     void setRockTexture(Actor &rock);
