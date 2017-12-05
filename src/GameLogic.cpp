@@ -171,9 +171,16 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
             return true;
         }
     }
+
+    /* Greyscale collision check*/
+    for (int i = 0; i < m_greyscaleVec.size(); i++){
+      if(fr.intersects(m_greyscaleVec[i]->getGlobalBounds())){
+        //call something
+        return true;
+      }
+    }
     return false;
 }
-
 
 /* Checks intersection with doors */
 bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
