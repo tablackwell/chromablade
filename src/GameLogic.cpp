@@ -321,8 +321,11 @@ int GameLogic::getLevelsCleared() {
 }
 
 void GameLogic::moveMobs(float &deltaTime) {
+    sf::Vector2f pos = m_player.getPosition();
+    sf::Vector2f target(pos.x + TILE_DIM / 2, pos.y + TILE_DIM / 2);
+
     for (int i=0; i<m_aiviews.size(); i++) {
-        m_aiviews[i]->move(m_player.getPosition(), deltaTime);
+        m_aiviews[i]->move(target, deltaTime);
     }
 //    MoveMobsEvent* moveMobsEvent = new MoveMobsEvent(m_player.getPosition());
 //    m_game->queueEvent(moveMobsEvent);
