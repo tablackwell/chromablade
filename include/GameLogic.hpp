@@ -47,6 +47,9 @@ public:
 
 private:
     bool checkCollisions(const sf::FloatRect& fr);
+    bool checkTileCollisions(const sf::FloatRect& fr);
+    bool checkRockCollisions(const sf::FloatRect& fr);
+    bool checkMobCollisions(const sf::FloatRect& fr);
     bool checkDoors(sf::FloatRect fr, int extra);
     bool checkPortals(const sf::FloatRect& fr);
     void playerAttack(Direction dir);

@@ -1,5 +1,5 @@
 #ifndef MOVEMOBSEVENT_HPP
-#define MOVEMOBSEVENT_hpp
+#define MOVEMOBSEVENT_HPP
 
 #include "EventInterface.hpp"
 #include "EventType.hpp"

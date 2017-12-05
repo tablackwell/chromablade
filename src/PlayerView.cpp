@@ -54,7 +54,7 @@ void PlayerView::init(){
     m_sword.setTexture(m_swordTexture);
     m_sword.setColor(sf::Color(255, 0, 0));
     m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
-    m_sword.setScale(0.5,0.5);
+//    m_sword.setScale(,0.5);
 
     // Load character animations
     m_walkingDown.setSpriteSheet(m_charTexture);
@@ -508,7 +508,7 @@ bool PlayerView::isOpen(){
 void PlayerView::update(float &deltaTime){
     updateHealthBar();
     if (isAttacking) {
-        if (m_sword.getRotation() < 70 || m_sword.getRotation() > 290) {
+        if (m_sword.getRotation() < 80 || m_sword.getRotation() > 280) {
             swingSword(deltaTime);
         }
         else {
@@ -523,17 +523,17 @@ void PlayerView::update(float &deltaTime){
 
 /* Play sword animation */
 void PlayerView::swingSword(float deltaTime) {
-    if (m_currAnimation == &m_walkingUp) { // works
-        m_sword.rotate(deltaTime * 600);
+    if (m_currAnimation == &m_walkingUp) {
+        m_sword.rotate(deltaTime * 800);
     }
     else if (m_currAnimation == &m_walkingDown) {
-        m_sword.rotate(deltaTime * -600);
+        m_sword.rotate(deltaTime * -800);
     }
-    else if (m_currAnimation == &m_walkingLeft) { // works
-        m_sword.rotate(deltaTime * 600);
+    else if (m_currAnimation == &m_walkingLeft) {
+        m_sword.rotate(deltaTime * 800);
     }
     else if (m_currAnimation == &m_walkingRight) {
-        m_sword.rotate(deltaTime * -600);
+        m_sword.rotate(deltaTime * -800);
     }
 }
 
@@ -749,6 +749,7 @@ void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
         mob.setAnimation(m_yellowMobWalkingLeft, m_yellowMobWalkingRight, m_yellowMobWalkingUp, m_yellowMobWalkingDown);
     }
 }
+
 
 void PlayerView::setRockTexture(Actor &rock) {
     rock.setTexture(*m_map.getTileSet());
