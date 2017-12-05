@@ -324,14 +324,14 @@ void GameLogic::playerAttack(Direction dir) {
             fr.top -= 40;
             fr.width += 40;
             fr.left -= 20;
-            verticalMove = -100;
+            verticalMove = -0;
             horizontalMove = 0;
             break;
         case Down:
             fr.height += 40;
             fr.width += 40;
             fr.left -= 20;
-            verticalMove = 100;
+            verticalMove = 0;
             horizontalMove = 0;
             break;
         case Left:
@@ -340,14 +340,14 @@ void GameLogic::playerAttack(Direction dir) {
             fr.height += 40;
             fr.top -= 20;
             verticalMove = 0;
-            horizontalMove = -100;
+            horizontalMove = -0;
             break;
         case Right:
             fr.width += 40;
             fr.height += 40;
             fr.top -= 20;
             verticalMove = 0;
-            horizontalMove = 100;
+            horizontalMove = 10;
             break;
     }
 
@@ -544,6 +544,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             setCharPosition(dungeonReturnPosition);
             m_view->updateCamera(dungeonReturnCamera.x, dungeonReturnCamera.y);
             unlockColor(curState);
+            m_player.setHealth(100);
         }
         else if (newState == GameState::RedLevel) {
             m_view->updateCamera(RED_CAM);
@@ -556,6 +557,7 @@ void GameLogic::useDoor(const EventInterface& event) {
         else if (newState == GameState::YellowLevel){
             m_view->updateCamera(YELLOW_CAM);
             setCharPosition(YELLOW_POS);
+            mobFactor = 2; //reset so the game doesn't become impossible
         }
         else if (newState == GameState::BossLevel){
           m_view->updateCamera(GREYSCALE_CAM);
@@ -619,7 +621,10 @@ void GameLogic::useDoor(const EventInterface& event) {
         if (std::find(v->begin(), v->end(), room) == v->end()) {
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 2, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 2 + mobFactor, size, center);
+            if(mobFactor < 7){
+              mobFactor += 1;
+            }
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);

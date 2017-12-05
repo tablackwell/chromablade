@@ -89,6 +89,9 @@ private:
 
     int m_xBound;
     int m_yBound;
+
+    int mobFactor = 0;
+
     sf::Vector2f dungeonReturnPosition;
     sf::Vector2f dungeonReturnCamera;
     bool inCombat;

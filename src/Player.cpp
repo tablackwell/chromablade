@@ -31,7 +31,7 @@ void Player::unlockColor(sf::Color color) {
 
 /* Causes damage to the enemy */
 void Player::attack(DynamicActor &enemy) {
-    enemy.setHealth(enemy.getHealth() - getDamage() * 100);
+    enemy.setHealth(enemy.getHealth() - getDamage() * 3);
 }
 
 
