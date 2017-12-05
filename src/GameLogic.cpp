@@ -289,6 +289,10 @@ std::vector<Actor*> GameLogic::getRocks() {
     return m_rocks;
 }
 
+void GameLogic::clearRocks(){
+  m_rocks.clear();
+}
+
 
 /* Returns mob vector */
 std::vector<DynamicActor*> GameLogic::getMobs() {
