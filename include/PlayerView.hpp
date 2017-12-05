@@ -95,6 +95,7 @@ private: //vars and objs
     sf::Texture m_charTexture;
     sf::Texture m_monsterTexture;
     sf::Texture m_swordTexture;
+    sf::Texture m_greyscaleTexture;
     sf::Sprite m_sword;
 
 
