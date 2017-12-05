@@ -284,23 +284,31 @@ void GameLogic::playerAttack(Direction dir) {
     switch (dir) {
         case Up:
             fr.height += 40;
-            fr.top -= 50;
+            fr.top -= 40;
+            fr.width += 40;
+            fr.left -= 20;
             verticalMove = -100;
             horizontalMove = 0;
             break;
         case Down:
             fr.height += 40;
+            fr.width += 40;
+            fr.left -= 20;
             verticalMove = 100;
             horizontalMove = 0;
             break;
         case Left:
             fr.width += 40;
             fr.left -= 40;
+            fr.height += 40;
+            fr.top -= 20;
             verticalMove = 0;
             horizontalMove = -100;
             break;
         case Right:
             fr.width += 40;
+            fr.height += 40;
+            fr.top -= 20;
             verticalMove = 0;
             horizontalMove = 100;
             break;
