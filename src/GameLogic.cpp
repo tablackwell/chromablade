@@ -278,17 +278,13 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
 }
 
 void GameLogic::spawnGreyscale(){
-  DynamicActor *actor = new Greyscale(sf::Color(255,255,0), 100, 20, sf::Vector2f(356,80), 100.f);
+  DynamicActor *actor = new Greyscale(sf::Color(255,255,0), 100, 20, sf::Vector2f(400,80), 100.f);
   m_view->setGreyscaleAnimation(*actor);
   m_greyscaleVec.push_back(actor);
   m_view->setFadeGoal(0);
 
-  BossScript *bossScript = new BossScript(actor, this, m_game);
-  m_bossScripts.push_back(bossScript);
-
-  AIView *bossAIView = new AIView(actor, this, m_game);
-  // m_bossAIScripts.push_back(bossAIView);
-  m_aiviews.push_back(bossAIView);
+  AIView *aiview = new AIView(actor, this, m_game);
+  m_aiviews.push_back(aiview);
 }
 
 std::vector<DynamicActor*> GameLogic::getGreyscale(){
@@ -604,7 +600,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             sf::Vector2f size = m_view->getCameraSize();
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 2, size, center);
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);

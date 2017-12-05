@@ -30,6 +30,8 @@ class DynamicActor : public Actor {
         bool getKnockback();
 		void move(int x, int y, float deltaTime);
 		int getSpeed();
+		void updateAttackClock(float deltaTime);
+		bool canAttack();
 
 	protected:
         AnimatedSprite m_animatedSprite;
@@ -37,6 +39,8 @@ class DynamicActor : public Actor {
         Animation m_MobWalkingUp;
         Animation m_MobWalkingRight;
         Animation m_MobWalkingLeft;
+        float m_attackClock;
+        bool m_canAttack;
 
 	private:
         sf::Color m_activeColor;
@@ -45,6 +49,7 @@ class DynamicActor : public Actor {
 		sf::Vector2f m_position;
         bool m_knockback;
 		int m_speed;
+
 
 };
 

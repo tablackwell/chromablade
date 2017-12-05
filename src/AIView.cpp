@@ -94,8 +94,12 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
 //                    }
                 // collided with player
                 } else {
-                    AttackEvent *attackEvent = new AttackEvent(false, m_actor);
-                    m_game->queueEvent(attackEvent);
+                    if (m_actor->canAttack()) {
+                        AttackEvent *attackEvent = new AttackEvent(false, m_actor);
+                        m_game->queueEvent(attackEvent);
+                    }
+
+                    m_actor->updateAttackClock(deltaTime);
                 }
             }
 
