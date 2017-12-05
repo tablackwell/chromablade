@@ -257,7 +257,7 @@ void GameLogic::spawnGreyscale(){
   DynamicActor *actor = new Greyscale(sf::Color(255,255,0), 100, 20, sf::Vector2f(400,80), 200.f);
   m_view->setGreyscaleAnimation(*actor);
   m_greyscaleVec.push_back(actor);
-
+  m_view->setFadeGoal(0);
 }
 
 std::vector<DynamicActor*> GameLogic::getGreyscale(){

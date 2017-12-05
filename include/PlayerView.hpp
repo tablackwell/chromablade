@@ -34,6 +34,7 @@ public:
     void setMobAnimation(sf::Color col, DynamicActor &mob);
     void setGreyscaleAnimation(DynamicActor &greyscale);
     void setRockTexture(Actor &rock);
+    void setFadeGoal(int goal);
 
     // event related methods
     void setListener();
@@ -117,6 +118,7 @@ private: //vars and objs
     sf::Sprite m_greyOverlay;
     sf::Texture m_greyOverlayTexture;
     int fadeValue = 0;
+    int fadeGoal = 254;
 };
 
 #endif
