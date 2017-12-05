@@ -481,7 +481,7 @@ bool PlayerView::isOpen(){
 void PlayerView::update(float &deltaTime){
     updateHealthBar();
     if (isAttacking) {
-        if (m_sword.getRotation() < 80 || m_sword.getRotation() > 260) {
+        if (m_sword.getRotation() < 80 || m_sword.getRotation() > 280) {
             swingSword(deltaTime);
         }
         else {
@@ -496,17 +496,17 @@ void PlayerView::update(float &deltaTime){
 
 /* Play sword animation */
 void PlayerView::swingSword(float deltaTime) {
-    if (m_currAnimation == &m_walkingUp) { // works
-        m_sword.rotate(deltaTime * 600);
+    if (m_currAnimation == &m_walkingUp) {
+        m_sword.rotate(deltaTime * 800);
     }
     else if (m_currAnimation == &m_walkingDown) {
-        m_sword.rotate(deltaTime * -600);
+        m_sword.rotate(deltaTime * -800);
     }
-    else if (m_currAnimation == &m_walkingLeft) { // works
-        m_sword.rotate(deltaTime * 600);
+    else if (m_currAnimation == &m_walkingLeft) {
+        m_sword.rotate(deltaTime * 800);
     }
     else if (m_currAnimation == &m_walkingRight) {
-        m_sword.rotate(deltaTime * -600);
+        m_sword.rotate(deltaTime * -800);
     }
 }
 
