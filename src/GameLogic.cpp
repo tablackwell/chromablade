@@ -572,7 +572,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             sf::Vector2f size = m_view->getCameraSize();
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 1, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
