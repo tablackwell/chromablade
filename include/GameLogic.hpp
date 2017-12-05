@@ -45,8 +45,9 @@ public:
     sf::Vector2i getNumNodes();
 
 private:
-    bool checkCollisions(const sf::FloatRect& fr);
+    bool checkCollisions(sf::FloatRect fr, int extra);
     bool checkDoors(sf::FloatRect fr, int extra);
+    bool checkPlayer(sf::FloatRect fr, int extra);
     bool checkPortals(const sf::FloatRect& fr);
     void playerAttack(Direction dir);
     void moveMobs(float &deltaTime);

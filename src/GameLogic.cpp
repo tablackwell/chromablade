@@ -142,7 +142,13 @@ void GameLogic::setListener() {
 
 
 /* Check collision with tiles, rocks and mobs */
-bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
+bool GameLogic::checkCollisions(sf::FloatRect fr, int extra) {
+    /* Increase bounds if necessary. */
+    fr.top -= TILE_DIM * extra;
+    fr.left -= TILE_DIM * extra;
+    fr.width += TILE_DIM * 2 * extra;
+    fr.height += TILE_DIM * 2 * extra;
+
     /* Check intersections with mini collision tiles. */
     for(int i = 0; i < m_collisionVector.size(); i++){
         if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
@@ -162,9 +168,9 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
     /* Check intersections with mobs. */
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
-            //std::cout << "MOB COLLISION! \n";
-            enemyAttack(m_mobs[i]);
-            std::cout<<"Player health"<<m_player.getHealth();
+            std::cout << "MOB COLLISION! \n";
+//            enemyAttack(m_mobs[i]);
+//            std::cout<<"Player health"<<m_player.getHealth();
             return true;
         }
     }
@@ -185,6 +191,21 @@ bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
         if (fr.intersects(m_doors[i].getGlobalBounds())) {
             return true;
         }
+    }
+    return false;
+}
+
+/* Checks intersection with player */
+bool GameLogic::checkPlayer(sf::FloatRect fr, int extra) {
+    /* Increase bounds if necessary. */
+    fr.top -= TILE_DIM * extra;
+    fr.left -= TILE_DIM * extra;
+    fr.width += TILE_DIM * 2 * extra;
+    fr.height += TILE_DIM * 2 * extra;
+
+    /* Check intersections with player bounds. */
+    if (fr.intersects(m_view->getGlobalBounds())) {
+        return true;
     }
     return false;
 }
@@ -368,7 +389,7 @@ void GameLogic::moveChar(const EventInterface& event) {
     m_view->drawAnimation(dir, moving, noKeyPressed, deltaTime);
 
     /* Check collisions. */
-    if(checkCollisions(m_sprite->getGlobalBounds())){
+    if(checkCollisions(m_sprite->getGlobalBounds(), 0)){
         setCharPosition(prev);
     }
 
@@ -489,7 +510,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             sf::Vector2f size = m_view->getCameraSize();
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 5, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
@@ -537,6 +558,7 @@ void GameLogic::spawn(const EventInterface& event) {
     sf::FloatRect tile;
     int rx, ry, x, y;
 
+    bool cond = true;
     for (int i=0; i<count; i++) {
         /* while not on wall or near door... */
         do {
@@ -548,7 +570,12 @@ void GameLogic::spawn(const EventInterface& event) {
 
             tile.left = x; tile.top = y;
             tile.width = tile.height = TILE_DIM;
-        } while (checkCollisions(tile) || checkDoors(tile, 3));
+
+            cond = checkCollisions(tile, 1) || checkDoors(tile, 2);
+            if (actorType == Actor::Mob) {
+                cond = cond || checkPlayer(tile, 10);
+            }
+        } while (cond);
 
         /* have a valid spawn location. */
         if (actorType == Actor::Rock) {

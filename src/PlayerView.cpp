@@ -54,7 +54,7 @@ void PlayerView::init(){
     m_sword.setTexture(m_swordTexture);
     m_sword.setColor(sf::Color(255, 0, 0));
     m_sword.setTextureRect(sf::IntRect(21, 111, 42, 57));
-    m_sword.setScale(0.5,0.5);
+    m_sword.setScale(0.7,0.7);
 
     // Load character animations
     m_walkingDown.setSpriteSheet(m_charTexture);
@@ -95,7 +95,7 @@ void PlayerView::resetPlayer() {
     m_currAnimation = &m_walkingDown;
     m_animatedSprite.setPosition(HUB_POS);
     setSwordOrientation();
-    m_animatedSprite.setScale(0.9f,0.9f);
+    m_animatedSprite.setScale(0.85f,0.85f);
     m_animatedSprite.play(*m_currAnimation);
     isAttacking = false;
     m_drawPlayer = true;
