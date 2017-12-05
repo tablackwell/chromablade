@@ -217,6 +217,10 @@ void PlayerView::setGameApplication(ChromaBlade* game) {
     m_game = game;
 }
 
+/* Return global bounds of the sprite. */
+sf::FloatRect PlayerView::getGlobalBounds() {
+    return m_animatedSprite.getGlobalBounds();
+}
 
 /* Handle user inputs */
 void PlayerView::handleInput(float deltaTime) {

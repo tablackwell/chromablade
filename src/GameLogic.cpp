@@ -320,7 +320,8 @@ int GameLogic::getLevelsCleared() {
 
 void GameLogic::moveMobs(float &deltaTime) {
     sf::Vector2f pos = m_player.getPosition();
-    sf::Vector2f target(pos.x + TILE_DIM / 2, pos.y + TILE_DIM / 2);
+    sf::FloatRect gb = m_view->getGlobalBounds();
+    sf::Vector2f target(pos.x + gb.width / 2, pos.y + gb.height / 2);
 
     for (int i=0; i<m_aiviews.size(); i++) {
         m_aiviews[i]->move(target, deltaTime);
