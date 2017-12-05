@@ -32,6 +32,7 @@ public:
     void setGameApplication(ChromaBlade* game);
     void clearTileMaps();
     void setMobAnimation(sf::Color col, DynamicActor &mob);
+    void setGreyscaleAnimation(DynamicActor &greyscale);
     void setRockTexture(Actor &rock);
     sf::Vector2f getPosition() const;
     sf::FloatRect getGlobalBounds() const;
@@ -50,6 +51,8 @@ public:
     void resetCamera();
     sf::Vector2f getCameraCenter();
     sf::Vector2f getCameraSize();
+
+    void fadeOut();
 
 private: //vars and objs
     void setSwordOrientation();
@@ -77,6 +80,10 @@ private: //vars and objs
     Animation m_yellowMobWalkingUp;
     Animation m_yellowMobWalkingRight;
     Animation m_yellowMobWalkingLeft;
+    Animation m_greyMobWalkingDown;
+    Animation m_greyMobWalkingUp;
+    Animation m_greyMobWalkingRight;
+    Animation m_greyMobWalkingLeft;
     sf::View m_camera;
     sf::View m_pauseCamera;
     sf::FloatRect m_boundaryBox;
@@ -88,6 +95,8 @@ private: //vars and objs
     sf::Texture m_monsterTexture;
     sf::Texture m_swordTexture;
     sf::Sprite m_sword;
+
+
     //sf::RectangleShape m_filter;
     GameLogic* m_gameLogic;
     ChromaBlade* m_game;
@@ -103,6 +112,13 @@ private: //vars and objs
     sf::SoundBuffer m_swingBuffer;
     sf::Sound m_switchSound;
     sf::SoundBuffer m_switchBuffer;
+
+    /* Cheesy fade-in stuff */
+    sf::Clock clock;
+    sf::Time fadeTimer;
+    sf::Sprite m_greyOverlay;
+    sf::Texture m_greyOverlayTexture;
+    int fadeValue = 0;
 };
 
 #endif

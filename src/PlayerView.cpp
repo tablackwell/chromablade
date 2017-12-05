@@ -88,6 +88,14 @@ void PlayerView::init(){
     setState(Process::RUNNING);
     m_camera.setSize(WIDTH,HEIGHT);
     m_pauseCamera.reset(sf::FloatRect(0, 0, WIDTH, HEIGHT));
+
+    //Overlay image for greyscale thingy
+    if(!m_greyOverlayTexture.loadFromFile("../res/level/Hub/hubgrey.png")){
+      //error...
+    }
+    m_greyOverlay.setTexture(m_greyOverlayTexture);
+    m_greyOverlay.setScale(2.f, 2.f);
+    m_greyOverlay.setColor(sf::Color(255,255,255,fadeValue));
     //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
 
@@ -125,6 +133,9 @@ void PlayerView::updateHealthBar() {
     m_health.setPosition(sf::Vector2f(x, y));
 }
 
+void PlayerView::fadeOut(){
+
+}
 
 /* Load animation for monsters */
 void PlayerView::loadMonsterAnimation() {
@@ -194,6 +205,27 @@ void PlayerView::loadMonsterAnimation() {
     m_yellowMobWalkingUp.addFrame(sf::IntRect(96, 64, 32, 32));
     m_yellowMobWalkingUp.addFrame(sf::IntRect(128, 64, 32, 32));
     m_yellowMobWalkingUp.addFrame(sf::IntRect(160, 64, 32, 32));
+
+    m_greyMobWalkingUp.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingDown.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
+    m_greyMobWalkingDown.addFrame(sf::IntRect(32, 0, 32, 32));
+    m_greyMobWalkingDown.addFrame(sf::IntRect(64, 0, 32, 32));
+
+    m_greyMobWalkingLeft.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingLeft.addFrame(sf::IntRect(288, 0, 32, 32));
+    m_greyMobWalkingLeft.addFrame(sf::IntRect(320, 0, 32, 32));
+    m_greyMobWalkingLeft.addFrame(sf::IntRect(352, 0, 32, 32));
+
+    m_greyMobWalkingRight.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingRight.addFrame(sf::IntRect(384, 0, 32, 32));
+    m_greyMobWalkingRight.addFrame(sf::IntRect(416, 0, 32, 32));
+    m_greyMobWalkingRight.addFrame(sf::IntRect(448, 0, 32, 32));
+
+    m_greyMobWalkingUp.setSpriteSheet(m_monsterTexture);
+    m_greyMobWalkingUp.addFrame(sf::IntRect(96, 0, 32, 32));
+    m_greyMobWalkingUp.addFrame(sf::IntRect(128, 0, 32, 32));
+    m_greyMobWalkingUp.addFrame(sf::IntRect(160, 0, 32, 32));
 }
 
 
@@ -243,6 +275,7 @@ void PlayerView::handleInput(float deltaTime) {
                 m_game->queueEvent(loadMap);
                 resetCamera();
                 updateCamera(HUB_CAM);
+                fadeTimer = clock.getElapsedTime();
             }
             else if (rc == 2) { // Selected Instruction
                 ChangeStateEvent* changeState = new ChangeStateEvent(GameState::Instruction);
@@ -414,6 +447,7 @@ void PlayerView::draw() {
     std::vector<Actor*> rocks = m_gameLogic->getRocks();
     std::vector<DynamicActor*> mobs = m_gameLogic->getMobs();
 
+
     // Render the content depending on the game state
     switch(state) {
         case GameState::Title:
@@ -433,6 +467,14 @@ void PlayerView::draw() {
         default:
             m_window->draw(m_map);
             m_window->draw(m_overlay);
+            if(state == GameState::Hub){
+              m_window->draw(m_greyOverlay);
+              m_greyOverlay.setColor(sf::Color(255,255,255,fadeValue));
+              if(fadeValue < 254){
+                fadeValue = fadeValue +2;
+              }
+            }
+
             for (int i=0; i<rocks.size(); i++) {
                 rocks[i]->draw(m_window);
             }
@@ -446,6 +488,11 @@ void PlayerView::draw() {
                 m_window->draw(m_animatedSprite);
                 m_window->draw(m_totalHealth);
                 m_window->draw(m_health);
+            }
+
+            if(state == GameState::BossLevel){
+              DynamicActor* greyscale = m_gameLogic->getGreyscale()[0];
+              greyscale->draw(m_window);
             }
 
             /* Debug stuff */
@@ -490,7 +537,7 @@ bool PlayerView::isOpen(){
 void PlayerView::update(float &deltaTime){
     updateHealthBar();
     if (isAttacking) {
-        if (m_sword.getRotation() < 70 || m_sword.getRotation() > 290) {
+        if (m_sword.getRotation() < 80 || m_sword.getRotation() > 280) {
             swingSword(deltaTime);
         }
         else {
@@ -505,17 +552,17 @@ void PlayerView::update(float &deltaTime){
 
 /* Play sword animation */
 void PlayerView::swingSword(float deltaTime) {
-    if (m_currAnimation == &m_walkingUp) { // works
-        m_sword.rotate(deltaTime * 600);
+    if (m_currAnimation == &m_walkingUp) {
+        m_sword.rotate(deltaTime * 800);
     }
     else if (m_currAnimation == &m_walkingDown) {
-        m_sword.rotate(deltaTime * -600);
+        m_sword.rotate(deltaTime * -800);
     }
-    else if (m_currAnimation == &m_walkingLeft) { // works
-        m_sword.rotate(deltaTime * 600);
+    else if (m_currAnimation == &m_walkingLeft) {
+        m_sword.rotate(deltaTime * 800);
     }
     else if (m_currAnimation == &m_walkingRight) {
-        m_sword.rotate(deltaTime * -600);
+        m_sword.rotate(deltaTime * -800);
     }
 }
 
@@ -715,6 +762,10 @@ void PlayerView::playerAttacked(const EventInterface &event) {
     }
 }
 
+void PlayerView::setGreyscaleAnimation(DynamicActor &greyscale){
+  greyscale.setAnimation(m_greyMobWalkingLeft, m_greyMobWalkingRight, m_greyMobWalkingUp, m_greyMobWalkingDown);
+}
+
 
 void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
     if (col == sf::Color::Red) {
@@ -727,6 +778,7 @@ void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
         mob.setAnimation(m_yellowMobWalkingLeft, m_yellowMobWalkingRight, m_yellowMobWalkingUp, m_yellowMobWalkingDown);
     }
 }
+
 
 void PlayerView::setRockTexture(Actor &rock) {
     rock.setTexture(*m_map.getTileSet());

@@ -3,6 +3,7 @@
 #include "PlayerView.hpp"
 #include "AIView.hpp"
 #include "Mob.hpp"
+#include "Greyscale.hpp"
 #include "Macros.hpp"
 
 #include "MoveEvent.hpp"
@@ -140,7 +141,6 @@ void GameLogic::setListener() {
 
 }
 
-
 /* Check collision with tiles, rocks and mobs */
 bool GameLogic::checkCollisions(sf::FloatRect fr, int extra) {
     /* Increase bounds if necessary. */
@@ -149,14 +149,11 @@ bool GameLogic::checkCollisions(sf::FloatRect fr, int extra) {
     fr.width += TILE_DIM * 2 * extra;
     fr.height += TILE_DIM * 2 * extra;
 
-    /* Check intersections with mini collision tiles. */
-    for(int i = 0; i < m_collisionVector.size(); i++){
-        if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
-            //std::cout << "COLLISION! \n";
-            return true;
-        }
-    }
+    return (checkRockCollisions(fr) || checkTileCollisions(fr) || checkMobCollisions(fr));
+}
 
+/* Check collision with rocks. */
+bool GameLogic::checkRockCollisions(const sf::FloatRect& fr) {
     /* Check intersections with rock tiles. */
     for (int i = 0; i < m_rocks.size(); i++) {
         if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
@@ -164,8 +161,25 @@ bool GameLogic::checkCollisions(sf::FloatRect fr, int extra) {
             return true;
         }
     }
+    return false;
+}
 
-    /* Check intersections with mobs. */
+
+/* Check intersections with mini collision tiles. */
+bool GameLogic::checkTileCollisions(const sf::FloatRect& fr) {
+    /* Check intersections with mini collision tiles. */
+    for(int i = 0; i < m_collisionVector.size(); i++){
+        if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
+            //std::cout << "COLLISION! \n";
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/* Check intersections with mobs. */
+bool GameLogic::checkMobCollisions(const sf::FloatRect& fr) {
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
             std::cout << "MOB COLLISION! \n";
@@ -174,9 +188,16 @@ bool GameLogic::checkCollisions(sf::FloatRect fr, int extra) {
             return true;
         }
     }
+
+    /* Greyscale collision check*/
+    for (int i = 0; i < m_greyscaleVec.size(); i++){
+      if(fr.intersects(m_greyscaleVec[i]->getGlobalBounds())){
+        //call something
+        return true;
+      }
+    }
     return false;
 }
-
 
 /* Checks intersection with doors */
 bool GameLogic::checkDoors(sf::FloatRect fr, int extra) {
@@ -238,6 +259,7 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
         std::cout << "BOSS BATTLE TRIGGERED \n";
         DoorEvent *doorEvent = new DoorEvent(GameState::BossLevel, 1, Direction::Up);
         m_game->queueEvent(doorEvent);
+        spawnGreyscale();
       }
       else{
         std::cout << "BOSS BATTLE NOT YET AVAILABLE \n";
@@ -248,6 +270,16 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
     return false; //no portal collisions
 }
 
+void GameLogic::spawnGreyscale(){
+  DynamicActor *actor = new Greyscale(sf::Color(255,255,0), 100, 20, sf::Vector2f(400,80), 200.f);
+  m_view->setGreyscaleAnimation(*actor);
+  m_greyscaleVec.push_back(actor);
+
+}
+
+std::vector<DynamicActor*> GameLogic::getGreyscale(){
+  return m_greyscaleVec;
+}
 
 /* Returns rock vector */
 std::vector<Actor*> GameLogic::getRocks() {
@@ -283,21 +315,38 @@ sf::Vector2i GameLogic::getNumNodes() {
 /* Called after a player-initiated attackEvent */
 void GameLogic::playerAttack(Direction dir) {
     sf::FloatRect fr = m_sprite->getGlobalBounds();
+    float verticalMove, horizontalMove;
     // Change the size and position of the rectangle depending on the attack direction, attack range is 20px
     switch (dir) {
         case Up:
-            fr.height += 20;
-            fr.top -= 20;
+            fr.height += 40;
+            fr.top -= 40;
+            fr.width += 40;
+            fr.left -= 20;
+            verticalMove = -100;
+            horizontalMove = 0;
             break;
         case Down:
-            fr.height += 20;
+            fr.height += 40;
+            fr.width += 40;
+            fr.left -= 20;
+            verticalMove = 100;
+            horizontalMove = 0;
             break;
         case Left:
-            fr.width += 20;
-            fr.left -= 20;
+            fr.width += 40;
+            fr.left -= 40;
+            fr.height += 40;
+            fr.top -= 20;
+            verticalMove = 0;
+            horizontalMove = -100;
             break;
         case Right:
-            fr.width += 20;
+            fr.width += 40;
+            fr.height += 40;
+            fr.top -= 20;
+            verticalMove = 0;
+            horizontalMove = 100;
             break;
     }
 
@@ -305,7 +354,17 @@ void GameLogic::playerAttack(Direction dir) {
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds()) && m_mobs[i]->getColor() == m_player.getColor()) {
             m_player.attack(*m_mobs[i]);
+
+            // Bounce back
+            sf::Vector2f prevPos = m_mobs[i]->getPosition();
+            m_mobs[i]->setPosition(sf::Vector2f(prevPos.x + horizontalMove, prevPos.y + verticalMove));
+            if (checkTileCollisions(m_mobs[i]->getGlobalBounds()) || checkRockCollisions(m_mobs[i]->getGlobalBounds())) {
+                m_mobs[i]->setPosition(prevPos);
+            }
+
+            // Mob dies
             if (m_mobs[i]->getHealth() <= 0) {
+                // flashes and disappear
                 m_mobs.erase(m_mobs.begin() + i); // Delete the dead mobs
             }
         }
@@ -583,16 +642,20 @@ void GameLogic::spawn(const EventInterface& event) {
         } else if (actorType == Actor::Mob) {
             int col_int = rand() % (index + 1);
             sf::Color col;
-            if (col_int == 0) {
+            DynamicActor *actor;
+            if (col_int == 0) { // Red: high health, low attack, low speed, good for getting familiar with game
                 col = sf::Color(255, 0, 0);
+                actor = new Mob(col, 150, 4, sf::Vector2f(x,y), 250.f);
             }
-            else if (col_int == 1) {
+            else if (col_int == 1) { // Blue: low health, medium attack, high speed, medium mobs
                 col = sf::Color(0, 0, 255);
+                actor = new Mob(col, 100, 8, sf::Vector2f(x,y), 300.f);
             }
-            else {
+            else { // Yellow: low health, high attack, high speed, hard mobs
                 col = sf::Color(255, 255, 0);
+                actor = new Mob(col, 100, 12, sf::Vector2f(x,y), 350.f);
             }
-            DynamicActor *actor = new Mob(col, 100, 20, sf::Vector2f(x,y), 200.f);
+
             m_view->setMobAnimation(col, *actor);
             m_mobs.push_back(actor);
 
