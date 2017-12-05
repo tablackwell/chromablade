@@ -32,6 +32,7 @@ public:
     void setView(PlayerView* view);
     void setListener();
     std::vector<Actor*> getRocks();
+    void clearRocks();
     std::vector<DynamicActor*> getMobs();
     std::vector<DynamicActor*> getGreyscale();
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
@@ -92,6 +93,7 @@ private:
     sf::Vector2f dungeonReturnCamera;
     bool inCombat;
     bool bossAvailable;
+    bool isOnPortal;
 
     Player m_player;
     AnimatedSprite* m_sprite;

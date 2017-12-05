@@ -664,7 +664,7 @@ void PlayerView::loadMap(const EventInterface& event) {
     const GameState state = loadMapEvent->getGameState();
 
     clearTileMaps();
-
+    m_gameLogic->clearRocks();
     switch (state) {
         case GameState::Hub:
             m_map.loadFromText("../res/tilesets/lightworld.png",

@@ -289,6 +289,10 @@ std::vector<Actor*> GameLogic::getRocks() {
     return m_rocks;
 }
 
+void GameLogic::clearRocks(){
+  m_rocks.clear();
+}
+
 
 /* Returns mob vector */
 std::vector<DynamicActor*> GameLogic::getMobs() {
@@ -477,7 +481,7 @@ void GameLogic::moveChar(const EventInterface& event) {
     if(m_game->getState() == GameState::Hub){
       bool portalDetected = checkPortals(m_sprite->getGlobalBounds());
       if(portalDetected){
-        dungeonReturnPosition = prev;
+        dungeonReturnPosition = sf::Vector2f(prev.x, prev.y + 20);
         dungeonReturnCamera = m_view->getCameraCenter();
       }
     }
