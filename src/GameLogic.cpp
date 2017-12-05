@@ -384,22 +384,24 @@ void GameLogic::playerAttack(Direction dir) {
             }
         }
     }
-    if(fr.intersects(m_greyscaleVec[0]->getGlobalBounds())){
-      m_player.attack(*m_greyscaleVec[0]);
-      m_greyscaleVec[0]->setKnockback(true);
-      sf::FloatRect mgb = m_greyscaleVec[0]->getGlobalBounds();
-      mgb.height += abs(verticalMove);
-      mgb.width += abs(horizontalMove);
-      if (verticalMove < 0) {
-          mgb.top += verticalMove;
-      }
-      if (horizontalMove < 0) {
-          mgb.left += horizontalMove;
-      }
-      if(m_greyscaleVec[0]->getHealth() <= 0){
-        DoorEvent *doorEvent = new DoorEvent(GameState::Hub, false, dir);
-        m_game->queueEvent(doorEvent);
-        //go back to start
+    if(m_game->getState() == GameState::BossLevel){
+      if(fr.intersects(m_greyscaleVec[0]->getGlobalBounds())){
+        m_player.attack(*m_greyscaleVec[0]);
+        m_greyscaleVec[0]->setKnockback(true);
+        sf::FloatRect mgb = m_greyscaleVec[0]->getGlobalBounds();
+        mgb.height += abs(verticalMove);
+        mgb.width += abs(horizontalMove);
+        if (verticalMove < 0) {
+            mgb.top += verticalMove;
+        }
+        if (horizontalMove < 0) {
+            mgb.left += horizontalMove;
+        }
+        if(m_greyscaleVec[0]->getHealth() <= 0){
+          DoorEvent *doorEvent = new DoorEvent(GameState::Hub, false, dir);
+          m_game->queueEvent(doorEvent);
+          //go back to start
+        }
       }
     }
 }
