@@ -96,6 +96,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                 } else {
                     AttackEvent *attackEvent = new AttackEvent(false, m_actor);
                     m_game->queueEvent(attackEvent);
+                    m_actor->updateAttackClock(deltaTime);
                 }
             }
 

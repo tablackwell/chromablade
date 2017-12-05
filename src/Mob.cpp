@@ -5,7 +5,11 @@ Mob::Mob(sf::Color color, float hp, float dmg, sf::Vector2f pos, int speed) : Dy
 }
 
 void Mob::attack(DynamicActor &target) {
-    float health = target.getHealth();
-    health -= getDamage();
-    target.setHealth(health);
+    if (m_canAttack) {
+        float health = target.getHealth();
+        health -= getDamage();
+        target.setHealth(health);
+        m_canAttack = false;
+        m_attackClock = 0;
+    }
 }
