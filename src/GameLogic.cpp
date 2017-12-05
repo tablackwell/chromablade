@@ -292,8 +292,9 @@ std::vector<Actor*> GameLogic::getRocks() {
     return m_rocks;
 }
 
-void GameLogic::clearRocks(){
+void GameLogic::clearActors(){
   m_rocks.clear();
+  m_mobs.clear();
 }
 
 

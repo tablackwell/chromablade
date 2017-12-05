@@ -228,7 +228,7 @@ void PlayerView::loadMonsterAnimation() {
     // m_greyMobWalkingUp.addFrame(sf::IntRect(96, 0, 32, 32));
     // m_greyMobWalkingUp.addFrame(sf::IntRect(128, 0, 32, 32));
     // m_greyMobWalkingUp.addFrame(sf::IntRect(160, 0, 32, 32));
-    
+
     m_greyMobWalkingDown.setSpriteSheet(m_greyscaleTexture);
     m_greyMobWalkingDown.addFrame(sf::IntRect(0, 0, 64, 64));
     m_greyMobWalkingDown.addFrame(sf::IntRect(64, 0, 64, 64));
@@ -687,7 +687,7 @@ void PlayerView::loadMap(const EventInterface& event) {
     const GameState state = loadMapEvent->getGameState();
 
     clearTileMaps();
-    m_gameLogic->clearRocks();
+    m_gameLogic->clearActors();
     switch (state) {
         case GameState::Hub:
             m_map.loadFromText("../res/tilesets/lightworld.png",
