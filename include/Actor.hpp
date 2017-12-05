@@ -14,13 +14,14 @@ public:
     Actor(Type type, sf::Vector2f size, sf::Vector2f pos);
     virtual void draw(sf::RenderWindow *window);
     virtual sf::FloatRect getGlobalBounds();
+    void setTexture(sf::Texture &texture);
 
     sf::RectangleShape m_rect;
 protected:
     Type m_type;
 
 private:
-    sf::Texture m_texture;
+//    sf::Texture m_texture;
 };
 
 #endif

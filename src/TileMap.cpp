@@ -266,3 +266,7 @@ void TileMap::clear() {
     m_height = 0;
 
 }
+
+sf::Texture* TileMap::getTileSet() {
+    return &m_tileset;
+}
