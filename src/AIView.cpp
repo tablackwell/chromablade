@@ -24,7 +24,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
 
     sf::Vector2f ppos = pview->getPosition();
     sf::FloatRect pgb = pview->getGlobalBounds();
-    sf::Vector2f target(ppos.x + pgb.width / 2, ppos.y + pgb.height / 2);
+    sf::Vector2f target(ppos.x + pgb.width * 0.4, ppos.y + pgb.height * 0.4);
 
     sf::Vector2i start((int) pos.x % WIDTH / MINI_TILE_DIM,
                        (int) pos.y % HEIGHT / MINI_TILE_DIM);
@@ -110,6 +110,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                 m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
                                                     pathMap, numNodes.x, numNodes.y);
                 printf("new route: |%s|\n", m_route.c_str());
+                if (m_route == "") return;
                 m_prevEnd = end;
                 m_walk = 0;
             // else same target, update new destination
