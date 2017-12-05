@@ -87,13 +87,14 @@ private:
     sf::RectangleShape m_bluePortal;
     sf::RectangleShape m_yellowPortal;
     sf::RectangleShape m_greyPortal;
-
+    sf::RectangleShape m_bossTrigger;
     int m_xBound;
     int m_yBound;
     sf::Vector2f dungeonReturnPosition;
     sf::Vector2f dungeonReturnCamera;
     bool inCombat;
     bool bossAvailable;
+    bool bossTriggered = false;
 
     Player m_player;
     AnimatedSprite* m_sprite;
@@ -101,6 +102,7 @@ private:
     PlayerView* m_view;
     std::vector<AIView*> m_aiviews;
     std::vector<BossScript*> m_bossScripts;
+    std::vector<AIView*> m_bossAIScripts;
     bool m_onDoor;
     bool m_levelToggled;
 };

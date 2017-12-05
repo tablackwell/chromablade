@@ -776,7 +776,8 @@ void PlayerView::playerAttacked(const EventInterface &event) {
 }
 
 void PlayerView::setGreyscaleAnimation(DynamicActor &greyscale){
-  greyscale.setAnimation(m_greyMobWalkingLeft, m_greyMobWalkingRight, m_greyMobWalkingUp, m_greyMobWalkingDown);
+  // greyscale.setAnimation(m_greyMobWalkingLeft, m_greyMobWalkingRight, m_greyMobWalkingUp, m_greyMobWalkingDown);
+  greyscale.setAnimation(m_redMobWalkingLeft, m_redMobWalkingRight, m_redMobWalkingUp, m_redMobWalkingDown);
 }
 
 

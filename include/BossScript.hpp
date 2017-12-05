@@ -21,6 +21,8 @@ private:
     sf::Vector2i m_di;
     sf::Vector2f m_dest;
     sf::Vector2f m_prevDist;
+    int currIndex;
+    sf::Vector2f currTarget;
     std::vector<sf::Vector2f> m_positions;
     std::string m_route;
     int m_walk;

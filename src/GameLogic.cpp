@@ -35,6 +35,8 @@ void GameLogic::init(){
     m_yellowPortal.setPosition(1984,32);
     m_greyPortal.setSize((sf::Vector2f(32,32)));
     m_greyPortal.setPosition(1184,880);
+    m_bossTrigger.setSize((sf::Vector2f(32,32)));
+    m_bossTrigger.setPosition(400,496);
     bossAvailable = false;
 
     /* Allocate memory for path maps. */
@@ -261,7 +263,7 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
 
     else if(fr.intersects(m_greyPortal.getGlobalBounds())){
       if(!bossAvailable){
-        std::cout << "BOSS BATTLE TRIGGERED \n";
+        std::cout << "LOAD BOSS ROOM \n";
         DoorEvent *doorEvent = new DoorEvent(GameState::BossLevel, 1, Direction::Up);
         m_game->queueEvent(doorEvent);
         spawnGreyscale();
@@ -276,13 +278,16 @@ bool GameLogic::checkPortals(const sf::FloatRect& fr){
 }
 
 void GameLogic::spawnGreyscale(){
-  DynamicActor *actor = new Greyscale(sf::Color(255,255,0), 100, 20, sf::Vector2f(356,80), 200.f);
+  DynamicActor *actor = new Greyscale(sf::Color(255,255,0), 100, 20, sf::Vector2f(356,80), 100.f);
   m_view->setGreyscaleAnimation(*actor);
   m_greyscaleVec.push_back(actor);
   m_view->setFadeGoal(0);
 
   BossScript *bossScript = new BossScript(actor, this, m_game);
   m_bossScripts.push_back(bossScript);
+
+  AIView *bossAIView = new AIView(actor, this, m_game);
+  m_bossAIScripts.push_back(bossAIView);
 }
 
 std::vector<DynamicActor*> GameLogic::getGreyscale(){
@@ -423,6 +428,12 @@ void GameLogic::updateGreyscale(float &deltaTime){
   for(int i = 0; i<m_bossScripts.size(); i++){
     m_bossScripts[i]->update(m_view, deltaTime);
   }
+  if(bossTriggered){
+    for(int i = 0; i<m_bossAIScripts.size(); i++){
+      m_bossAIScripts[i]->move(m_view, deltaTime);
+    }
+  }
+
 }
 
 /***************************** Event Triggered Functions ******************************/
@@ -487,6 +498,13 @@ void GameLogic::moveChar(const EventInterface& event) {
       if(portalDetected){
         dungeonReturnPosition = prev;
         dungeonReturnCamera = m_view->getCameraCenter();
+      }
+    }
+
+    if(m_game->getState() == GameState::BossLevel){
+      if(m_sprite->getGlobalBounds().intersects(m_bossTrigger.getGlobalBounds())){
+        std::cout << "BOSS BATTLE TRIGGERED \n";
+        bossTriggered = true;
       }
     }
 
