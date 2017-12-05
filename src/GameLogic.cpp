@@ -314,6 +314,7 @@ sf::Vector2i GameLogic::getNumNodes() {
 
 /* Called after a player-initiated attackEvent */
 void GameLogic::playerAttack(Direction dir) {
+    printf("playerAttack!\n");
     sf::FloatRect fr = m_sprite->getGlobalBounds();
     float verticalMove, horizontalMove;
     // Change the size and position of the rectangle depending on the attack direction, attack range is 20px
@@ -361,6 +362,8 @@ void GameLogic::playerAttack(Direction dir) {
             prevPos.y = round(prevPos.y / TILE_DIM) * TILE_DIM;
 
             m_mobs[i]->setPosition(sf::Vector2f(prevPos.x + horizontalMove, prevPos.y + verticalMove));
+            m_mobs[i]->setKnockback(true);
+
             if (checkTileCollisions(m_mobs[i]->getGlobalBounds()) || checkRockCollisions(m_mobs[i]->getGlobalBounds())) {
                 m_mobs[i]->setPosition(prevPos);
             }
@@ -368,7 +371,8 @@ void GameLogic::playerAttack(Direction dir) {
             // Mob dies
             if (m_mobs[i]->getHealth() <= 0) {
                 // flashes and disappear
-                m_mobs.erase(m_mobs.begin() + i); // Delete the dead mobs
+                m_mobs.erase(m_mobs.begin() + i); // Delete the dead mob
+                m_aiviews.erase(m_aiviews.begin() + i); // Delete the dead mob's aiview
             }
         }
     }
@@ -579,7 +583,6 @@ void GameLogic::useDoor(const EventInterface& event) {
 
 /* Triggered by an attackEvent */
 void GameLogic::attack(const EventInterface& event) {
-    printf("recv attackEvent!\n");
     const EventInterface *ptr = &event;
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
     if (attackEvent->isFromPlayer() == true) { // player attack
