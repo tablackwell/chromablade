@@ -37,8 +37,8 @@ void GameLogic::init(){
     bossAvailable = false;
 
     /* Allocate memory for path maps. */
-    m_numNodes.x = WIDTH / TILE_DIM;
-    m_numNodes.y = HEIGHT / TILE_DIM;
+    m_numNodes.x = WIDTH / MINI_TILE_DIM;
+    m_numNodes.y = HEIGHT / MINI_TILE_DIM;
     m_pathMap = new char* [m_numNodes.x];
     for (int i=0; i<m_numNodes.x; i++) {
         m_pathMap[i] = new char[m_numNodes.y];
@@ -347,8 +347,8 @@ void GameLogic::playerAttack(Direction dir) {
 
             // Bounce back
             sf::Vector2f prevPos = m_mobs[i]->getPosition();
-            prevPos.x = round(prevPos.x / TILE_DIM) * TILE_DIM;
-            prevPos.y = round(prevPos.y / TILE_DIM) * TILE_DIM;
+            prevPos.x = round(prevPos.x / MINI_TILE_DIM) * MINI_TILE_DIM;
+            prevPos.y = round(prevPos.y / MINI_TILE_DIM) * MINI_TILE_DIM;
 
             m_mobs[i]->setPosition(sf::Vector2f(prevPos.x + horizontalMove, prevPos.y + verticalMove));
             m_mobs[i]->setKnockback(true);
@@ -733,8 +733,8 @@ void GameLogic::pathMap(const EventInterface& event) {
             continue;
         }
 
-        int x = (int) gb.left % WIDTH / TILE_DIM;
-        int y = (int) gb.top % HEIGHT / TILE_DIM;
+        int x = (int) gb.left % WIDTH / MINI_TILE_DIM;
+        int y = (int) gb.top % HEIGHT / MINI_TILE_DIM;
         m_pathMap[x][y] = '#';
     }
 
@@ -748,16 +748,21 @@ void GameLogic::pathMap(const EventInterface& event) {
             continue;
         }
 
-        int x = (int) gb.left % WIDTH / TILE_DIM;
-        int y = (int) gb.top % HEIGHT / TILE_DIM;
-        if (x > 0 && y > 0) {
-            m_pathMap[x][y] = '#';
+        // Rocks are 32x32.
+        // Mob position is top-left oriented, so add padding on top and left.
+        for (int i=0; i<9; i++) {
+            int x = (int) gb.left % WIDTH / MINI_TILE_DIM - 1 + i / 3;
+            int y = (int) gb.top % HEIGHT / MINI_TILE_DIM - 1 + i % 3;
+            if (x > 0 && y > 0) {
+                m_pathMap[x][y] = '#';
+            }
         }
     }
 
-//    for(int y=0;y<m;y++) {
-//        for(int x=0;x<n;x++)
-//            printf("%c", m_pathMap[x][y]);
-//        printf("\n");
-//    }
+    for(int y=0;y<m;y++) {
+        printf("%2d ", y);
+        for(int x=0;x<n;x++)
+            printf("%c", m_pathMap[x][y]);
+        printf("\n");
+    }
 }

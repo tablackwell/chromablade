@@ -1,6 +1,7 @@
 #define WIDTH 800
 #define HEIGHT 608
 #define TILE_DIM 32
+#define MINI_TILE_DIM 16
 
 #define SPEED 200.f
 
