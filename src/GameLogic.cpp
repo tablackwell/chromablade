@@ -11,8 +11,6 @@
 #include "AttackEvent.hpp"
 #include "SpawnEvent.hpp"
 #include "SwitchColorEvent.hpp"
-#include "MoveMobsEvent.hpp"
-#include "SpawnPositionsEvent.hpp"
 #include "PathMapEvent.hpp"
 
 #include <iostream>
@@ -327,8 +325,6 @@ void GameLogic::moveMobs(float &deltaTime) {
     for (int i=0; i<m_aiviews.size(); i++) {
         m_aiviews[i]->move(target, deltaTime);
     }
-//    MoveMobsEvent* moveMobsEvent = new MoveMobsEvent(m_player.getPosition());
-//    m_game->queueEvent(moveMobsEvent);
 }
 
 /***************************** Event Triggered Functions ******************************/
@@ -496,9 +492,6 @@ void GameLogic::useDoor(const EventInterface& event) {
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
-//            SpawnPositionsEvent *spawnPositionsEvent
-//                = new SpawnPositionsEvent(m_rocks, m_mobs);
-//            m_game->queueEvent(spawnPositionsEvent);    
         }
     }
 }
@@ -583,18 +576,6 @@ void GameLogic::spawn(const EventInterface& event) {
         }
     }
 }
-
-///* Triggered by a SpawnPositionsEvent. */
-//void GameLogic::setSpawnPositions(const EventInterface& event) {
-//    const SpawnPositionsEvent *spawnPositionsEvent
-//        = dynamic_cast<const SpawnPositionsEvent*>(&event);
-//    std::vector<Actor*> rocks = spawnPositionsEvent->getRocks();
-//    std::vector<DynamicActor*> mobs = spawnPositionsEvent->getMobs();
-//
-//    for (int i=0; i<m_aiviews.size(); i++) {
-//        m_aiviews[i]->setSpawnPositions(rocks, mobs);
-//    }
-//}
 
 /* Triggered by a SwitchColorEvent */
 void GameLogic::switchColor(const EventInterface& event) {
