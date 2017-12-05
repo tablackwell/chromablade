@@ -134,66 +134,66 @@ void PlayerView::loadMonsterAnimation() {
     }
     // Red mob
     m_redMobWalkingDown.setSpriteSheet(m_monsterTexture);
-    m_redMobWalkingDown.addFrame(sf::IntRect(0, 32, 32, 32));
-    m_redMobWalkingDown.addFrame(sf::IntRect(32, 32, 32, 32));
-    m_redMobWalkingDown.addFrame(sf::IntRect(64, 32, 32, 32));
+    m_redMobWalkingDown.addFrame(sf::IntRect(0, 64, 64, 64));
+    m_redMobWalkingDown.addFrame(sf::IntRect(64, 64, 64, 64));
+    m_redMobWalkingDown.addFrame(sf::IntRect(128, 64, 64, 64));
 
     m_redMobWalkingLeft.setSpriteSheet(m_monsterTexture);
-    m_redMobWalkingLeft.addFrame(sf::IntRect(288, 32, 32, 32));
-    m_redMobWalkingLeft.addFrame(sf::IntRect(320, 32, 32, 32));
-    m_redMobWalkingLeft.addFrame(sf::IntRect(352, 32, 32, 32));
+    m_redMobWalkingLeft.addFrame(sf::IntRect(576, 64, 64, 64));
+    m_redMobWalkingLeft.addFrame(sf::IntRect(640, 64, 64, 64));
+    m_redMobWalkingLeft.addFrame(sf::IntRect(704, 64, 64, 64));
 
     m_redMobWalkingRight.setSpriteSheet(m_monsterTexture);
-    m_redMobWalkingRight.addFrame(sf::IntRect(384, 32, 32, 32));
-    m_redMobWalkingRight.addFrame(sf::IntRect(416, 32, 32, 32));
-    m_redMobWalkingRight.addFrame(sf::IntRect(448, 32, 32, 32));
+    m_redMobWalkingRight.addFrame(sf::IntRect(768, 64, 64, 64));
+    m_redMobWalkingRight.addFrame(sf::IntRect(832, 64, 64, 64));
+    m_redMobWalkingRight.addFrame(sf::IntRect(896, 64, 64, 64));
 
     m_redMobWalkingUp.setSpriteSheet(m_monsterTexture);
-    m_redMobWalkingUp.addFrame(sf::IntRect(192, 32, 32, 32));
-    m_redMobWalkingUp.addFrame(sf::IntRect(224, 32, 32, 32));
-    m_redMobWalkingUp.addFrame(sf::IntRect(256, 32, 32, 32));
+    m_redMobWalkingUp.addFrame(sf::IntRect(384, 64, 64, 64));
+    m_redMobWalkingUp.addFrame(sf::IntRect(448, 64, 64, 64));
+    m_redMobWalkingUp.addFrame(sf::IntRect(512, 64, 64, 64));
 
     // Blue mob
     m_blueMobWalkingDown.setSpriteSheet(m_monsterTexture);
-    m_blueMobWalkingDown.addFrame(sf::IntRect(0, 96, 32, 32));
-    m_blueMobWalkingDown.addFrame(sf::IntRect(32, 96, 32, 32));
-    m_blueMobWalkingDown.addFrame(sf::IntRect(64, 96, 32, 32));
+    m_blueMobWalkingDown.addFrame(sf::IntRect(0, 192, 64, 64));
+    m_blueMobWalkingDown.addFrame(sf::IntRect(64, 192, 64, 64));
+    m_blueMobWalkingDown.addFrame(sf::IntRect(128, 192, 64, 64));
 
     m_blueMobWalkingLeft.setSpriteSheet(m_monsterTexture);
-    m_blueMobWalkingLeft.addFrame(sf::IntRect(288, 96, 32, 32));
-    m_blueMobWalkingLeft.addFrame(sf::IntRect(320, 96, 32, 32));
-    m_blueMobWalkingLeft.addFrame(sf::IntRect(352, 96, 32, 32));
+    m_blueMobWalkingLeft.addFrame(sf::IntRect(576, 192, 64, 64));
+    m_blueMobWalkingLeft.addFrame(sf::IntRect(640, 192, 64, 64));
+    m_blueMobWalkingLeft.addFrame(sf::IntRect(704, 192, 64, 64));
 
     m_blueMobWalkingRight.setSpriteSheet(m_monsterTexture);
-    m_blueMobWalkingRight.addFrame(sf::IntRect(384, 96, 32, 32));
-    m_blueMobWalkingRight.addFrame(sf::IntRect(416, 96, 32, 32));
-    m_blueMobWalkingRight.addFrame(sf::IntRect(448, 96, 32, 32));
+    m_blueMobWalkingRight.addFrame(sf::IntRect(768, 192, 64, 64));
+    m_blueMobWalkingRight.addFrame(sf::IntRect(832, 192, 64, 64));
+    m_blueMobWalkingRight.addFrame(sf::IntRect(896, 192, 64, 64));
 
     m_blueMobWalkingUp.setSpriteSheet(m_monsterTexture);
-    m_blueMobWalkingUp.addFrame(sf::IntRect(96, 96, 32, 32));
-    m_blueMobWalkingUp.addFrame(sf::IntRect(128, 96, 32, 32));
-    m_blueMobWalkingUp.addFrame(sf::IntRect(160, 96, 32, 32));
+    m_blueMobWalkingUp.addFrame(sf::IntRect(192, 192, 64, 64));
+    m_blueMobWalkingUp.addFrame(sf::IntRect(256, 192, 64, 64));
+    m_blueMobWalkingUp.addFrame(sf::IntRect(320, 192, 64, 64));
 
     // Yellow mob
     m_yellowMobWalkingDown.setSpriteSheet(m_monsterTexture);
-    m_yellowMobWalkingDown.addFrame(sf::IntRect(0, 64, 32, 32));
-    m_yellowMobWalkingDown.addFrame(sf::IntRect(32, 64, 32, 32));
-    m_yellowMobWalkingDown.addFrame(sf::IntRect(64, 64, 32, 32));
+    m_yellowMobWalkingDown.addFrame(sf::IntRect(0, 128, 64, 64));
+    m_yellowMobWalkingDown.addFrame(sf::IntRect(32, 128, 64, 64));
+    m_yellowMobWalkingDown.addFrame(sf::IntRect(64, 128, 64, 64));
 
     m_yellowMobWalkingLeft.setSpriteSheet(m_monsterTexture);
-    m_yellowMobWalkingLeft.addFrame(sf::IntRect(288, 64, 32, 32));
-    m_yellowMobWalkingLeft.addFrame(sf::IntRect(320, 64, 32, 32));
-    m_yellowMobWalkingLeft.addFrame(sf::IntRect(352, 64, 32, 32));
+    m_yellowMobWalkingLeft.addFrame(sf::IntRect(576, 128, 64, 64));
+    m_yellowMobWalkingLeft.addFrame(sf::IntRect(640, 128, 64, 64));
+    m_yellowMobWalkingLeft.addFrame(sf::IntRect(704, 128, 64, 64));
 
     m_yellowMobWalkingRight.setSpriteSheet(m_monsterTexture);
-    m_yellowMobWalkingRight.addFrame(sf::IntRect(384, 64, 32, 32));
-    m_yellowMobWalkingRight.addFrame(sf::IntRect(416, 64, 32, 32));
-    m_yellowMobWalkingRight.addFrame(sf::IntRect(448, 64, 32, 32));
+    m_yellowMobWalkingRight.addFrame(sf::IntRect(768, 128, 32, 32));
+    m_yellowMobWalkingRight.addFrame(sf::IntRect(832, 128, 32, 32));
+    m_yellowMobWalkingRight.addFrame(sf::IntRect(896, 128, 32, 32));
 
     m_yellowMobWalkingUp.setSpriteSheet(m_monsterTexture);
-    m_yellowMobWalkingUp.addFrame(sf::IntRect(96, 64, 32, 32));
-    m_yellowMobWalkingUp.addFrame(sf::IntRect(128, 64, 32, 32));
-    m_yellowMobWalkingUp.addFrame(sf::IntRect(160, 64, 32, 32));
+    m_yellowMobWalkingUp.addFrame(sf::IntRect(192, 128, 32, 32));
+    m_yellowMobWalkingUp.addFrame(sf::IntRect(256, 128, 32, 32));
+    m_yellowMobWalkingUp.addFrame(sf::IntRect(320, 128, 32, 32));
 }
 
 
