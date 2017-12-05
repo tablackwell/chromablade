@@ -143,16 +143,14 @@ void GameLogic::setListener() {
 }
 
 
-/* Check collision with tiles, rocks and mobs */
+/* Check collision with rocks, tiles, mobs. */
 bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
-    /* Check intersections with mini collision tiles. */
-    for(int i = 0; i < m_collisionVector.size(); i++){
-        if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
-            //std::cout << "COLLISION! \n";
-            return true;
-        }
-    }
+    return (checkRockCollisions(fr) || checkTileCollisions(fr) || checkMobCollisions(fr));
+}
 
+
+/* Check collision with rocks. */
+bool GameLogic::checkRockCollisions(const sf::FloatRect& fr) {
     /* Check intersections with rock tiles. */
     for (int i = 0; i < m_rocks.size(); i++) {
         if (fr.intersects(m_rocks[i]->getGlobalBounds())) {
@@ -160,8 +158,25 @@ bool GameLogic::checkCollisions(const sf::FloatRect& fr) {
             return true;
         }
     }
+    return false;
+}
 
-    /* Check intersections with mobs. */
+
+/* Check intersections with mini collision tiles. */
+bool GameLogic::checkTileCollisions(const sf::FloatRect& fr) {
+    /* Check intersections with mini collision tiles. */
+    for(int i = 0; i < m_collisionVector.size(); i++){
+        if (fr.intersects(m_collisionVector[i].getGlobalBounds())){
+            //std::cout << "COLLISION! \n";
+            return true;
+        }
+    }
+    return false;
+}
+
+
+/* Check intersections with mobs. */
+bool GameLogic::checkMobCollisions(const sf::FloatRect& fr) {
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds())) {
             //std::cout << "MOB COLLISION! \n";
@@ -264,21 +279,30 @@ sf::Vector2i GameLogic::getNumNodes() {
 /* Called after a player-initiated attackEvent */
 void GameLogic::playerAttack(Direction dir) {
     sf::FloatRect fr = m_sprite->getGlobalBounds();
+    float verticalMove, horizontalMove;
     // Change the size and position of the rectangle depending on the attack direction, attack range is 20px
     switch (dir) {
         case Up:
-            fr.height += 30;
-            fr.top -= 30;
+            fr.height += 40;
+            fr.top -= 50;
+            verticalMove = -100;
+            horizontalMove = 0;
             break;
         case Down:
-            fr.height += 30;
+            fr.height += 40;
+            verticalMove = 100;
+            horizontalMove = 0;
             break;
         case Left:
-            fr.width += 30;
-            fr.left -= 30;
+            fr.width += 40;
+            fr.left -= 40;
+            verticalMove = 0;
+            horizontalMove = -100;
             break;
         case Right:
-            fr.width += 30;
+            fr.width += 40;
+            verticalMove = 0;
+            horizontalMove = 100;
             break;
     }
 
@@ -286,7 +310,17 @@ void GameLogic::playerAttack(Direction dir) {
     for (int i = 0; i < m_mobs.size(); i++) {
         if (fr.intersects(m_mobs[i]->getGlobalBounds()) && m_mobs[i]->getColor() == m_player.getColor()) {
             m_player.attack(*m_mobs[i]);
+
+            // Bounce back
+            sf::Vector2f prevPos = m_mobs[i]->getPosition();
+            m_mobs[i]->setPosition(sf::Vector2f(prevPos.x + horizontalMove, prevPos.y + verticalMove));
+            if (checkTileCollisions(m_mobs[i]->getGlobalBounds()) || checkRockCollisions(m_mobs[i]->getGlobalBounds())) {
+                m_mobs[i]->setPosition(prevPos);
+            }
+
+            // Mob dies
             if (m_mobs[i]->getHealth() <= 0) {
+                // flashes and disappear
                 m_mobs.erase(m_mobs.begin() + i); // Delete the dead mobs
             }
         }

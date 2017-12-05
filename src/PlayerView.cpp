@@ -719,6 +719,7 @@ void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
     }
 }
 
+
 void PlayerView::setRockTexture(Actor &rock) {
     rock.setTexture(*m_map.getTileSet());
 }
