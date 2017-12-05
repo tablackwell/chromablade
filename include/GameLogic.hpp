@@ -92,6 +92,7 @@ private:
     sf::Vector2f dungeonReturnCamera;
     bool inCombat;
     bool bossAvailable;
+    bool isOnPortal;
 
     Player m_player;
     AnimatedSprite* m_sprite;
