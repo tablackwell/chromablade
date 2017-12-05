@@ -25,6 +25,8 @@ class DynamicActor : public Actor {
 		void draw(sf::RenderWindow *window);
 		void setAnimation(Animation &leftAnimation, Animation &rightAnimation, Animation &upAnimation, Animation &downAnimation);
 		sf::FloatRect getGlobalBounds();
+        void setKnockback(bool b);
+        bool getKnockback();
 
 	protected:
         AnimatedSprite m_animatedSprite;
@@ -38,6 +40,7 @@ class DynamicActor : public Actor {
 		float m_health;
 		float m_damage; // Attack damage
 		sf::Vector2f m_position;
+        bool m_knockback;
 		int m_speed;
 
 };

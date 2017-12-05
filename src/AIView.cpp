@@ -11,6 +11,7 @@ AIView::AIView(DynamicActor *actor, GameLogic *gameLogic, ChromaBlade *game) {
     m_dest.x = m_dest. y = -1;
     m_route = "";
     m_walk = 0;
+    m_init = true;
 }
 
 void AIView::move(const PlayerView* pview, float &deltaTime) {
@@ -23,32 +24,42 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
 
     sf::Vector2f ppos = pview->getPosition();
     sf::FloatRect pgb = pview->getGlobalBounds();
-    sf::Vector2f target(ppos.x + pgb.width / 2, ppos.y + pgb.height / 2);
+    sf::Vector2f target(ppos.x + pgb.width / 2, ppos.y + pgb.height * 0.75);
 
     sf::Vector2i start((int) pos.x % WIDTH / TILE_DIM,
                        (int) pos.y % HEIGHT / TILE_DIM);
     sf::Vector2i end((int) target.x % WIDTH / TILE_DIM,
                      (int) target.y % HEIGHT / TILE_DIM);
 
+    printf("%d %d ", start.x, start.y);
+    printf("%d %d\n", end.x, end.y);
     // initialize
-    if (m_dest.x == -1 && m_dest.y == -1) {
+    if (m_init) {
         m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
                                             pathMap, numNodes.x, numNodes.y);
         printf("starting route: %s\n", m_route.c_str());
         m_prevEnd = end;
 
         m_walk = 0;
-        m_di.x = m_route[m_walk] - '0';
-        m_di.y = m_route[m_walk] - '0';
-        m_dest.x = ((int) pos.x / TILE_DIM + dx[m_di.x]) * TILE_DIM;
-        m_dest.y = ((int) pos.y / TILE_DIM + dy[m_di.y]) * TILE_DIM;
+        m_di = m_route[m_walk] - '0';
+        m_dest.x = ((int) pos.x / TILE_DIM + dx[m_di]) * TILE_DIM;
+        m_dest.y = ((int) pos.y / TILE_DIM + dy[m_di]) * TILE_DIM;
+        m_init = false;
     // already initialized
     } else {
         // if not at destination
         if (pos != m_dest) {
+            // if was knockbacked, reset
+            if (m_actor->getKnockback()) {
+                m_actor->setKnockback(false);
+                m_init = true;
+                printf("processed knockback!\n");
+                return;
+            }
+
             // move
-            sf::Vector2f newPos(pos.x + SPEED/1.7 * deltaTime * dx[m_di.x],
-                                pos.y + SPEED/1.7 * deltaTime * dy[m_di.y]);
+            sf::Vector2f newPos(pos.x + (SPEED/1.7 * deltaTime * dx[m_di]),
+                                pos.y + (SPEED/1.7 * deltaTime * dy[m_di]));
             gb.top = newPos.y;
             gb.left = newPos.x;
 
@@ -77,12 +88,12 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                     // reset if went past destination
                     if (dist.x > m_prevDist.x || dist.y > m_prevDist.y) {
                         m_actor->setPosition(m_dest);
+                        printf("resetting!\n");
                     } else {
                         m_prevDist = dist;
                     }
                 // collided with player
                 } else {
-                    printf("send attackEvent!\n");
                     AttackEvent *attackEvent = new AttackEvent(false, m_actor);
                     m_game->queueEvent(attackEvent);
                 }
@@ -101,12 +112,11 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             } else {
                 m_walk++;
             }
-            m_di.x = m_route[m_walk] - '0';
-            m_di.y = m_route[m_walk] - '0';
-            m_dest.x = ((int) pos.x / TILE_DIM + dx[m_di.x]) * TILE_DIM;
-            m_dest.y = ((int) pos.y / TILE_DIM + dy[m_di.y]) * TILE_DIM;
-            m_prevDist.x = abs(TILE_DIM * dx[m_di.x]);
-            m_prevDist.y = abs(TILE_DIM * dy[m_di.y]);
+            m_di = m_route[m_walk] - '0';
+            m_dest.x = ((int) pos.x / TILE_DIM + dx[m_di]) * TILE_DIM;
+            m_dest.y = ((int) pos.y / TILE_DIM + dy[m_di]) * TILE_DIM;
+            m_prevDist.x = abs(TILE_DIM * dx[m_di]);
+            m_prevDist.y = abs(TILE_DIM * dy[m_di]);
         }
     }
 }

@@ -314,6 +314,7 @@ sf::Vector2i GameLogic::getNumNodes() {
 
 /* Called after a player-initiated attackEvent */
 void GameLogic::playerAttack(Direction dir) {
+    printf("playerAttack!\n");
     sf::FloatRect fr = m_sprite->getGlobalBounds();
     float verticalMove, horizontalMove;
     // Change the size and position of the rectangle depending on the attack direction, attack range is 20px
@@ -358,6 +359,8 @@ void GameLogic::playerAttack(Direction dir) {
             // Bounce back
             sf::Vector2f prevPos = m_mobs[i]->getPosition();
             m_mobs[i]->setPosition(sf::Vector2f(prevPos.x + horizontalMove, prevPos.y + verticalMove));
+            m_mobs[i]->setKnockback(true);
+
             if (checkTileCollisions(m_mobs[i]->getGlobalBounds()) || checkRockCollisions(m_mobs[i]->getGlobalBounds())) {
                 m_mobs[i]->setPosition(prevPos);
             }
@@ -566,7 +569,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             sf::Vector2f size = m_view->getCameraSize();
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 1, size, center);
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
@@ -577,7 +580,6 @@ void GameLogic::useDoor(const EventInterface& event) {
 
 /* Triggered by an attackEvent */
 void GameLogic::attack(const EventInterface& event) {
-    printf("recv attackEvent!\n");
     const EventInterface *ptr = &event;
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
     if (attackEvent->isFromPlayer() == true) { // player attack
