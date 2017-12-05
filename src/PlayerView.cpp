@@ -94,7 +94,6 @@ void PlayerView::init(){
       //error...
     }
     m_greyOverlay.setTexture(m_greyOverlayTexture);
-    m_greyOverlay.setScale(2.f, 2.f);
     m_greyOverlay.setColor(sf::Color(255,255,255,fadeValue));
     //m_filter.setSize(sf::Vector2f(WIDTH,HEIGHT));
 }
