@@ -664,8 +664,6 @@ void PlayerView::loadMap(const EventInterface& event) {
     const GameState state = loadMapEvent->getGameState();
 
     clearTileMaps();
-    m_gameLogic->clearRocks();
-    m_gameLogic->clearEnemies();
 
     switch (state) {
         case GameState::Hub:

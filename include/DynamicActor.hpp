@@ -31,6 +31,7 @@ class DynamicActor : public Actor {
 		void move(int x, int y, float deltaTime);
 		int getSpeed();
 		void updateAttackClock(float deltaTime);
+		bool canAttack();
 
 	protected:
         AnimatedSprite m_animatedSprite;

@@ -128,4 +128,6 @@ void DynamicActor::updateAttackClock(float deltaTime) {
     }
 }
 
-
+bool DynamicActor::canAttack() {
+    return m_canAttack;
+}
