@@ -11,8 +11,7 @@ AIView::AIView(DynamicActor *actor, GameLogic *gameLogic) {
     m_walk = 0;
 }
 
-void AIView::move(const sf::Vector2f& target) {
-
+void AIView::move(const sf::Vector2f& target, float &deltaTime) {
     char **pathMap = m_gameLogic->getPathMap();
     sf::Vector2i numNodes = m_gameLogic->getNumNodes();
     sf::Vector2f pos = m_actor->getPosition();
@@ -39,7 +38,20 @@ void AIView::move(const sf::Vector2f& target) {
         // if not at destination
         if (pos != m_dest) {
             // move
-            m_actor->setPosition(sf::Vector2f(pos.x + dx[m_di.x], pos.y + dy[m_di.y]));
+            sf::Vector2f newPos(pos.x + SPEED/1.7 * deltaTime * dx[m_di.x],
+                                pos.y + SPEED/1.7 * deltaTime * dy[m_di.y]);
+            m_actor->setPosition(newPos);
+
+            sf::Vector2f dist;
+            dist.x = abs(newPos.x - m_dest.x);
+            dist.y = abs(newPos.y - m_dest.y);
+
+            // reset if went past destination
+            if (dist.x > m_prevDist.x || dist.y > m_prevDist.y) {
+                m_actor->setPosition(m_dest);
+            } else {
+                m_prevDist = dist;
+            }
         // reached destination
         } else {
             // if target has moved, get a new route
@@ -57,6 +69,8 @@ void AIView::move(const sf::Vector2f& target) {
             m_di.y = m_route[m_walk] - '0';
             m_dest.x = ((int) pos.x / TILE_DIM + dx[m_di.x]) * TILE_DIM;
             m_dest.y = ((int) pos.y / TILE_DIM + dy[m_di.y]) * TILE_DIM;
+            m_prevDist.x = abs(TILE_DIM * dx[m_di.x]);
+            m_prevDist.y = abs(TILE_DIM * dy[m_di.y]);
         }
     }
 }

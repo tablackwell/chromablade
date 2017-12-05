@@ -51,7 +51,7 @@ void GameLogic::update(float &deltaTime){
     GameState state = m_game->getState();
 
     if (state != GameState::Hub) {
-        moveMobs();
+        moveMobs(deltaTime);
     }
 }
 
@@ -320,9 +320,9 @@ int GameLogic::getLevelsCleared() {
     return index;
 }
 
-void GameLogic::moveMobs() {
+void GameLogic::moveMobs(float &deltaTime) {
     for (int i=0; i<m_aiviews.size(); i++) {
-        m_aiviews[i]->move(m_player.getPosition());
+        m_aiviews[i]->move(m_player.getPosition(), deltaTime);
     }
 //    MoveMobsEvent* moveMobsEvent = new MoveMobsEvent(m_player.getPosition());
 //    m_game->queueEvent(moveMobsEvent);
@@ -489,7 +489,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             sf::Vector2f size = m_view->getCameraSize();
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 1, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 5, size, center);
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
