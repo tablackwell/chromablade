@@ -15,7 +15,7 @@
 #include "PathMapEvent.hpp"
 
 #include <iostream>
-
+#include <cmath>
 
 GameLogic::GameLogic() : Process() {
 }
@@ -357,6 +357,9 @@ void GameLogic::playerAttack(Direction dir) {
 
             // Bounce back
             sf::Vector2f prevPos = m_mobs[i]->getPosition();
+            prevPos.x = round(prevPos.x / TILE_DIM) * TILE_DIM;
+            prevPos.y = round(prevPos.y / TILE_DIM) * TILE_DIM;
+
             m_mobs[i]->setPosition(sf::Vector2f(prevPos.x + horizontalMove, prevPos.y + verticalMove));
             if (checkTileCollisions(m_mobs[i]->getGlobalBounds()) || checkRockCollisions(m_mobs[i]->getGlobalBounds())) {
                 m_mobs[i]->setPosition(prevPos);
@@ -565,7 +568,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             sf::Vector2f size = m_view->getCameraSize();
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 1, size, center);
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
