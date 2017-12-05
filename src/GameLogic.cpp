@@ -458,10 +458,15 @@ void GameLogic::moveChar(const EventInterface& event) {
     /* Check doors. */
     bool doorDetected = checkDoors(m_sprite->getGlobalBounds(), 0);
     if (doorDetected && !m_onDoor) {
-        std::cout << "onDoor\n";
-        m_onDoor = true;
-        DoorEvent *doorEvent = new DoorEvent(m_game->getState(), 1, dir);
-        m_game->queueEvent(doorEvent);
+        if (m_mobs.size() == 0) {
+            std::cout << "onDoor\n";
+            m_onDoor = true;
+            DoorEvent *doorEvent = new DoorEvent(m_game->getState(), 1, dir);
+            m_game->queueEvent(doorEvent);
+        } else {
+            printf("%d\n", m_mobs.size());
+            setCharPosition(prev);
+        }
     }
     else if (!doorDetected && m_onDoor) {
         std::cout << "not onDoor\n";
@@ -572,7 +577,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             sf::Vector2f size = m_view->getCameraSize();
             SpawnEvent *spawnRocksEvent = new SpawnEvent(Actor::Rock, 10, size, center);
             m_game->queueEvent(spawnRocksEvent);
-            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 10, size, center);
+            SpawnEvent *spawnMobsEvent = new SpawnEvent(Actor::Mob, 1, size, center);
             m_game->queueEvent(spawnMobsEvent);
             PathMapEvent *pathMapEvent = new PathMapEvent(size, center);
             m_game->queueEvent(pathMapEvent);
