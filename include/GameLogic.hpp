@@ -60,7 +60,7 @@ private:
     bool checkMobCollisions(const sf::FloatRect& fr);
     bool checkDoors(sf::FloatRect fr, int extra);
     bool checkPlayer(sf::FloatRect fr, int extra);
-    bool checkPortals(const sf::FloatRect& fr);
+    bool checkPortals(const sf::FloatRect& fr, sf::Vector2f prev);
     void playerAttack(Direction dir);
     void moveMobs(float &deltaTime);
     void enemyAttack(DynamicActor* attacker);
@@ -82,9 +82,9 @@ private:
     std::vector<Actor*> m_rocks;
     std::vector<DynamicActor*> m_mobs;
     std::vector<DynamicActor*> m_greyscaleVec;
-    std::vector<sf::Vector2i> m_redCleared;
-    std::vector<sf::Vector2i> m_yellowCleared;
-    std::vector<sf::Vector2i> m_blueCleared;
+    std::vector<sf::Vector2i> m_redClearedRooms;
+    std::vector<sf::Vector2i> m_yellowClearedRooms;
+    std::vector<sf::Vector2i> m_blueClearedRooms;
     bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;
 
@@ -95,6 +95,7 @@ private:
     sf::RectangleShape m_bluePortal;
     sf::RectangleShape m_yellowPortal;
     sf::RectangleShape m_greyPortal;
+    bool m_clearedLevels[3];
 
     int m_xBound;
     int m_yBound;

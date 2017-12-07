@@ -31,6 +31,9 @@ void GameLogic::init(){
     for (int i=0; i<m_numNodes.x; i++) {
         m_pathMap[i] = new char[m_numNodes.y];
     }
+
+    /* No levels are cleared. */
+    m_clearedLevels[0] = m_clearedLevels[1] = m_clearedLevels[2] = false;
 }
 
 
@@ -225,36 +228,48 @@ bool GameLogic::checkPlayer(sf::FloatRect fr, int extra) {
 
 
 /* Check collision with portals */
-bool GameLogic::checkPortals(const sf::FloatRect& fr){
+bool GameLogic::checkPortals(const sf::FloatRect& fr, sf::Vector2f prev){
     if(fr.intersects(m_redPortal.getGlobalBounds())){
-      std::cout << "RED PORTAL TRIGGERED \n";
-      DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, true, Direction::Up);
-      m_game->queueEvent(doorEvent);
-      return true;
+        if (!m_clearedLevels[0]) {
+          std::cout << "RED PORTAL TRIGGERED \n";
+          DoorEvent *doorEvent = new DoorEvent(GameState::RedLevel, true, Direction::Up);
+          m_game->queueEvent(doorEvent);
+          return true;
+        } else {
+            setCharPosition(prev);
+        }
     }
 
     else if(fr.intersects(m_bluePortal.getGlobalBounds())){
-      std::cout << "BLUE PORTAL TRIGGERED \n";
-      DoorEvent *doorEvent = new DoorEvent(GameState::BlueLevel, true, Direction::Up);
-      m_game->queueEvent(doorEvent);
-      return true;
+        if (m_clearedLevels[0] && !m_clearedLevels[1]) {
+          std::cout << "BLUE PORTAL TRIGGERED \n";
+          DoorEvent *doorEvent = new DoorEvent(GameState::BlueLevel, true, Direction::Up);
+          m_game->queueEvent(doorEvent);
+          return true;
+        } else {
+            setCharPosition(prev);
+        }
     }
 
     else if(fr.intersects(m_yellowPortal.getGlobalBounds())){
-      std::cout << "YELLOW PORTAL TRIGGERED \n";
-      DoorEvent *doorEvent = new DoorEvent(GameState::YellowLevel, true, Direction::Up);
-      m_game->queueEvent(doorEvent);
-      return true;
+        if (m_clearedLevels[1] && !m_clearedLevels[2]) {
+          std::cout << "YELLOW PORTAL TRIGGERED \n";
+          DoorEvent *doorEvent = new DoorEvent(GameState::YellowLevel, true, Direction::Up);
+          m_game->queueEvent(doorEvent);
+          return true;
+        } else {
+            setCharPosition(prev);
+        }
     }
 
     else if(fr.intersects(m_greyPortal.getGlobalBounds())){
-      if(!m_bossAvailable){
+      if(m_clearedLevels[2]) {
         std::cout << "BOSS BATTLE TRIGGERED \n";
         DoorEvent *doorEvent = new DoorEvent(GameState::BossLevel, true, Direction::Up);
         m_game->queueEvent(doorEvent);
         spawnGreyscale();
-      }
-      else{
+      } else {
+          setCharPosition(prev);
         std::cout << "BOSS BATTLE NOT YET AVAILABLE \n";
         // TODO: display text to user
       }
@@ -598,7 +613,7 @@ void GameLogic::moveChar(const EventInterface& event) {
     }
 
     if(m_game->getState() == GameState::Hub){
-      bool portalDetected = checkPortals(m_sprite->getGlobalBounds());
+      bool portalDetected = checkPortals(m_sprite->getGlobalBounds(), prev);
       if(portalDetected){
         m_dungeonReturnPosition = sf::Vector2f(prev.x, prev.y + 20);
         m_dungeonReturnCamera = m_view->getCameraCenter();
@@ -693,6 +708,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             DoorEvent *doorEvent = new DoorEvent(GameState::Hub, false, dir);
             m_game->queueEvent(doorEvent);
             toggleLevel();
+            m_clearedLevels[(int) curState - (int) GameState::RedLevel] = true;
         }
         else {
             m_view->updateCamera(moveCam.x, moveCam.y);
@@ -711,13 +727,13 @@ void GameLogic::useDoor(const EventInterface& event) {
 
         std::vector<sf::Vector2i> *v;
         if (newState == GameState::RedLevel) {
-            v = &m_redCleared;
+            v = &m_redClearedRooms;
         }
         else if (newState == GameState::YellowLevel) {
-            v = &m_yellowCleared;
+            v = &m_yellowClearedRooms;
         }
         else if (newState == GameState::BlueLevel) {
-            v = &m_blueCleared;
+            v = &m_blueClearedRooms;
         }
         printf("size=%d\n", v->size());
 
