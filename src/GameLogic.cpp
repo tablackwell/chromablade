@@ -90,6 +90,7 @@ void GameLogic::setAnimatedSprite(AnimatedSprite* sprite){
 	m_sprite = sprite;
 }
 
+/* Boolean value to indicate if the player is in a dungeon*/
 void GameLogic::toggleLevel(){
 	m_levelToggled = !m_levelToggled;
 }
@@ -456,7 +457,8 @@ void GameLogic::unlockColor(GameState state) {
     }
 }
 
-
+/* Generates a pathmap upon a pathmap event
+The pathmap is used to generate movements of mobs.*/
 void GameLogic::pathMap(const EventInterface& event) {
     printf("pathMap!\n");
     const PathMapEvent *pathMapEvent = dynamic_cast<const PathMapEvent*>(&event);

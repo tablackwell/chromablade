@@ -90,10 +90,13 @@ bool TileMap::loadFromText(const std::string& tileset, std::string textFileName,
         fprintf(stderr, "loadFromText!\n");
         return true;
 }
+
+/* Returns the height of a particular tilemap*/
 int TileMap::getHeight(){
   return m_height;
 }
 
+/* Returns the tile width of a particular tilemap*/
 int TileMap::getWidth(){
   return m_width;
 }
@@ -200,6 +203,7 @@ bool TileMap::loadCollisionsFromText(const std::string& tileset, std::string tex
             }
         return true;
 }
+
 /*
 Loads door locations from a .csv file
 
@@ -267,6 +271,7 @@ void TileMap::clear() {
 
 }
 
+/* Returns a pointer to the tilset*/
 sf::Texture* TileMap::getTileSet() {
     return &m_tileset;
 }

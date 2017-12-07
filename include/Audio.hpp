@@ -14,15 +14,11 @@ public:
     void playTitle();
     void pauseTitle();
     void stopTitle();
-    void playDungeon();
-    void pauseDungeon();
-    void stopDungeon();
 
     void playSound();
 
 private:
     sf::Music m_title;
-    sf::Music m_dungeon;
 
     // TODO: add sound effects
     sf::SoundBuffer m_buf;
