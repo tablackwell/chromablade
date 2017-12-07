@@ -32,9 +32,40 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
 
     // initialize
     if (m_init) {
+        std::vector<int> xs, ys;
+        sf::FloatRect mgb;
+        
+        // Add collision markers for other mobs
+        for (int i = 0; i < mobs.size(); i++) {
+            mgb = mobs[i]->getGlobalBounds();
+
+            // Ignore self
+            if (mgb == gb) continue;
+
+            // Mobs are 32x32.
+            // Mob position is top-left oriented, so add padding on top and left.
+            for (int i=0; i<9; i++) {
+                int x = (int) mgb.left % WIDTH / MINI_TILE_DIM - 1 + i / 3;
+                int y = (int) mgb.top % HEIGHT / MINI_TILE_DIM - 1 + i % 3;
+                if (x > 0 && y > 0) {
+                    if (pathMap[x][y] != '#') {
+                        pathMap[x][y] = '#';
+                        xs.push_back(x);
+                        ys.push_back(y);
+                    }
+                }
+            }
+        }
+
+        // Find the path
         m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
                                             pathMap, numNodes.x, numNodes.y);
-        //printf("starting route: %s\n", m_route.c_str());
+
+        // Clean up collision markers for other mobs
+        for (int i=0; i<xs.size(); i++) {
+            pathMap[xs[i]][ys[i]] = ' ';
+        }
+
         m_prevEnd = end;
         if (m_route == "") return;
 
@@ -54,9 +85,8 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                 return;
             }
 
+            // set speeds based on color
             int speed = m_actor->getSpeed();
-//            sf::Vector2i d((int) (dx[m_di] * deltaTime * speed),
-//                           (int) (dy[m_di] * deltaTime * speed));
             sf::Vector2i d;
             if (speed == RED_SPEED) {
                 d.x = dx[m_di] * 1;
@@ -69,11 +99,11 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                 d.y = dy[m_di] * 4;
             }
 
-            sf::Vector2f newPos(pos.x + d.x, pos.y + d.y);
-
             // check intersection with other mobs
+            sf::Vector2f newPos(pos.x + d.x, pos.y + d.y);
             gb.top = newPos.y;
             gb.left = newPos.x;
+
             bool mobIntersect = false;
             for (int i = 0; i < mobs.size(); i++) {
                 sf::Vector2f mobPos = mobs[i]->getPosition();
@@ -91,18 +121,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                     // move if no mob-mob, mob-player collisions
                     m_actor->move(d.x, d.y, deltaTime);
 
-                    sf::Vector2f dist;
-                    dist.x = abs(newPos.x - m_dest.x);
-                    dist.y = abs(newPos.y - m_dest.y);
-
-                    // reset if went past destination
-//                    if (dist.x > m_prevDist.x || dist.y > m_prevDist.y) {
-//                        m_actor->setPosition(m_dest);
-//                        printf("resetting!\n");
-//                    } else {
-//                        m_prevDist = dist;
-//                    }
-                // collided with player
+                // else collided with player, so attack
                 } else {
                     if (m_actor->canAttack()) {
                         AttackEvent *attackEvent = new AttackEvent(false, m_actor);
@@ -117,21 +136,14 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
         } else {
             // if target has moved, get a new route
             if (end != m_prevEnd) {
-                m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
-                                                    pathMap, numNodes.x, numNodes.y);
-                //printf("new route: |%s|\n", m_route.c_str());
-                if (m_route == "") return;
-                m_prevEnd = end;
-                m_walk = 0;
-            // else same target, update new destination
+                m_init = true;
+            // else get next destination node
             } else {
                 m_walk++;
+                m_di = m_route[m_walk] - '0';
+                m_dest.x = ((int) pos.x / MINI_TILE_DIM + dx[m_di]) * MINI_TILE_DIM;
+                m_dest.y = ((int) pos.y / MINI_TILE_DIM + dy[m_di]) * MINI_TILE_DIM;
             }
-            m_di = m_route[m_walk] - '0';
-            m_dest.x = ((int) pos.x / MINI_TILE_DIM + dx[m_di]) * MINI_TILE_DIM;
-            m_dest.y = ((int) pos.y / MINI_TILE_DIM + dy[m_di]) * MINI_TILE_DIM;
-            m_prevDist.x = abs(MINI_TILE_DIM * dx[m_di]);
-            m_prevDist.y = abs(MINI_TILE_DIM * dy[m_di]);
         }
     }
 }

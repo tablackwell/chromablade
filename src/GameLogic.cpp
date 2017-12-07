@@ -479,8 +479,8 @@ void GameLogic::pathMap(const EventInterface& event) {
         gb = m_collisionVector[i].getGlobalBounds();
 
         // Outside of view.
-        if (gb.left < center.x - size.x / 2 || gb.left >= center.x + size.x / 2 ||
-            gb.top < center.y - size.x / 2 || gb.top >= center.y + size.x / 2) {
+        if ((gb.left < center.x - size.x / 2) || (gb.left >= center.x + size.x / 2) ||
+            (gb.top < center.y - size.x / 2) || (gb.top >= center.y + size.x / 2)) {
             continue;
         }
 
@@ -496,14 +496,16 @@ void GameLogic::pathMap(const EventInterface& event) {
     }
 
     // Rock tiles.
+    int count = 0;
     for (int i = 0; i < m_rocks.size(); i++) {
         gb = m_rocks[i]->getGlobalBounds();
 
         // Outside of view.
-        if (gb.left < center.x - size.x / 2 || gb.left >= center.x + size.x / 2 ||
-            gb.top < center.y - size.x / 2 || gb.top >= center.y + size.x / 2) {
+        if ((gb.left < center.x - size.x / 2) || (gb.left >= center.x + size.x / 2) ||
+            (gb.top < center.y - size.x / 2) || (gb.top >= center.y + size.x / 2)) {
             continue;
         }
+        count++;
 
         // Rocks are 32x32.
         // Mob position is top-left oriented, so add padding on top and left.
@@ -522,6 +524,7 @@ void GameLogic::pathMap(const EventInterface& event) {
             printf("%c", m_pathMap[x][y]);
         printf("\n");
     }
+    printf("num rocks %d\n", m_rocks.size());
 }
 
 
@@ -739,6 +742,7 @@ void GameLogic::attack(const EventInterface& event) {
     const AttackEvent *attackEvent = dynamic_cast<const AttackEvent*>(ptr);
     if (attackEvent->isFromPlayer() == true) { // player attack
         Direction dir = attackEvent->getDirection();
+    sf::Vector2f m_prevDist;
         playerAttack(dir);
     }
     else { // enemy attack
@@ -792,7 +796,7 @@ void GameLogic::spawn(const EventInterface& event) {
 
             cond = checkCollisions(tile, 1) || checkDoors(tile, 2);
             if (actorType == Actor::Mob) {
-                cond = cond || checkPlayer(tile, 10);
+                cond = cond || checkPlayer(tile, 5);
             }
         } while (cond);
 

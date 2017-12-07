@@ -19,7 +19,6 @@ private:
     ChromaBlade *m_game;
     sf::Vector2i m_prevEnd;
     sf::Vector2f m_dest;
-    sf::Vector2f m_prevDist;
     std::string m_route;
     int m_walk;
     int m_di;
