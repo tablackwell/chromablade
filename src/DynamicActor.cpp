@@ -4,6 +4,7 @@
 
 #include "DynamicActor.hpp"
 #include <iostream>
+#include <cmath>
 
 
 DynamicActor::DynamicActor() {
@@ -103,12 +104,25 @@ void DynamicActor::move(int x, int y, float deltaTime) {
     else {
         m_animatedSprite.play(m_MobWalkingDown);
     }
-//    m_animatedSprite.move(x * deltaTime * m_speed, y * deltaTime * m_speed);
-//    this->m_position.x += x * deltaTime * m_speed;
-//    this->m_position.y += y * deltaTime * m_speed;
-    m_animatedSprite.move(x, y);
-    this->m_position.x += x;
-    this->m_position.y += y;
+    sf::Vector2i v((int) (x * deltaTime * m_speed), (int) (y * deltaTime * m_speed));
+
+    v.x = (v.x > 4) ? 4 : v.x;
+    v.x = (v.x < -4) ? -4 : v.x;
+    v.y = (v.y > 4) ? 4 : v.y;
+    v.y = (v.y < -4) ? -4 : v.y;
+    if (v.x == 3) v.x = 4;
+    if (v.x == -3) v.x = -4;
+    if (v.y == 3) v.y = 4;
+    if (v.y == -3) v.y = -4;
+
+    printf("%d %d\n", v.x, v.y);
+
+    m_animatedSprite.move(v.x, v.y);
+    this->m_position.x += v.x;
+    this->m_position.y += v.y;
+//    m_animatedSprite.move(x, y);
+//    this->m_position.x += x;
+//    this->m_position.y += y;
     m_animatedSprite.update(sf::seconds(deltaTime));
 }
 
