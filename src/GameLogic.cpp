@@ -808,15 +808,15 @@ void GameLogic::spawn(const EventInterface& event) {
             DynamicActor *actor;
             if (col_int == 0) { // Red: high health, low attack, low speed, good for getting familiar with the game
                 col = sf::Color(255, 0, 0);
-                actor = new Mob(col, 150, 4, sf::Vector2f(x,y), 100.f);
+                actor = new Mob(col, 150, 4, sf::Vector2f(x,y), RED_SPEED);
             }
             else if (col_int == 1) { // Blue: medium health, medium attack, medium speed, medium mobs
                 col = sf::Color(0, 0, 255);
-                actor = new Mob(col, 100, 8, sf::Vector2f(x,y), 150.f);
+                actor = new Mob(col, 100, 8, sf::Vector2f(x,y), BLUE_SPEED);
             }
             else { // Yellow: low health, high attack, high speed, hard mobs
                 col = sf::Color(255, 255, 0);
-                actor = new Mob(col, 50, 12, sf::Vector2f(x,y), 200.f);
+                actor = new Mob(col, 50, 12, sf::Vector2f(x,y), YELLOW_SPEED);
             }
 
             m_view->setMobAnimation(col, *actor); // Give mob its animations
