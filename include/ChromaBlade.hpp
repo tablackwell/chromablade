@@ -5,22 +5,21 @@
 #include <SFML/Window.hpp>
 
 #include "ProcessManager.hpp"
-#include "PlayerView.hpp"
 #include "EventManager.hpp"
 #include "ChangeStateEvent.hpp"
 #include "GameLogic.hpp"
+#include "PlayerView.hpp"
 #include "GameState.hpp"
-#include "TileMap.hpp"
-#include "Title.hpp"
 #include "Audio.hpp"
 #include "EventType.hpp"
+#include "Macros.hpp"
+
 
 class ChromaBlade{
 public:
     ChromaBlade();
     void init();
     void run();
-    void pause();
     GameState getState();
     GameState getPrevState();
     void setState(GameState state);
@@ -36,9 +35,8 @@ private: // functions
     void handleEvents(float deltaTime);
     void registerListeners();
     void updateState(const EventInterface &event);
-    void shutdown(const EventInterface &event);
 
-private: // vars and objs
+private: // data
     GameLogic m_gameLogic;
     PlayerView m_view;
     EventManager m_eventManager;
