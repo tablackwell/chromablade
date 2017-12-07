@@ -268,7 +268,6 @@ void GameLogic::spawnGreyscale(){
   DynamicActor *actor = new Greyscale(sf::Color(255,255,0), 100, 20, sf::Vector2f(400,80), 100.f);
   m_view->setGreyscaleAnimation(*actor);
   m_greyscaleVec.push_back(actor);
-  m_view->setFadeGoal(0);
 
   AIView *aiview = new AIView(actor, this, m_game);
   m_aiviews.push_back(aiview);
@@ -397,10 +396,11 @@ void GameLogic::playerAttack(Direction dir) {
         if (horizontalKnockBack < 0) {
             mgb.left += horizontalKnockBack;
         }
-        if(m_greyscaleVec[0]->getHealth() <= 0){
+        if(m_greyscaleVec[0]->getHealth() <= 0){ // Greyscale dies
           DoorEvent *doorEvent = new DoorEvent(GameState::Hub, false, dir);
           m_game->queueEvent(doorEvent);
           //go back to start
+          m_view->setFadeGoal(0);
         }
       }
     }
@@ -410,7 +410,7 @@ void GameLogic::playerAttack(Direction dir) {
 /* Called after a enemy-initiated attackEvent */
 void GameLogic::enemyAttack(DynamicActor* attacker) {
     attacker->attack(m_player);
-    // Player died
+    // Player dies
     if (m_player.getHealth() <= 0) {
         ChangeStateEvent *changeState = new ChangeStateEvent(GameState::PlayerDied);
         m_game->queueEvent(changeState);
