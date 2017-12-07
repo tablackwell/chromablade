@@ -4,6 +4,7 @@
 
 #include "DynamicActor.hpp"
 #include <iostream>
+#include <cmath>
 
 
 DynamicActor::DynamicActor() {
@@ -93,21 +94,19 @@ bool DynamicActor::getKnockback() {
 
 void DynamicActor::move(int x, int y, float deltaTime) {
     Direction dir;
-    if (x == 1) {
+    if (x > 0) {
         m_animatedSprite.play(m_MobWalkingRight);
     }
-    else if (x == -1) {
+    else if (x < 0) {
         m_animatedSprite.play(m_MobWalkingLeft);
     }
-    else if (y == -1) {
+    else if (y < 0) {
         m_animatedSprite.play(m_MobWalkingUp);
     }
     else {
         m_animatedSprite.play(m_MobWalkingDown);
     }
-//    m_animatedSprite.move(x * deltaTime * m_speed, y * deltaTime * m_speed);
-//    this->m_position.x += x * deltaTime * m_speed;
-//    this->m_position.y += y * deltaTime * m_speed;
+
     m_animatedSprite.move(x, y);
     this->m_position.x += x;
     this->m_position.y += y;

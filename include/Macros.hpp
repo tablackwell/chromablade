@@ -4,6 +4,9 @@
 #define MINI_TILE_DIM 16
 
 #define SPEED 200.f
+#define RED_SPEED 100.f
+#define BLUE_SPEED 150.f
+#define YELLOW_SPEED 200.f
 
 #define HUB_POS sf::Vector2f(1184,320)
 #define RED_POS sf::Vector2f(65,1520)

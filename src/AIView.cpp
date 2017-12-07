@@ -54,11 +54,22 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                 return;
             }
 
-            // If movement is more than 1 pixel, bad things will happen...
-//            sf::Vector2f newPos(pos.x + (int) (SPEED/2 * deltaTime * dx[m_di]),
-//                                pos.y + (int) (SPEED/2 * deltaTime * dy[m_di]));
-            sf::Vector2f newPos(pos.x + dx[m_di],
-                                pos.y + dy[m_di]);
+            int speed = m_actor->getSpeed();
+//            sf::Vector2i d((int) (dx[m_di] * deltaTime * speed),
+//                           (int) (dy[m_di] * deltaTime * speed));
+            sf::Vector2i d;
+            if (speed == RED_SPEED) {
+                d.x = dx[m_di] * 1;
+                d.y = dy[m_di] * 1;
+            } else if (speed == BLUE_SPEED) {
+                d.x = dx[m_di] * 2;
+                d.y = dy[m_di] * 2;
+            } else if (speed == YELLOW_SPEED) {
+                d.x = dx[m_di] * 4;
+                d.y = dy[m_di] * 4;
+            }
+
+            sf::Vector2f newPos(pos.x + d.x, pos.y + d.y);
 
             // check intersection with other mobs
             gb.top = newPos.y;
@@ -78,7 +89,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             if (!mobIntersect) {
                 if (!gb.intersects(pgb)) {
                     // move if no mob-mob, mob-player collisions
-                    m_actor->move(dx[m_di], dy[m_di], deltaTime);
+                    m_actor->move(d.x, d.y, deltaTime);
 
                     sf::Vector2f dist;
                     dist.x = abs(newPos.x - m_dest.x);
