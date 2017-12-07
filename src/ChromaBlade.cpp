@@ -113,10 +113,10 @@ void ChromaBlade::queueEvent(EventInterface *event) {
 
 /* Add listeners to the EventManager */
 void ChromaBlade::registerListeners() {
-    // Subscribe to events.
+    // ChangeStateEvent
     std::function<void(const EventInterface &event)> changeState = std::bind(&ChromaBlade::updateState, this, std::placeholders::_1);
-    const EventListener m_listener1 = EventListener(changeState, EventType::changeStateEvent);
-    m_eventManager.addListener(m_listener1, EventType::changeStateEvent);
+    const EventListener changeStateListener = EventListener(changeState, EventType::changeStateEvent);
+    m_eventManager.addListener(changeStateListener, EventType::changeStateEvent);
 }
 
 
@@ -136,7 +136,7 @@ void ChromaBlade::updateState(const EventInterface &event) {
             case GameState::Hub:
                 // Start the game
                 m_view.setListener();
-                m_gameLogic.setListener();
+                m_gameLogic.setListeners();
                 printf("Changed state to Hub!\n");
                 break;
             case GameState::RedLevel:
