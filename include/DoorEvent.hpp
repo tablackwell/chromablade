@@ -12,6 +12,7 @@ public:
     const int isDungeon() const;
     const Direction getDirection() const;
     const GameState getGameState() const;
+    const sf::Vector2f getPrevPos() const;
 private:
     GameState m_state;
     Direction m_dir;

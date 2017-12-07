@@ -574,9 +574,14 @@ void GameLogic::moveChar(const EventInterface& event) {
     if (doorDetected && !m_onDoor) {
         if (m_mobs.size() == 0) {
             std::cout << "onDoor\n";
-            m_onDoor = true;
-            DoorEvent *doorEvent = new DoorEvent(m_game->getState(), true, dir);
-            m_game->queueEvent(doorEvent);
+            if ((dir == Direction::Left) && ((prev.x - WIDTH / 2) < 0)) {
+                setCharPosition(prev);
+            } else {
+                m_onDoor = true;
+                printf("door event!\n");
+                DoorEvent *doorEvent = new DoorEvent(m_game->getState(), true, dir);
+                m_game->queueEvent(doorEvent);
+            }
         } else {
             printf("%d\n", m_mobs.size());
             setCharPosition(prev);
@@ -653,25 +658,30 @@ void GameLogic::useDoor(const EventInterface& event) {
     else{
         sf::Vector2f pos = m_player.getPosition();
         sf::Vector2f new_pos;
+        sf::Vector2f moveCam;
         if (dir == Direction::Left) {
             new_pos.x = ((int) pos.x / (int) WIDTH) * WIDTH - 2 * TILE_DIM;
             new_pos.y = pos.y;
-            m_view->updateCamera(-WIDTH,0);
+            moveCam.x = -WIDTH;
+            moveCam.y = 0;
         }
         else if (dir == Direction::Right){
             new_pos.x = ((int) pos.x / (int) WIDTH + 1) * WIDTH + TILE_DIM;
             new_pos.y = pos.y;
-            m_view->updateCamera(WIDTH,0);
+            moveCam.x = WIDTH;
+            moveCam.y = 0;
         }
         else if (dir == Direction::Up){
             new_pos.x = pos.x;
             new_pos.y = ((int) pos.y / (int) HEIGHT) * HEIGHT - 2 * TILE_DIM;
-            m_view->updateCamera(0,-HEIGHT);
+            moveCam.x = 0;
+            moveCam.y = -HEIGHT;
         }
         else if (dir == Direction::Down){
             new_pos.x = pos.x;
             new_pos.y = ((int) pos.y / (int) HEIGHT + 1) * HEIGHT + TILE_DIM;
-          m_view->updateCamera(0,HEIGHT);
+            moveCam.x = 0;
+            moveCam.y = HEIGHT;
         }
 
         if (new_pos.x < 0 || new_pos.y < 0 || new_pos.x > m_xBound || new_pos.y > m_yBound) {
@@ -680,6 +690,7 @@ void GameLogic::useDoor(const EventInterface& event) {
             toggleLevel();
         }
         else {
+            m_view->updateCamera(moveCam.x, moveCam.y);
             setCharPosition(new_pos);
             m_onDoor = false;
         }
