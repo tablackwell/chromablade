@@ -94,37 +94,22 @@ bool DynamicActor::getKnockback() {
 
 void DynamicActor::move(int x, int y, float deltaTime) {
     Direction dir;
-    if (x == 1) {
+    if (x > 0) {
         m_animatedSprite.play(m_MobWalkingRight);
     }
-    else if (x == -1) {
+    else if (x < 0) {
         m_animatedSprite.play(m_MobWalkingLeft);
     }
-    else if (y == -1) {
+    else if (y < 0) {
         m_animatedSprite.play(m_MobWalkingUp);
     }
     else {
         m_animatedSprite.play(m_MobWalkingDown);
     }
-    sf::Vector2i v((int) (x * deltaTime * m_speed), (int) (y * deltaTime * m_speed));
 
-    v.x = (v.x > 4) ? 4 : v.x;
-    v.x = (v.x < -4) ? -4 : v.x;
-    v.y = (v.y > 4) ? 4 : v.y;
-    v.y = (v.y < -4) ? -4 : v.y;
-    if (v.x == 3) v.x = 4;
-    if (v.x == -3) v.x = -4;
-    if (v.y == 3) v.y = 4;
-    if (v.y == -3) v.y = -4;
-
-    printf("%d %d\n", v.x, v.y);
-
-    m_animatedSprite.move(v.x, v.y);
-    this->m_position.x += v.x;
-    this->m_position.y += v.y;
-//    m_animatedSprite.move(x, y);
-//    this->m_position.x += x;
-//    this->m_position.y += y;
+    m_animatedSprite.move(x, y);
+    this->m_position.x += x;
+    this->m_position.y += y;
     m_animatedSprite.update(sf::seconds(deltaTime));
 }
 

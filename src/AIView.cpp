@@ -55,9 +55,23 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             }
 
             // If movement is more than 1 pixel, bad things will happen...
-            sf::Vector2f newPos(pos.x + (int) (SPEED * deltaTime * dx[m_di]),
-                                pos.y + (int) (SPEED * deltaTime * dy[m_di]));
-            //printf("%d %d\n", (int) (SPEED * deltaTime * dx[m_di]), (int) (SPEED * deltaTime * dy[m_di]));
+            int speed = m_actor->getSpeed();
+            sf::Vector2i d((int) (dx[m_di] * deltaTime * speed),
+                           (int) (dy[m_di] * deltaTime * speed));
+
+            d.x = (d.x > 4) ? 4 : d.x;
+            d.x = (d.x < -4) ? -4 : d.x;
+            d.y = (d.y > 4) ? 4 : d.y;
+            d.y = (d.y < -4) ? -4 : d.y;
+            if (d.x == 3) d.x = 4;
+            if (d.x == -3) d.x = -4;
+            if (d.y == 3) d.y = 4;
+            if (d.y == -3) d.y = -4;
+
+            sf::Vector2f newPos(pos.x + d.x, pos.y + d.y);
+//            printf("%f %f\n", newPos.x, newPos.y);
+            //printf("%d %d\n", d.x, d.y);
+
 //            sf::Vector2f newPos(pos.x + dx[m_di],
 //                                pos.y + dy[m_di]);
 
@@ -79,8 +93,7 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             if (!mobIntersect) {
                 if (!gb.intersects(pgb)) {
                     // move if no mob-mob, mob-player collisions
-                    //m_actor->move(dx[m_di], dy[m_di], deltaTime);
-                    m_actor->move(dx[m_di], dy[m_di], deltaTime);
+                    m_actor->move(d.x, d.y, deltaTime);
 
                     sf::Vector2f dist;
                     dist.x = abs(newPos.x - m_dest.x);

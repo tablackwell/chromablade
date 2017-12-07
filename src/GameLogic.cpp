@@ -484,15 +484,21 @@ void GameLogic::pathMap(const EventInterface& event) {
             continue;
         }
 
-        for (int j=3; j>=0; j--) {
-            int x = (int) gb.left % WIDTH / MINI_TILE_DIM - 1 + j / 2;
-            int y = (int) gb.top % HEIGHT / MINI_TILE_DIM - 1 + j % 2;
-            if (y >= 2*18-1) break;
-            if (x >= 2*23) break;
-            if (x > 0 && y > 0) {
-                m_pathMap[x][y] = '#';
-            }
+        int x = (int) gb.left % WIDTH / MINI_TILE_DIM;
+        int y = (int) gb.top % HEIGHT / MINI_TILE_DIM;
+        if (x > 0 && y > 0) {
+            m_pathMap[x][y] = '#';
         }
+        if (y == 33) { printf("%d %d\n", x, y); }
+//        for (int j=3; j>=0; j--) {
+//            int x = (int) gb.left % WIDTH / MINI_TILE_DIM - 1 + j / 2;
+//            int y = (int) gb.top % HEIGHT / MINI_TILE_DIM - 1 + j % 2;
+//            //if (y >= 2*18-1) break;
+//            //if (x >= 2*23) break;
+//            if (x > 0 && y > 0) {
+//                m_pathMap[x][y] = '#';
+//            }
+//        }
     }
 
     // Rock tiles.
