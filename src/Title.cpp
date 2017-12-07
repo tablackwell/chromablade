@@ -5,6 +5,7 @@
 Title::Title() { };
 Title::~Title() { };
 
+/* The title screen */
 void Title::init() {
 
     // load background

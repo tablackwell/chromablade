@@ -208,27 +208,7 @@ void PlayerView::loadMonsterAnimation() {
     m_yellowMobWalkingUp.addFrame(sf::IntRect(128, 64, 32, 32));
     m_yellowMobWalkingUp.addFrame(sf::IntRect(160, 64, 32, 32));
 
-    // greyscale
-    // m_greyMobWalkingDown.setSpriteSheet(m_monsterTexture);
-    // m_greyMobWalkingDown.addFrame(sf::IntRect(0, 0, 32, 32));
-    // m_greyMobWalkingDown.addFrame(sf::IntRect(32, 0, 32, 32));
-    // m_greyMobWalkingDown.addFrame(sf::IntRect(64, 0, 32, 32));
-    //
-    // m_greyMobWalkingLeft.setSpriteSheet(m_monsterTexture);
-    // m_greyMobWalkingLeft.addFrame(sf::IntRect(288, 0, 32, 32));
-    // m_greyMobWalkingLeft.addFrame(sf::IntRect(320, 0, 32, 32));
-    // m_greyMobWalkingLeft.addFrame(sf::IntRect(352, 0, 32, 32));
-    //
-    // m_greyMobWalkingRight.setSpriteSheet(m_monsterTexture);
-    // m_greyMobWalkingRight.addFrame(sf::IntRect(384, 0, 32, 32));
-    // m_greyMobWalkingRight.addFrame(sf::IntRect(416, 0, 32, 32));
-    // m_greyMobWalkingRight.addFrame(sf::IntRect(448, 0, 32, 32));
-    //
-    // m_greyMobWalkingUp.setSpriteSheet(m_monsterTexture);
-    // m_greyMobWalkingUp.addFrame(sf::IntRect(96, 0, 32, 32));
-    // m_greyMobWalkingUp.addFrame(sf::IntRect(128, 0, 32, 32));
-    // m_greyMobWalkingUp.addFrame(sf::IntRect(160, 0, 32, 32));
-
+    // Greyscale
     m_greyMobWalkingDown.setSpriteSheet(m_greyscaleTexture);
     m_greyMobWalkingDown.addFrame(sf::IntRect(0, 0, 64, 64));
     m_greyMobWalkingDown.addFrame(sf::IntRect(64, 0, 64, 64));
@@ -271,15 +251,18 @@ void PlayerView::setGameApplication(ChromaBlade* game) {
     m_game = game;
 }
 
-/* Return position of the sprite. */
+
+/* Return position of the player sprite. */
 sf::Vector2f PlayerView::getPosition() const {
     return m_animatedSprite.getPosition();
 }
+
 
 /* Return global bounds of the sprite. */
 sf::FloatRect PlayerView::getGlobalBounds() const {
     return m_animatedSprite.getGlobalBounds();
 }
+
 
 /* Handle user inputs */
 void PlayerView::handleInput(float deltaTime) {
@@ -442,7 +425,7 @@ void PlayerView::handleInput(float deltaTime) {
 }
 
 
-/* Camera Functions */
+/************ Camera Functions *************/
 void PlayerView::updateCamera(int newX, int newY){
   m_camera.setCenter(m_camera.getCenter().x + newX, m_camera.getCenter().y + newY);
   m_window->setView(m_camera);
@@ -465,6 +448,7 @@ void PlayerView::setFadeGoal(int goal){
   fadeGoal = goal;
 }
 
+/*********************************************/
 
 /* Render */
 void PlayerView::draw() {
@@ -513,7 +497,6 @@ void PlayerView::draw() {
             for (int i=0; i<mobs.size(); i++) {
                 mobs[i]->draw(m_window);
             }
-            // m_window->draw(m_filter);
 
             if (m_drawPlayer) {
                 m_window->draw(m_sword);
@@ -568,6 +551,7 @@ bool PlayerView::isOpen(){
 /* Update view. */
 void PlayerView::update(float &deltaTime){
     updateHealthBar();
+    // Update sword animation
     if (isAttacking) {
         if (m_sword.getRotation() < 80 || m_sword.getRotation() > 280) {
             swingSword(deltaTime);
@@ -638,7 +622,7 @@ void PlayerView::setListener() {
 }
 
 
-
+/* Draw the animation of player's animated sprite */
 void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPressed, float deltaTime) {
     switch (dir) {
         case Up: {
@@ -670,6 +654,7 @@ void PlayerView::drawAnimation(Direction dir, sf::Vector2f moving , bool noKeyPr
 }
 
 
+/* Clear the previous tile maps */
 void PlayerView::clearTileMaps() {
     fprintf(stderr, "clearTileMaps!\n");
     m_map.clear();
@@ -704,14 +689,14 @@ void PlayerView::loadMap(const EventInterface& event) {
                     sf::Vector2u(16, 16), 150, 76);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
             m_gameLogic->setBoundaries(150*16, 76*16);
-
-        break;
+            break;
         case GameState::RedLevel:
             fprintf(stderr, "loading RedLevel!\n");
             m_map.loadFromText("../res/tilesets/dungeon.png",
                     "../res/level/RedDungeon/dungeon_base.csv",
                     sf::Vector2u(16, 16), 100, 114);
-            m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/RedDungeon/dungeon_overlay.csv",
+            m_overlay.loadFromText("../res/tilesets/dungeon.png",
+                    "../res/level/RedDungeon/dungeon_overlay.csv",
                     sf::Vector2u(16, 16), 100, 114);
             m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
                     "../res/level/RedDungeon/dungeon_collision.csv",
@@ -721,13 +706,15 @@ void PlayerView::loadMap(const EventInterface& event) {
                     sf::Vector2u(16, 16), 100, 114);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
             m_gameLogic->setBoundaries(100*16,114*16);
-        break;
+            break;
         case GameState::BlueLevel:
             fprintf(stderr, "loadingBlueLevel!\n");
             m_map.loadFromText("../res/tilesets/dungeon.png",
                     "../res/level/BlueDungeon/bluedungeon_base.csv",
                     sf::Vector2u(16, 16), 200, 76);
-            m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/BlueDungeon/bluedungeon_overlay.csv", sf::Vector2u(16, 16),200, 76);
+            m_overlay.loadFromText("../res/tilesets/dungeon.png",
+                    "../res/level/BlueDungeon/bluedungeon_overlay.csv",
+                    sf::Vector2u(16, 16),200, 76);
             m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
                     "../res/level/BlueDungeon/bluedungeon_collision.csv",
                     sf::Vector2u(16, 16), 200, 76);
@@ -736,37 +723,41 @@ void PlayerView::loadMap(const EventInterface& event) {
                     sf::Vector2u(16, 16), 200, 76);
             m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
             m_gameLogic->setBoundaries(200*16,76*16);
-        break;
+            break;
         case GameState::YellowLevel:
-        fprintf(stderr, "loadingYellow!\n");
-          m_map.loadFromText("../res/tilesets/dungeon.png",
-                  "../res/level/YellowDungeon/yellowdungeon_base.csv",
-                  sf::Vector2u(16, 16), 150, 114);
-          m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/YellowDungeon/yellowdungeon_overlay.csv", sf::Vector2u(16, 16),150, 114);
-          m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
+            fprintf(stderr, "loadingYellow!\n");
+            m_map.loadFromText("../res/tilesets/dungeon.png",
+                    "../res/level/YellowDungeon/yellowdungeon_base.csv",
+                    sf::Vector2u(16, 16), 150, 114);
+            m_overlay.loadFromText("../res/tilesets/dungeon.png",
+                    "../res/level/YellowDungeon/yellowdungeon_overlay.csv",
+                    sf::Vector2u(16, 16),150, 114);
+            m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
                   "../res/level/YellowDungeon/yellowdungeon_collision.csv",
                   sf::Vector2u(16, 16), 150, 114);
-          m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
+            m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
                   "../res/level/YellowDungeon/yellowdungeon_doors.csv",
                   sf::Vector2u(16, 16),150, 114);
-          m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
-          m_gameLogic->setBoundaries(150*16,114*16);
-        break;
+            m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
+            m_gameLogic->setBoundaries(150*16,114*16);
+            break;
         case GameState::BossLevel:
-        fprintf(stderr, "Loading Boss Level \n");
-          m_map.loadFromText("../res/tilesets/dungeon.png",
+            fprintf(stderr, "Loading Boss Level \n");
+            m_map.loadFromText("../res/tilesets/dungeon.png",
                   "../res/level/BossLevel/bosslevel_base.csv",
                   sf::Vector2u(16, 16), 50, 76);
-          m_overlay.loadFromText("../res/tilesets/dungeon.png", "../res/level/BossLevel/bosslevel_overlay.csv", sf::Vector2u(16, 16),50, 76);
-          m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
+            m_overlay.loadFromText("../res/tilesets/dungeon.png",
+                  "../res/level/BossLevel/bosslevel_overlay.csv",
+                  sf::Vector2u(16, 16),50, 76);
+            m_collisions.loadCollisionsFromText("../res/tilesets/dungeon.png",
                   "../res/level/BossLevel/bosslevel_collision.csv",
                   sf::Vector2u(16, 16), 50, 76);
-          m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
+            m_doors.loadDoorsFromText("../res/tilesets/dungeon.png",
                   "../res/level/BossLevel/bosslevel_doors.csv",
                   sf::Vector2u(16, 16),50, 76);
-          m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
-          m_gameLogic->setBoundaries(50*16,76*16);
-        break;
+            m_gameLogic->setCollisionMapping(m_collisions.m_boxes, m_doors.m_boxes);
+            m_gameLogic->setBoundaries(50*16,76*16);
+            break;
     }
 }
 
@@ -792,11 +783,14 @@ void PlayerView::playerAttacked(const EventInterface &event) {
     }
 }
 
+
+/* Set up the animation for Greyscale */
 void PlayerView::setGreyscaleAnimation(DynamicActor &greyscale){
   greyscale.setAnimation(m_greyMobWalkingLeft, m_greyMobWalkingRight, m_greyMobWalkingUp, m_greyMobWalkingDown);
 }
 
 
+/* Set up the animation for mobs depending on different colors */
 void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
     if (col == sf::Color::Red) {
         mob.setAnimation(m_redMobWalkingLeft, m_redMobWalkingRight, m_redMobWalkingUp, m_redMobWalkingDown);
@@ -810,6 +804,7 @@ void PlayerView::setMobAnimation(sf::Color col, DynamicActor &mob) {
 }
 
 
+/* Set up the texture for rocks */
 void PlayerView::setRockTexture(Actor &rock) {
     rock.setTexture(*m_map.getTileSet());
 }
