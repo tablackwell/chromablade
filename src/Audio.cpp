@@ -1,24 +1,17 @@
 #include "Audio.hpp"
 
-// Initialize Process variables 
+// Initialize Process variables
 Audio::Audio() : Process() {
 }
 
 void Audio::init() {
     // Load title screen music
-    if (!m_title.openFromFile("../res/legendaryhero.ogg")) {
+    if (!m_dungeon.openFromFile("../res/music/ruins.ogg")) {
         return;
     }
 
-    // Example for loading sound effect
-    if (!m_buf.loadFromFile("../res/blip.wav")) {
-        return;
-    }
-    m_sound.setBuffer(m_buf);
 
     // Start title screen music
-    playTitle();
-
     setState(Process::RUNNING);
 }
 
@@ -35,4 +28,15 @@ void Audio::pauseTitle() {
 }
 void Audio::stopTitle() {
     m_title.stop();
+}
+
+/* Media controls for dungeon music */
+void Audio::playDungeon() {
+    m_dungeon.play();
+}
+void Audio::pauseDungeon() {
+    m_dungeon.pause();
+}
+void Audio::stopDungeon() {
+    m_dungeon.stop();
 }
