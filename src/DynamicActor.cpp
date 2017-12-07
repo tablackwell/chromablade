@@ -21,6 +21,8 @@ DynamicActor::DynamicActor(sf::Color color, float health, float damage, sf::Vect
     this->m_speed = speed;
     this->m_animatedSprite.setPosition(startPos);
     m_knockback = false;
+    m_attackClock = 0;
+    m_canAttack = true;
 }
 
 
@@ -128,4 +130,18 @@ void DynamicActor::move(int x, int y, float deltaTime) {
 
 int DynamicActor::getSpeed() {
     return m_speed;
+}
+
+void DynamicActor::updateAttackClock(float deltaTime) {
+    if (!m_canAttack) {
+        m_attackClock += deltaTime;
+        if (m_attackClock > 1) {
+            m_canAttack = true; // can attack after 1 sec
+            m_attackClock = 0; // reset clock
+        }
+    }
+}
+
+bool DynamicActor::canAttack() {
+    return m_canAttack;
 }

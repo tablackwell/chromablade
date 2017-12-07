@@ -1,9 +1,9 @@
 #include "DoorEvent.hpp"
 
-DoorEvent::DoorEvent(GameState state, int room, Direction dir) {
+DoorEvent::DoorEvent(GameState state, bool isDungeon, Direction dir) {
     m_type = doorEvent;
     m_state = state;
-    m_room = room;
+    m_isDungeon = isDungeon;
     m_dir = dir;
 }
 
@@ -11,8 +11,8 @@ const GameState DoorEvent::getGameState() const {
     return m_state;
 }
 
-const int DoorEvent::getRoom() const {
-    return m_room;
+const int DoorEvent::isDungeon() const {
+    return m_isDungeon;
 }
 
 const Direction DoorEvent::getDirection() const {

@@ -22,26 +22,26 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
     sf::FloatRect gb = m_actor->getGlobalBounds();
     std::vector<DynamicActor*> mobs = m_gameLogic->getMobs();
 
-    sf::Vector2f ppos = pview->getPosition();
     sf::FloatRect pgb = pview->getGlobalBounds();
-    sf::Vector2f target(ppos.x + pgb.width / 2, ppos.y + pgb.height * 0.75);
+    sf::Vector2f target(pgb.left + pgb.width * 0, pgb.top + pgb.height * 0);
 
-    sf::Vector2i start((int) pos.x % WIDTH / TILE_DIM,
-                       (int) pos.y % HEIGHT / TILE_DIM);
-    sf::Vector2i end((int) target.x % WIDTH / TILE_DIM,
-                     (int) target.y % HEIGHT / TILE_DIM);
+    sf::Vector2i start((int) pos.x % WIDTH / MINI_TILE_DIM,
+                       (int) pos.y % HEIGHT / MINI_TILE_DIM);
+    sf::Vector2i end((int) target.x % WIDTH / MINI_TILE_DIM,
+                     (int) target.y % HEIGHT / MINI_TILE_DIM);
 
     // initialize
     if (m_init) {
         m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
                                             pathMap, numNodes.x, numNodes.y);
-        printf("starting route: %s\n", m_route.c_str());
+        //printf("starting route: %s\n", m_route.c_str());
         m_prevEnd = end;
+        if (m_route == "") return;
 
         m_walk = 0;
         m_di = m_route[m_walk] - '0';
-        m_dest.x = ((int) pos.x / TILE_DIM + dx[m_di]) * TILE_DIM;
-        m_dest.y = ((int) pos.y / TILE_DIM + dy[m_di]) * TILE_DIM;
+        m_dest.x = ((int) pos.x / MINI_TILE_DIM + dx[m_di]) * MINI_TILE_DIM;
+        m_dest.y = ((int) pos.y / MINI_TILE_DIM + dy[m_di]) * MINI_TILE_DIM;
         m_init = false;
     // already initialized
     } else {
@@ -51,7 +51,6 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             if (m_actor->getKnockback()) {
                 m_actor->setKnockback(false);
                 m_init = true;
-                printf("processed knockback!\n");
                 return;
             }
 
@@ -96,8 +95,12 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
 //                    }
                 // collided with player
                 } else {
-                    AttackEvent *attackEvent = new AttackEvent(false, m_actor);
-                    m_game->queueEvent(attackEvent);
+                    if (m_actor->canAttack()) {
+                        AttackEvent *attackEvent = new AttackEvent(false, m_actor);
+                        m_game->queueEvent(attackEvent);
+                    }
+
+                    m_actor->updateAttackClock(deltaTime);
                 }
             }
 
@@ -107,7 +110,8 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
             if (end != m_prevEnd) {
                 m_route = AStar::pathFind(start.x, start.y, end.x, end.y,
                                                     pathMap, numNodes.x, numNodes.y);
-                printf("new route: %s\n", m_route.c_str());
+                //printf("new route: |%s|\n", m_route.c_str());
+                if (m_route == "") return;
                 m_prevEnd = end;
                 m_walk = 0;
             // else same target, update new destination
@@ -115,10 +119,10 @@ void AIView::move(const PlayerView* pview, float &deltaTime) {
                 m_walk++;
             }
             m_di = m_route[m_walk] - '0';
-            m_dest.x = ((int) pos.x / TILE_DIM + dx[m_di]) * TILE_DIM;
-            m_dest.y = ((int) pos.y / TILE_DIM + dy[m_di]) * TILE_DIM;
-            m_prevDist.x = abs(TILE_DIM * dx[m_di]);
-            m_prevDist.y = abs(TILE_DIM * dy[m_di]);
+            m_dest.x = ((int) pos.x / MINI_TILE_DIM + dx[m_di]) * MINI_TILE_DIM;
+            m_dest.y = ((int) pos.y / MINI_TILE_DIM + dy[m_di]) * MINI_TILE_DIM;
+            m_prevDist.x = abs(MINI_TILE_DIM * dx[m_di]);
+            m_prevDist.y = abs(MINI_TILE_DIM * dy[m_di]);
         }
     }
 }

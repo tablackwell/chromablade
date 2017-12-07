@@ -1,20 +1,15 @@
 #include "ChromaBlade.hpp"
-#include "PlayerView.hpp"
-#include "GameLogic.hpp"
-#include "Macros.hpp"
-
-#include <cstdio>
 
 
-/* The game application layer */
-ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade - Alpha build", sf::Style::Titlebar | sf::Style::Close)
+/* This class is the game application layer */
+ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromablade", sf::Style::Titlebar | sf::Style::Close)
 {
     /* Starts on the Title screen. */
     m_state = GameState::Title;
 
     m_gameLogic.setGameApplication(this);
-    m_view.setGameLogic(&m_gameLogic);
     m_gameLogic.setView(&m_view);
+    m_view.setGameLogic(&m_gameLogic);
     m_view.setContext(&m_window);
     m_view.setGameApplication(this);
     m_eventManager.setWindow(&m_window);
@@ -26,6 +21,7 @@ ChromaBlade::ChromaBlade() : m_window(sf::VideoMode(WIDTH,HEIGHT,32), "Chromabla
 }
 
 
+/* Initialize the game */
 void ChromaBlade::init(){
     m_gameLogic.init();
     m_view.init();
@@ -39,13 +35,6 @@ void ChromaBlade::init(){
     //m_processManager.attachProcess(&m_audio);
 }
 
-bool ChromaBlade::inDebugMode(){
-  return inDebug;
-}
-
-void ChromaBlade::setDebug(){
-  inDebug = true;
-}
 
 /* Main game loop */
 void ChromaBlade::run(){
@@ -59,19 +48,19 @@ void ChromaBlade::run(){
 }
 
 
-/* Calls playerView to handle player inputs */
+/* Call playerView to handle player inputs */
 void ChromaBlade::handleInput(float deltaTime) {
     m_view.handleInput(deltaTime);
 }
 
 
-/* Updates game logic */
+/* Update game logic */
 void ChromaBlade::update(float &deltaTime) {
-    /* Naive switch to handle game state transitions. */
     switch (m_state) {
         case GameState::Title:
-            break;
         case GameState::Pause:
+        case GameState::PlayerDied:
+        case GameState::Instruction:
             break;
         default:
             m_processManager.update(deltaTime);
@@ -80,25 +69,25 @@ void ChromaBlade::update(float &deltaTime) {
 }
 
 
-/* Processes events in eventManager */
+/* Process events in eventManager */
 void ChromaBlade::handleEvents(float deltaTime) {
     m_eventManager.update(deltaTime);
 }
 
 
-/* Calls playerView to render */
+/* Call playerView to render */
 void ChromaBlade::render() {
     m_view.draw();
 }
 
 
-/* Sets the game state */
+/* Set the game state */
 void ChromaBlade::setState(GameState state) {
     m_state = state;
 }
 
 
-/* Gets the game state */
+/* Return the game state */
 GameState ChromaBlade::getState() {
     return m_state;
 }
@@ -110,27 +99,28 @@ GameState ChromaBlade::getPrevState() {
 }
 
 
-/* Allows other components to register listeners */
+/* Allow other components to register listeners */
 void ChromaBlade::registerListener(EventListener listener, EventType eventType) {
     m_eventManager.addListener(listener, eventType);
 }
 
 
-/* Allows other components to queue events */
+/* Allow other components to queue events */
 void ChromaBlade::queueEvent(EventInterface *event) {
     m_eventManager.queueEvent(event);
 }
 
 
+/* Add listeners to the EventManager */
 void ChromaBlade::registerListeners() {
-    // Subscribe to events.
+    // ChangeStateEvent
     std::function<void(const EventInterface &event)> changeState = std::bind(&ChromaBlade::updateState, this, std::placeholders::_1);
-    const EventListener m_listener1 = EventListener(changeState, EventType::changeStateEvent);
-    m_eventManager.addListener(m_listener1, EventType::changeStateEvent);
+    const EventListener changeStateListener = EventListener(changeState, EventType::changeStateEvent);
+    m_eventManager.addListener(changeStateListener, EventType::changeStateEvent);
 }
 
 
-/* Update m_state to game state. */
+/* Update game state, triggered by a ChangeStateEvent. */
 void ChromaBlade::updateState(const EventInterface &event) {
     const EventInterface *ptr = &event;
     if (const ChangeStateEvent *stateEvent = dynamic_cast<const ChangeStateEvent*>(ptr)){
@@ -144,9 +134,10 @@ void ChromaBlade::updateState(const EventInterface &event) {
                 printf("Changed state to Pause!\n");
                 break;
             case GameState::Hub:
+                // Start the game
                 m_view.setListener();
-                m_gameLogic.setListener();
-                printf("Changed state to Game!\n");
+                m_gameLogic.setListeners();
+                printf("Changed state to Hub!\n");
                 break;
             case GameState::RedLevel:
                 printf("Changed state to RedLevel!\n");
@@ -162,4 +153,15 @@ void ChromaBlade::updateState(const EventInterface &event) {
                 break;
         }
     }
+}
+
+
+/************************* Debug methods ************************/
+bool ChromaBlade::inDebugMode(){
+  return inDebug;
+}
+
+
+void ChromaBlade::setDebug(){
+  inDebug = true;
 }

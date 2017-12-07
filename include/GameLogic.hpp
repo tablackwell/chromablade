@@ -1,18 +1,29 @@
 #ifndef GAMELOGIC_HPP
 #define GAMELOGIC_HPP
 
-
 #include "Process.hpp"
-#include "Player.hpp"
 #include "EventInterface.hpp"
-#include "MoveEvent.hpp"
 #include "EventManager.hpp"
 #include "EventListener.hpp"
 #include "AnimatedSprite.hpp"
 #include "EventType.hpp"
+#include "Player.hpp"
+#include "Mob.hpp"
+#include "Greyscale.hpp"
 #include "Actor.hpp"
 #include "GameState.hpp"
-#include <functional>
+#include "Macros.hpp"
+#include "MoveEvent.hpp"
+#include "LoadMapEvent.hpp"
+#include "DoorEvent.hpp"
+#include "AttackEvent.hpp"
+#include "SpawnEvent.hpp"
+#include "SwitchColorEvent.hpp"
+#include "PathMapEvent.hpp"
+
+#include <iostream>
+#include <cmath>
+
 
 class ChromaBlade;
 class PlayerView;
@@ -20,22 +31,19 @@ class AIView;
 
 class GameLogic : public Process {
 public:
-    enum Level { red, blue, yellow, green, orange, purple };
     GameLogic();
     void init();
     void update(float &deltaTime);
-    Level getLevel();
     void setCharPosition(sf::Vector2f position);
     void resetCharacter();
     void setGameApplication(ChromaBlade* game);
     void setAnimatedSprite(AnimatedSprite* sprite);
     void setView(PlayerView* view);
-    void setListener();
+    void setListeners();
     std::vector<Actor*> getRocks();
+    void clearActors();
     std::vector<DynamicActor*> getMobs();
     std::vector<DynamicActor*> getGreyscale();
-    void clearRocks();
-    void clearEnemies();
     void setCollisionMapping(std::vector<sf::RectangleShape>, std::vector<sf::RectangleShape>);
     void setBoundaries(int xBound, int yBound);
     void toggleLevel();
@@ -74,7 +82,9 @@ private:
     std::vector<Actor*> m_rocks;
     std::vector<DynamicActor*> m_mobs;
     std::vector<DynamicActor*> m_greyscaleVec;
-    std::vector<int> m_clearedRooms;
+    std::vector<sf::Vector2i> m_redCleared;
+    std::vector<sf::Vector2i> m_yellowCleared;
+    std::vector<sf::Vector2i> m_blueCleared;
     bool m_possibleMobColors[3] = {true, false, false}; // in the order of red, blue, yellow
     std::vector<sf::RectangleShape> m_portals;
 
@@ -88,10 +98,14 @@ private:
 
     int m_xBound;
     int m_yBound;
-    sf::Vector2f dungeonReturnPosition;
-    sf::Vector2f dungeonReturnCamera;
-    bool inCombat;
-    bool bossAvailable;
+
+    int m_mobFactor = 0;
+
+    sf::Vector2f m_dungeonReturnPosition;
+    sf::Vector2f m_dungeonReturnCamera;
+    bool m_inCombat;
+    bool m_bossAvailable;
+    bool m_isOnPortal;
 
     Player m_player;
     AnimatedSprite* m_sprite;

@@ -2,6 +2,6 @@
 #define GAMESTATE_HPP
 
 /* Possible game states. */
-enum class GameState { Title, Hub, RedLevel, BlueLevel, YellowLevel, Pause, PlayerDied, BossLevel, Instruction };
+enum class GameState { Title, Instruction, Pause, PlayerDied, Hub, RedLevel, BlueLevel, YellowLevel, BossLevel };
 
 #endif

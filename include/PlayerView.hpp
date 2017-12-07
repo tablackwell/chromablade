@@ -31,6 +31,8 @@ public:
     void setGameLogic(GameLogic* gameLogic);
     void setGameApplication(ChromaBlade* game);
     void clearTileMaps();
+    void clearRocks();
+    void clearMobs();
     void setMobAnimation(sf::Color col, DynamicActor &mob);
     void setGreyscaleAnimation(DynamicActor &greyscale);
     void setRockTexture(Actor &rock);
@@ -94,6 +96,7 @@ private: //vars and objs
     sf::RenderWindow* m_window;
     sf::Texture m_charTexture;
     sf::Texture m_monsterTexture;
+    sf::Texture m_greyscaleTexture;
     sf::Texture m_swordTexture;
     sf::Sprite m_sword;
 
