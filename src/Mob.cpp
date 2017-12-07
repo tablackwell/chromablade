@@ -1,5 +1,6 @@
 #include "Mob.hpp"
 
+/* Implements the mobs in dungeons, extends dynamicActor */
 Mob::Mob(sf::Color color, float hp, float dmg, sf::Vector2f pos, int speed) : DynamicActor(color, hp, dmg, pos, speed) {
     m_type = Actor::Mob;
 }

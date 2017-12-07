@@ -6,6 +6,7 @@
 Instruction::Instruction() { };
 Instruction::~Instruction() { };
 
+/* The instruction screen */
 void Instruction::init() {
 
     // load font

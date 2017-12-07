@@ -4,8 +4,6 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
-static sf::Color Orange(255,127,0);
-static sf::Color Purple(128,0,128);
 
 class Actor {
 public:
@@ -15,13 +13,12 @@ public:
     virtual void draw(sf::RenderWindow *window);
     virtual sf::FloatRect getGlobalBounds();
     void setTexture(sf::Texture &texture);
-
     sf::RectangleShape m_rect;
+
 protected:
     Type m_type;
 
 private:
-//    sf::Texture m_texture;
 };
 
 #endif
